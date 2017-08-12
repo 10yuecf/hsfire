@@ -8,6 +8,9 @@
 #import "AppDelegate.h"
 #import <BaiduMapAPI_Map/BMKMapComponent.h>
 #import "LoginViewController.h"
+#import "JYJNavigationController.h"
+#import "ViewController.h"
+#import "MapViewController.h"
 
 BMKMapManager* _mapManager;
 @interface AppDelegate ()
@@ -39,15 +42,21 @@ BMKMapManager* _mapManager;
         NSLog(@"manager start failed!");
     }
     
-    self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    [[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
-    
+    // 设置窗口的根控制器
     LoginViewController *login = [[LoginViewController alloc]init];
-    UINavigationController *BarNav = [[UINavigationController alloc]initWithRootViewController:login];
-    self.window.rootViewController = BarNav;
     
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
+    self.window.rootViewController = [[JYJNavigationController alloc]initWithRootViewController:login];
+//    self.window.rootViewController = [[JYJNavigationController alloc] initWithRootViewController:[[MapViewController alloc] init]];
     [self.window makeKeyAndVisible];
+    
+    //self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    //[[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
+    //UINavigationController *BarNav = [[UINavigationController alloc]initWithRootViewController:login];
+    //self.window.rootViewController = BarNav;
+    //self.window.backgroundColor = [UIColor whiteColor];
+    //[self.window makeKeyAndVisible];
     
     return YES;
 }

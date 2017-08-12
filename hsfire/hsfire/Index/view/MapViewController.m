@@ -1,25 +1,38 @@
 //
-//  IndexViewController.m
-//  fireyun
+//  MapViewController.m
+//  hsfire
 //
-//  Created by louislee on 2017/8/2.
+//  Created by louislee on 2017/8/12.
 //  Copyright © 2017年 hsdcw. All rights reserved.
 //
 
-#import "IndexViewController.h"
-#import "Macro.h"
+#import "MapViewController.h"
 #import "JYJSliderMenuTool.h"
+#import "Macro.h"
 
-@interface IndexViewController () <UIGestureRecognizerDelegate>
-@property (nonatomic, strong)UIButton *backBtn;
-@property (nonatomic, strong)UILabel *loginLabel;
+@interface MapViewController ()<UIGestureRecognizerDelegate>
 /** tapGestureRec */
 @property (nonatomic, weak) UITapGestureRecognizer *tapGestureRec;
 /** panGestureRec */
 @property (nonatomic, strong) UIPanGestureRecognizer *panGestureRec;
+
 @end
 
-@implementation IndexViewController
+@implementation MapViewController
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [_mapView viewWillAppear];
+    _mapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
+    _locService.delegate = self;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [_mapView viewWillDisappear];
+    _mapView.delegate = nil; // 不用时，置nil
+    _locService.delegate = nil;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -40,8 +53,6 @@
     
     self.view = _mapView;
     
-    [self loadbtns];
-    
     [self setupNav];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -56,6 +67,37 @@
     [self.view addGestureRecognizer:leftEdgeGesture];
     // 这里是地图处理方式，遵守代理协议，实现代理方法
     leftEdgeGesture.delegate = self;
+    
+    // 如果是scrollView的话，下面这行代码就可以了不用遵守代理协议，实现代理方法
+    //    [scrollView.panGestureRecognizer requireGestureRecognizerToFail:leftEdgeGesture];
+    
+    //加载底部按钮组
+    [self loadbtns];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    BOOL result = NO;
+    if ([gestureRecognizer isKindOfClass:[UIScreenEdgePanGestureRecognizer class]]) {
+        result = YES;
+    }
+    return result;
+}
+
+- (void)moveViewWithGesture:(UIPanGestureRecognizer *)panGes {
+    if (panGes.state == UIGestureRecognizerStateEnded) {
+        [self profileCenter];
+    }
+}
+
+- (void)msgClick {
+    UIViewController *vc = [[UIViewController alloc] init];
+    vc.view.backgroundColor = [UIColor greenColor];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)profileCenter {
+    // 展示个人中心
+    [JYJSliderMenuTool showWithRootViewController:self];
 }
 
 - (void)setupNav {
@@ -97,44 +139,20 @@
     self.navigationItem.rightBarButtonItems = @[negativeSpacer, rightItem];
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    BOOL result = NO;
-    if ([gestureRecognizer isKindOfClass:[UIScreenEdgePanGestureRecognizer class]]) {
-        result = YES;
-    }
-    return result;
-}
-
-- (void)moveViewWithGesture:(UIPanGestureRecognizer *)panGes {
-    if (panGes.state == UIGestureRecognizerStateEnded) {
-        [self profileCenter];
-    }
-}
-
-- (void)msgClick {
-    UIViewController *vc = [[UIViewController alloc] init];
-    vc.view.backgroundColor = [UIColor greenColor];
-    [self.navigationController pushViewController:vc animated:YES];
-}
-
-- (void)profileCenter {
-    // 展示个人中心
-    [JYJSliderMenuTool showWithRootViewController:self];
-}
-
 //底部按钮组
 -(void)loadbtns {
     //按钮组
     CGFloat btn_w = 70;
     CGFloat btn_h = 30;
+    int maph = 35;
     
     UIView *view = [[UIView alloc]init];
-    view.frame = CGRectMake(5, kHeight - 100, kWidth - 10, btn_h);
+    view.frame = CGRectMake(5, kHeight - maph, kWidth - 10, btn_h);
     view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:view];
     
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn1.frame = CGRectMake(5, kHeight - 100, btn_w, btn_h);
+    btn1.frame = CGRectMake(5, kHeight - maph, btn_w, btn_h);
     btn1.tag = 0;
     btn1.titleLabel.font = [UIFont systemFontOfSize:14.0];
     [btn1 setTitle:@"消防栓" forState:UIControlStateNormal];
@@ -144,7 +162,7 @@
     [self.view addSubview:btn1];
     
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn2.frame = CGRectMake(btn_w + 5, kHeight - 100, btn_w + 10, btn_h);
+    btn2.frame = CGRectMake(btn_w + 5, kHeight - maph, btn_w + 10, btn_h);
     btn2.tag = 1;
     btn2.titleLabel.font = [UIFont systemFontOfSize:14.0];
     [btn2 setTitle:@"天然水源" forState:UIControlStateNormal];
@@ -154,7 +172,7 @@
     [self.view addSubview:btn2];
     
     UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn3.frame = CGRectMake(btn_w * 2 + 20, kHeight - 100, btn_w + 10, btn_h);
+    btn3.frame = CGRectMake(btn_w * 2 + 20, kHeight - maph, btn_w + 10, btn_h);
     btn3.tag = 2;
     btn3.titleLabel.font = [UIFont systemFontOfSize:14.0];
     [btn3 setTitle:@"重点单位" forState:UIControlStateNormal];
@@ -164,7 +182,7 @@
     [self.view addSubview:btn3];
     
     UIButton *btn4 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn4.frame = CGRectMake(btn_w * 3 + 25, kHeight - 100, btn_w + 10, btn_h);
+    btn4.frame = CGRectMake(btn_w * 3 + 25, kHeight - maph, btn_w + 10, btn_h);
     btn4.tag = 3;
     btn4.titleLabel.font = [UIFont systemFontOfSize:14.0];
     [btn4 setTitle:@"微型站" forState:UIControlStateNormal];
@@ -193,6 +211,7 @@
     }
 }
 
+//加载地图
 - (void)startLocation {
     //初始化BMKLocationService
     _locService = [[BMKLocationService alloc]init];
@@ -238,7 +257,7 @@
     //location:  地址坐标
     //poiList:   地址周边POI信息，成员类型为BMKPoiInfo
 }
-    
+
 //定位失败
 - (void)didFailToLocateUserWithError:(NSError *)error{
     NSLog(@"error:%@",error);
@@ -246,22 +265,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-}
-
-//视图即将呈现时
--(void)viewWillAppear:(BOOL)animated {
-    [_mapView viewWillAppear];
-    _mapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
-    _locService.delegate = self;
-    self.navigationController.navigationBarHidden = YES;
-}
-
-//视图即将消失时
--(void)viewWillDisappear:(BOOL)animated {
-    [_mapView viewWillDisappear];
-    _mapView.delegate = nil; // 不用时，置nil
-    _locService.delegate = nil;
-    self.navigationController.navigationBarHidden = NO;
 }
 
 @end

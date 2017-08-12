@@ -11,13 +11,6 @@
 
 #import "IndexViewController.h"
 
-//#import "FirstViewController.h"
-//#import "SecondViewController.h"
-//#import "MessTableViewController.h"
-//#import "FourthViewController.h"
-//#import "FifthViewController.h"
-//#import "CardViewController.h"
-
 #define KWIDTH ([UIScreen mainScreen].bounds.size.width)
 #define KHEIGHT ([UIScreen mainScreen].bounds.size.height)
 #define RGBA(r,g,b,a) [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a]

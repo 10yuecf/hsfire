@@ -9,7 +9,10 @@
 #import <QuartzCore/QuartzCore.h>
 #import "LoginViewController.h"
 #import "IndexViewController.h"
+#import "MapViewController.h"
 #import "CustomTabBarController.h"
+#import "JYJNavigationController.h"
+#import "JYJBaseNavigationController.h"
 
 #import "UITextField+Shake.h"
 #import "MyMD5.h"
@@ -42,9 +45,6 @@
         [alert addAction:setAction];
         [self presentViewController:alert animated:YES completion:nil];
     }
-    
-    //隐藏导航栏
-    self.navigationController.navigationBarHidden = YES;
     
     [self login];
 }
@@ -86,20 +86,34 @@
 }
 
 -(void)loginButtonClick:(UIButton *)button {
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"我的" style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationItem.backBarButtonItem = item;
+    MapViewController *map = [[MapViewController alloc]init];
+    IndexViewController *index = [[IndexViewController alloc]init];
+    //[self.navigationController pushViewController:index animated:YES];
+    [self.navigationController pushViewController:map animated:YES];
+    
+    //JYJNavigationController *Jnav = [[JYJNavigationController alloc]init];
+    //[self.navigationController pushViewController:Jnav animated:YES];
+    NSLog(@"%s","baidu");
+    
+    //self.window.rootViewController = [[JYJNavigationController alloc]initWithRootViewController:map];
+    
+    //UINavigationController *BarNav = [[JYJNavigationController alloc]init];
+    
+    
+    //UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"我的" style:UIBarButtonItemStylePlain target:nil action:nil];
+    //self.navigationItem.backBarButtonItem = item;
     
     //IndexViewController *index = [[IndexViewController alloc]init];
     //[self.navigationController pushViewController:index animated:YES];
     
     //登录成功
-    CustomTabBarController *CustomTabBar = [[CustomTabBarController alloc] init];
-    
-    CATransition* transition = [CATransition animation];
-    transition.type = kCATransitionPush;//可更改为其他方式
-    transition.subtype = kCATransitionFromRight;//可更改为其他方式
-    [self.navigationController.view.layer addAnimation:transition forKey:kCATransition];
-    [self.navigationController pushViewController:CustomTabBar animated:NO];
+//    CustomTabBarController *CustomTabBar = [[CustomTabBarController alloc] init];
+//    
+//    CATransition* transition = [CATransition animation];
+//    transition.type = kCATransitionPush;//可更改为其他方式
+//    transition.subtype = kCATransitionFromRight;//可更改为其他方式
+//    [self.navigationController.view.layer addAnimation:transition forKey:kCATransition];
+//    [self.navigationController pushViewController:CustomTabBar animated:NO];
 }
 
 - (BOOL)prefersStatusBarHidden{
@@ -112,6 +126,16 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+//视图即将呈现时
+-(void)viewWillAppear:(BOOL)animated {
+    self.navigationController.navigationBarHidden = YES;
+}
+
+//视图即将消失时
+-(void)viewWillDisappear:(BOOL)animated {
+    self.navigationController.navigationBarHidden = NO;
 }
 
 @end
