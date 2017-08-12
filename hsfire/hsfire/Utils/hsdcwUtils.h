@@ -1,0 +1,17 @@
+//
+//  hsdcwUtils.h
+//  hsjhb
+//
+//  Created by louislee on 16/6/15.
+//  Copyright © 2016年 hsdcw. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+@interface hsdcwUtils : NSObject
+
+- (BOOL)isBlankString:(NSString *)string;
+
+-(int)getRandomNumber:(int)from to:(int)to;
+
+@end
