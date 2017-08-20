@@ -49,7 +49,7 @@
     UINavigationBar *appearance = [UINavigationBar appearanceWhenContainedIn:[self class], nil];
     
     // 1.设置导航条的背景
-    [appearance setBackgroundImage:[UIImage createImageWithColor:[UIColor colorWithRed:38 / 255.0 green:41 / 255.0 blue:48 / 255.0 alpha:1.0]] forBarMetrics:UIBarMetricsDefault];
+    [appearance setBackgroundImage:[UIImage createImageWithColor:[UIColor colorWithRed:204/255.0 green:0/255.0 blue:0/255.0 alpha:1.0]] forBarMetrics:UIBarMetricsDefault];
     
     // 设置文字
     NSMutableDictionary *att = [NSMutableDictionary dictionary];

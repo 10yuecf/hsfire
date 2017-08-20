@@ -13,17 +13,27 @@
 #import "CustomTabBarController.h"
 #import "JYJNavigationController.h"
 #import "JYJBaseNavigationController.h"
+#import "RegViewController.h"
 
 #import "UITextField+Shake.h"
 #import "MyMD5.h"
 #import "hsdcwUtils.h"
 #import "CKHttpCommunicate.h"
 #import "MBProgressHUD.h"
+#import "Macro.h"
 
+#import "TestViewController.h"
+#import "HouseTypeMapVC.h"
+
+static void *ProgressObserverContext = &ProgressObserverContext;
 @interface LoginViewController ()<UITextFieldDelegate>
 @property (nonatomic ,strong)UIImageView *imageView;
 @property (nonatomic ,strong)UIButton *registerBtn;
 @property (nonatomic ,strong)UILabel *loginLabel;
+@property (nonatomic, strong)UITextField *accountFiled;
+@property (nonatomic, strong)UITextField *passTextFiled;
+@property (nonatomic, strong)UIView *accountView;
+@property (nonatomic, strong)UIView *passView;
 @end
 
 @implementation LoginViewController
@@ -55,65 +65,110 @@
     _imageView.image = [UIImage imageNamed:@"loginbg.jpg"];
     [self.view addSubview:_imageView];
     
-    //为登陆界面添加Button
-    [self createButtons];
+    //加载UI界面
+    [self createUI];
 }
 
--(void)createButtons {
+-(void)createUI {
+    //账号view
+    _accountView = [[UIView alloc]initWithFrame:CGRectMake(50, 230, kWidth - 90, 30)];
+    _accountView.layer.cornerRadius = 2.0;
+    //_backView.alpha = 0.7;
+    _accountView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:_accountView];
+    
+    //密码view
+    _passView = [[UIView alloc]initWithFrame:CGRectMake(50, 280, kWidth - 90, 30)];
+    _passView.layer.cornerRadius = 2.0;
+    //_backView.alpha = 0.7;
+    _passView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:_passView];
+    
+    _accountFiled = [[UITextField alloc]initWithFrame:CGRectMake(40, 5, 190, 20)];
+    _accountFiled.delegate = self;
+    _accountFiled.placeholder = @"账号";
+    _accountFiled.font = [UIFont systemFontOfSize:14];
+    _accountFiled.clearButtonMode = UITextFieldViewModeWhileEditing;
+    //_phoneTextFiled.keyboardType = UIKeyboardTypeNumberPad;
+    [_accountView addSubview:_accountFiled];
+    
+    _passTextFiled = [[UITextField alloc]initWithFrame:CGRectMake(40, 5, 190, 20)];
+    _passTextFiled.delegate = self;
+    _passTextFiled.placeholder = @"密码";
+    _passTextFiled.font = [UIFont systemFontOfSize:14];
+    _passTextFiled.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _passTextFiled.secureTextEntry = YES;
+    [_passView addSubview:_passTextFiled];
+    
+    UIImageView *accountIV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+    accountIV.image = [UIImage imageNamed:@"account"];
+    accountIV.layer.cornerRadius = 2.0;
+    accountIV.layer.masksToBounds = YES;
+    [_accountView addSubview:accountIV];
+    
+    UIImageView *passIV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
+    passIV.image= [UIImage imageNamed:@"pass"];
+    passIV.layer.cornerRadius = 2.0;
+    passIV.layer.masksToBounds =YES;
+    [_passView addSubview:passIV];
+    
+    int btn_x = _passView.frame.origin.x;
+    int btn_y = _passView.frame.origin.y;
+    
     UIButton *loginButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    loginButton.frame = CGRectMake(10, self.view.frame.size.height - 60, (self.view.frame.size.width - 30)/2, 37);
-    [loginButton setTitle:@"登录" forState:UIControlStateNormal];
-    loginButton.titleLabel.font = [UIFont systemFontOfSize:16];
-    [loginButton setTitleColor:[UIColor grayColor] forState:UIControlStateNormal];
+    loginButton.frame = CGRectMake(btn_x, btn_y + 50, (kWidth - 30)/3, 37);
+    //[loginButton setTitle:@"登录" forState:UIControlStateNormal];
+    //loginButton.titleLabel.font = [UIFont systemFontOfSize:14];
     [loginButton addTarget:self action:@selector(loginButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [loginButton setBackgroundColor:[UIColor colorWithRed:255/255.0f green:255/255.0f blue:255/255.0f alpha:1]];
-    loginButton.layer.cornerRadius = 5.0;
+    //[loginButton setBackgroundColor:[UIColor colorWithRed:255/255.0f green:0/255.0f blue:0/255.0f alpha:1]];
+    loginButton.layer.cornerRadius = 3.0;
+    [loginButton setImage:[UIImage imageNamed:@"loginbtn"] forState:UIControlStateNormal];
     [self.view addSubview:loginButton];
     
     UIButton *regButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    regButton.frame = CGRectMake((self.view.frame.size.width + 10)/2, self.view.frame.size.height - 60, (self.view.frame.size.width - 30)/2, 37);
-    [regButton setTitle:@"注册" forState:UIControlStateNormal];
-    regButton.titleLabel.font = [UIFont systemFontOfSize:16];
+    regButton.frame = CGRectMake(btn_x * 3.5, btn_y + 50, (kWidth - 30)/3, 37);
+    //regButton.titleLabel.font = [UIFont systemFontOfSize:14];
+    regButton.layer.cornerRadius = 3.0;
+    [regButton setImage:[UIImage imageNamed:@"regbtn"] forState:UIControlStateNormal];
+    //[regButton setTitle:@"注册" forState:UIControlStateNormal];
     [regButton addTarget:self action:@selector(registerButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [regButton setBackgroundColor:[UIColor colorWithRed:248/255.0f green:144/255.0f blue:34/255.0f alpha:1]];
-    regButton.layer.cornerRadius = 5.0;
+    //[regButton setBackgroundColor:[UIColor colorWithRed:255/255.0f green:0/255.0f blue:0/255.0f alpha:1]];
     [self.view addSubview:regButton];
+    
+    UIButton *forgetButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    forgetButton.titleLabel.font = [UIFont systemFontOfSize:13];
+    forgetButton.frame = CGRectMake(kWidth / 3, kHeight / 1.5, 100, 30);
+    [forgetButton setTitle:@"忘记密码?" forState:UIControlStateNormal];
+    [forgetButton setTitleColor:[UIColor colorWithRed:225/255.0f green:208/255.0f blue:208/255.0f alpha:1] forState:UIControlStateNormal];
+    [forgetButton addTarget:self action:@selector(forgotPwdButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:forgetButton];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.view endEditing:YES];
+}
+
+-(void)forgotPwdButtonClick:(UIButton *)button {
+    NSLog(@"%s","forgot pass");
 }
 
 -(void)registerButtonClick:(UIButton *)button {
-    IndexViewController *index = [[IndexViewController alloc]init];
-    [self.navigationController pushViewController:index animated:YES];
+    //RegViewController *reg = [[RegViewController alloc]init];
+    //[self.navigationController pushViewController:reg animated:YES];
+    
+    TestViewController *test = [[TestViewController alloc]init];
+    [self.navigationController pushViewController:test animated:YES];
+    
+    //ClusterDemoViewController *cluster = [[ClusterDemoViewController alloc]init];
+    ///[self.navigationController pushViewController:cluster animated:YES];
+    
+    //HouseTypeMapVC *hs = [[HouseTypeMapVC alloc]init];
+    //[self.navigationController pushViewController:hs animated:YES];
 }
 
 -(void)loginButtonClick:(UIButton *)button {
     MapViewController *map = [[MapViewController alloc]init];
-    IndexViewController *index = [[IndexViewController alloc]init];
-    //[self.navigationController pushViewController:index animated:YES];
     [self.navigationController pushViewController:map animated:YES];
-    
-    //JYJNavigationController *Jnav = [[JYJNavigationController alloc]init];
-    //[self.navigationController pushViewController:Jnav animated:YES];
-    NSLog(@"%s","baidu");
-    
-    //self.window.rootViewController = [[JYJNavigationController alloc]initWithRootViewController:map];
-    
-    //UINavigationController *BarNav = [[JYJNavigationController alloc]init];
-    
-    
-    //UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"我的" style:UIBarButtonItemStylePlain target:nil action:nil];
-    //self.navigationItem.backBarButtonItem = item;
-    
-    //IndexViewController *index = [[IndexViewController alloc]init];
-    //[self.navigationController pushViewController:index animated:YES];
-    
-    //登录成功
-//    CustomTabBarController *CustomTabBar = [[CustomTabBarController alloc] init];
-//    
-//    CATransition* transition = [CATransition animation];
-//    transition.type = kCATransitionPush;//可更改为其他方式
-//    transition.subtype = kCATransitionFromRight;//可更改为其他方式
-//    [self.navigationController.view.layer addAnimation:transition forKey:kCATransition];
-//    [self.navigationController pushViewController:CustomTabBar animated:NO];
 }
 
 - (BOOL)prefersStatusBarHidden{

@@ -10,7 +10,9 @@
 
 @interface hsdcwUtils : NSObject
 
-- (BOOL)isBlankString:(NSString *)string;
+-(BOOL)isBlankString:(NSString *)string;
+
+-(NSMutableArray *)getUserInfo;
 
 -(int)getRandomNumber:(int)from to:(int)to;
 

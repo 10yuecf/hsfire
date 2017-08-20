@@ -10,10 +10,6 @@
 #define JHCellConfigDemo_Macro_h
 
 #endif
-
-#define kWidthOfScreen [UIScreen mainScreen].bounds.size.width
-#define kHeightOfScreen [UIScreen mainScreen].bounds.size.height
-
 /****************************** 颜色 ********************************/
 #define RGBColor(r,g,b,a) ([UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:a])
 /** tableView 边框颜色 */

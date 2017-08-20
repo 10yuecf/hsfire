@@ -9,7 +9,6 @@
 #import <BaiduMapAPI_Map/BMKMapComponent.h>
 #import "LoginViewController.h"
 #import "JYJNavigationController.h"
-#import "ViewController.h"
 #import "MapViewController.h"
 
 BMKMapManager* _mapManager;
@@ -48,15 +47,7 @@ BMKMapManager* _mapManager;
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     self.window.rootViewController = [[JYJNavigationController alloc]initWithRootViewController:login];
-//    self.window.rootViewController = [[JYJNavigationController alloc] initWithRootViewController:[[MapViewController alloc] init]];
     [self.window makeKeyAndVisible];
-    
-    //self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
-    //[[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
-    //UINavigationController *BarNav = [[UINavigationController alloc]initWithRootViewController:login];
-    //self.window.rootViewController = BarNav;
-    //self.window.backgroundColor = [UIColor whiteColor];
-    //[self.window makeKeyAndVisible];
     
     return YES;
 }

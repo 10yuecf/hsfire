@@ -9,8 +9,21 @@
 #import "MapViewController.h"
 #import "JYJSliderMenuTool.h"
 #import "Macro.h"
+#import "MyAnimatedAnnotationView.h"
 
 @interface MapViewController ()<UIGestureRecognizerDelegate>
+{
+    BMKCircle* circle;
+    BMKPolygon* polygon;
+    BMKPolygon* polygon2;
+    BMKPolyline* polyline;
+    BMKPolyline* colorfulPolyline;
+    BMKArcline* arcline;
+    BMKGroundOverlay* ground2;
+    BMKPointAnnotation* pointAnnotation;
+    BMKPointAnnotation* animatedAnnotation;
+}
+
 /** tapGestureRec */
 @property (nonatomic, weak) UITapGestureRecognizer *tapGestureRec;
 /** panGestureRec */
@@ -73,6 +86,111 @@
     
     //加载底部按钮组
     [self loadbtns];
+    
+    //初始化segment
+    segment.selectedSegmentIndex = 0;
+    
+    //添加内置覆盖物
+    [self addOverlayView];
+}
+
+- (void)dealloc {
+    if (_mapView) {
+        _mapView = nil;
+    }
+}
+
+//添加内置覆盖物
+- (void)addOverlayView {
+    // 添加圆形覆盖物
+    if (circle == nil) {
+        CLLocationCoordinate2D coor;
+        coor.latitude = 39.915;
+        coor.longitude = 116.404;
+        circle = [BMKCircle circleWithCenterCoordinate:coor radius:5000];
+    }
+    [_mapView addOverlay:circle];
+    
+    // 添加多边形覆盖物
+    if (polygon == nil) {
+        CLLocationCoordinate2D coords[4] = {0};
+        coords[0].latitude = 39.915;
+        coords[0].longitude = 116.404;
+        coords[1].latitude = 39.815;
+        coords[1].longitude = 116.404;
+        coords[2].latitude = 39.815;
+        coords[2].longitude = 116.504;
+        coords[3].latitude = 39.915;
+        coords[3].longitude = 116.504;
+        polygon = [BMKPolygon polygonWithCoordinates:coords count:4];
+    }
+    [_mapView addOverlay:polygon];
+    
+    // 添加多边形覆盖物
+    if (polygon2 == nil) {
+        CLLocationCoordinate2D coords[5] = {0};
+        coords[0].latitude = 39.965;
+        coords[0].longitude = 116.604;
+        coords[1].latitude = 39.865;
+        coords[1].longitude = 116.604;
+        coords[2].latitude = 39.865;
+        coords[2].longitude = 116.704;
+        coords[3].latitude = 39.905;
+        coords[3].longitude = 116.654;
+        coords[4].latitude = 39.965;
+        coords[4].longitude = 116.704;
+        polygon2 = [BMKPolygon polygonWithCoordinates:coords count:5];
+    }
+    [_mapView addOverlay:polygon2];
+    
+    //添加折线覆盖物
+    if (polyline == nil) {
+        CLLocationCoordinate2D coors[2] = {0};
+        coors[1].latitude = 39.895;
+        coors[1].longitude = 116.354;
+        coors[0].latitude = 39.815;
+        coors[0].longitude = 116.304;
+        polyline = [BMKPolyline polylineWithCoordinates:coors count:2];
+    }
+    [_mapView addOverlay:polyline];
+    
+    //添加折线(分段颜色绘制)覆盖物
+    if (colorfulPolyline == nil) {
+        CLLocationCoordinate2D coords[5] = {0};
+        coords[0].latitude = 39.965;
+        coords[0].longitude = 116.404;
+        coords[1].latitude = 39.925;
+        coords[1].longitude = 116.454;
+        coords[2].latitude = 39.955;
+        coords[2].longitude = 116.494;
+        coords[3].latitude = 39.905;
+        coords[3].longitude = 116.554;
+        coords[4].latitude = 39.965;
+        coords[4].longitude = 116.604;
+        //构建分段颜色索引数组
+        NSArray *colorIndexs = [NSArray arrayWithObjects:
+                                [NSNumber numberWithInt:2],
+                                [NSNumber numberWithInt:0],
+                                [NSNumber numberWithInt:1],
+                                [NSNumber numberWithInt:2], nil];
+        
+        //构建BMKPolyline,使用分段颜色索引，其对应的BMKPolylineView必须设置colors属性
+        colorfulPolyline = [BMKPolyline polylineWithCoordinates:coords count:5 textureIndex:colorIndexs];
+    }
+    [_mapView addOverlay:colorfulPolyline];
+    
+    // 添加圆弧覆盖物
+    if (arcline == nil) {
+        CLLocationCoordinate2D coords[3] = {0};
+        coords[0].latitude = 40.065;
+        coords[0].longitude = 116.124;
+        coords[1].latitude = 40.125;
+        coords[1].longitude = 116.304;
+        coords[2].latitude = 40.065;
+        coords[2].longitude = 116.404;
+        arcline = [BMKArcline arclineWithCoordinates:coords];
+    }
+    [_mapView addOverlay:arcline];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
@@ -101,16 +219,15 @@
 }
 
 - (void)setupNav {
-    self.title = @"摩 拜 单 车";
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20], NSForegroundColorAttributeName:[UIColor colorWithRed:222 / 255.0 green:91 / 255.0 blue:78 / 255.0 alpha:1.0]}];
+    self.title = @"消防栓显示";
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20], NSForegroundColorAttributeName:[UIColor colorWithRed:255 / 255.0 green:255 / 255.0 blue:255 / 255.0 alpha:1.0]}];
     
     UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     negativeSpacer.width = -15;
     
     UIButton *profileButton = [[UIButton alloc] init];
     // 设置按钮的背景图片
-    [profileButton setImage:[UIImage imageNamed:@"navigationbar_list_normal"] forState:UIControlStateNormal];
-    [profileButton setImage:[UIImage imageNamed:@"navigationbar_list_hl"] forState:UIControlStateHighlighted];
+    [profileButton setImage:[UIImage imageNamed:@"tt"] forState:UIControlStateNormal];
     // 设置按钮的尺寸为背景图片的尺寸
     profileButton.frame = CGRectMake(0, 0, 44, 44);
     //监听按钮的点击
@@ -118,23 +235,23 @@
     UIBarButtonItem *profile = [[UIBarButtonItem alloc] initWithCustomView:profileButton];
     self.navigationItem.leftBarButtonItems = @[negativeSpacer, profile];
     
-    // 右边按钮
-    UIButton *searchButton = [[UIButton alloc] init];
-    [searchButton setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
-    [searchButton setImage:[UIImage imageNamed:@"search_down"] forState:UIControlStateHighlighted];
-    searchButton.frame = CGRectMake(0, 0, 44, 44);
-    [searchButton addTarget:self action:@selector(msgClick) forControlEvents:UIControlEventTouchUpInside];
+    //搜索按钮
+//    UIButton *searchButton = [[UIButton alloc] init];
+//    [searchButton setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
+//    [searchButton setImage:[UIImage imageNamed:@"search_down"] forState:UIControlStateHighlighted];
+//    searchButton.frame = CGRectMake(0, 0, 44, 44);
+//    [searchButton addTarget:self action:@selector(msgClick) forControlEvents:UIControlEventTouchUpInside];
+//    [rightView addSubview:searchButton];
     
     UIButton *msgButton = [[UIButton alloc] init];
-    [msgButton setImage:[UIImage imageNamed:@"notification"] forState:UIControlStateNormal];
-    [msgButton setImage:[UIImage imageNamed:@"notification_down"] forState:UIControlStateHighlighted];
+    [msgButton setImage:[UIImage imageNamed:@"mymsg"] forState:UIControlStateNormal];
     msgButton.frame = CGRectMake(40, 0, 44, 44);
     [msgButton addTarget:self action:@selector(msgClick) forControlEvents:UIControlEventTouchUpInside];
     
     UIView *rightView = [[UIView alloc] init];
     rightView.frame = CGRectMake(0, 0, 88, 44);
-    [rightView addSubview:searchButton];
     [rightView addSubview:msgButton];
+    
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightView];
     self.navigationItem.rightBarButtonItems = @[negativeSpacer, rightItem];
 }
@@ -158,7 +275,7 @@
     [btn1 setTitle:@"消防栓" forState:UIControlStateNormal];
     [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn1 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
-    [btn1 setImage:[UIImage imageNamed:@"pass"] forState:UIControlStateNormal];
+    [btn1 setImage:[UIImage imageNamed:@"xfs"] forState:UIControlStateNormal];
     [self.view addSubview:btn1];
     
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -168,7 +285,7 @@
     [btn2 setTitle:@"天然水源" forState:UIControlStateNormal];
     [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn2 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
-    [btn2 setImage:[UIImage imageNamed:@"pass"] forState:UIControlStateNormal];
+    [btn2 setImage:[UIImage imageNamed:@"water"] forState:UIControlStateNormal];
     [self.view addSubview:btn2];
     
     UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -178,7 +295,7 @@
     [btn3 setTitle:@"重点单位" forState:UIControlStateNormal];
     [btn3 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn3 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
-    [btn3 setImage:[UIImage imageNamed:@"pass"] forState:UIControlStateNormal];
+    [btn3 setImage:[UIImage imageNamed:@"dw"] forState:UIControlStateNormal];
     [self.view addSubview:btn3];
     
     UIButton *btn4 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -188,7 +305,7 @@
     [btn4 setTitle:@"微型站" forState:UIControlStateNormal];
     [btn4 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn4 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
-    [btn4 setImage:[UIImage imageNamed:@"pass"] forState:UIControlStateNormal];
+    [btn4 setImage:[UIImage imageNamed:@"wxz"] forState:UIControlStateNormal];
     [self.view addSubview:btn4];
 }
 
@@ -256,6 +373,106 @@
     //businessCircle:  商圈名称
     //location:  地址坐标
     //poiList:   地址周边POI信息，成员类型为BMKPoiInfo
+}
+
+#pragma mark -
+#pragma mark implement BMKMapViewDelegate
+
+//根据overlay生成对应的View
+- (BMKOverlayView *)mapView:(BMKMapView *)mapView viewForOverlay:(id <BMKOverlay>)overlay
+{
+    if ([overlay isKindOfClass:[BMKCircle class]])
+    {
+        BMKCircleView* circleView = [[BMKCircleView alloc] initWithOverlay:overlay];
+        circleView.fillColor = [[UIColor alloc] initWithRed:1 green:0 blue:0 alpha:0.5];
+        circleView.strokeColor = [[UIColor alloc] initWithRed:0 green:0 blue:1 alpha:0.5];
+        circleView.lineWidth = 5.0;
+        
+        return circleView;
+    }
+    
+    if ([overlay isKindOfClass:[BMKPolyline class]])
+    {
+        BMKPolylineView* polylineView = [[BMKPolylineView alloc] initWithOverlay:overlay];
+        if (overlay == colorfulPolyline) {
+            polylineView.lineWidth = 5;
+            /// 使用分段颜色绘制时，必须设置（内容必须为UIColor）
+            polylineView.colors = [NSArray arrayWithObjects:
+                                   [[UIColor alloc] initWithRed:0 green:1 blue:0 alpha:1],
+                                   [[UIColor alloc] initWithRed:1 green:0 blue:0 alpha:1],
+                                   [[UIColor alloc] initWithRed:1 green:1 blue:0 alpha:0.5], nil];
+        } else {
+            polylineView.strokeColor = [[UIColor blueColor] colorWithAlphaComponent:1];
+            polylineView.lineWidth = 20.0;
+            [polylineView loadStrokeTextureImage:[UIImage imageNamed:@"texture_arrow.png"]];
+        }
+        return polylineView;
+    }
+    
+    if ([overlay isKindOfClass:[BMKPolygon class]])
+    {
+        BMKPolygonView* polygonView = [[BMKPolygonView alloc] initWithOverlay:overlay];
+        polygonView.strokeColor = [[UIColor alloc] initWithRed:0.0 green:0 blue:0.5 alpha:1];
+        polygonView.fillColor = [[UIColor alloc] initWithRed:0 green:1 blue:1 alpha:0.2];
+        polygonView.lineWidth =2.0;
+        polygonView.lineDash = (overlay == polygon2);
+        return polygonView;
+    }
+    if ([overlay isKindOfClass:[BMKGroundOverlay class]])
+    {
+        BMKGroundOverlayView* groundView = [[BMKGroundOverlayView alloc] initWithOverlay:overlay];
+        return groundView;
+    }
+    if ([overlay isKindOfClass:[BMKArcline class]]) {
+        BMKArclineView *arclineView = [[BMKArclineView alloc] initWithArcline:overlay];
+        arclineView.strokeColor = [UIColor blueColor];
+        arclineView.lineDash = YES;
+        arclineView.lineWidth = 6.0;
+        return arclineView;
+    }
+    return nil;
+}
+
+
+// 根据anntation生成对应的View
+- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation
+{
+    //普通annotation
+    if (annotation == pointAnnotation) {
+        NSString *AnnotationViewID = @"renameMark";
+        BMKPinAnnotationView *annotationView = (BMKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+        if (annotationView == nil) {
+            annotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+            // 设置颜色
+            annotationView.pinColor = BMKPinAnnotationColorPurple;
+            // 从天上掉下效果
+            annotationView.animatesDrop = YES;
+            // 设置可拖拽
+            annotationView.draggable = YES;
+        }
+        return annotationView;
+    }
+    
+    //动画annotation
+    NSString *AnnotationViewID = @"AnimatedAnnotation";
+    MyAnimatedAnnotationView *annotationView = nil;
+    if (annotationView == nil) {
+        annotationView = [[MyAnimatedAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+    }
+    NSMutableArray *images = [NSMutableArray array];
+    for (int i = 1; i < 4; i++) {
+        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"poi_%d.png", i]];
+        [images addObject:image];
+    }
+    annotationView.annotationImages = images;
+    return annotationView;
+    
+}
+
+// 当点击annotation view弹出的泡泡时，调用此接口
+- (void)mapView:(BMKMapView *)mapView annotationViewForBubble:(BMKAnnotationView *)view;
+{
+    NSLog(@"paopaoclick");
 }
 
 //定位失败
