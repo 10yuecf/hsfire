@@ -28,7 +28,6 @@
 @property (nonatomic, weak) UITapGestureRecognizer *tapGestureRec;
 /** panGestureRec */
 @property (nonatomic, strong) UIPanGestureRecognizer *panGestureRec;
-
 @end
 
 @implementation MapViewController
@@ -54,6 +53,8 @@
     if(([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0)) {
         self.navigationController.navigationBar.translucent = NO;
     }
+    
+    NSLog(@"================%@",self.userEntity.userId);
     
     _mapView = [[BMKMapView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight - 64)];
     _mapView.showsUserLocation = YES; //是否显示定位图层

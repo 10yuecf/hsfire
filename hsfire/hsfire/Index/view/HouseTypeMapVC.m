@@ -19,8 +19,7 @@
 #import "HouseTypeMapVC.h"
 #import "Macro.h"
 
-@interface HouseTypeMapVC ()<BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate>
-{
+@interface HouseTypeMapVC ()<BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate> {
     BMKLocationService* _locService;
 }
 
@@ -57,7 +56,7 @@
     [self initUI];
 }
 
-- (void)initUI{
+- (void)initUI {
     [self goBackBtn];
     _mapView.mapType = BMKMapTypeStandard;
     [self.view addSubview:_mapView];
@@ -301,7 +300,7 @@
 
 /**
  *在地图View将要启动定位时，会调用此函数
- *@param mapView 地图View
+ *mapView 地图View
  */
 - (void)willStartLocatingUser
 {
@@ -320,7 +319,7 @@
 
 /**
  *在地图View停止定位后，会调用此函数
- *@param mapView 地图View
+ *mapView 地图View
  */
 - (void)didStopLocatingUser
 {
@@ -329,7 +328,7 @@
 
 /**
  *定位失败后，会调用此函数
- *@param mapView 地图View
+ *mapView 地图View
  *@param error 错误号，参考CLError.h中定义的错误号
  */
 - (void)didFailToLocateUserWithError:(NSError *)error

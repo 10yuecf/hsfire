@@ -17,4 +17,13 @@
 @synthesize title;
 @synthesize other;
 @synthesize tel;
+@synthesize devcode;
+@synthesize name;
+@synthesize zw;
+@synthesize groupid;
+@synthesize tagid;
+@synthesize tagname;
+@synthesize dwtype;
+@synthesize dwname;
+@synthesize dwid;
 @end

@@ -17,9 +17,7 @@ typedef NS_ENUM (NSInteger , HttpResponseCode)
     HttpResponseCnout
 };
 
-
-#define URL_BASE          @"http://www.jhb1314.com/api/socket.php?action="
-
+#define URL_BASE          @"http://10yue.hsdcw.com/fireyun/api/socket.php?action="
 
 //http后缀
 typedef NS_ENUM(NSInteger,HTTP_COMMAND_LIST){
@@ -36,7 +34,7 @@ typedef NS_ENUM(NSInteger,HTTP_COMMAND_LIST){
     //获取用户信息
     GetUserMore,
     //用户注册第一步
-    Register1,
+    Register,
     //用户注册第二步
     Register2,
     //获取地区
@@ -44,7 +42,7 @@ typedef NS_ENUM(NSInteger,HTTP_COMMAND_LIST){
     //获取基础信息
     GetBase,
     //用户登陆
-    userLogin,
+    appLogin,
     //发送信息
     sandinfo,
     //获取用户消息
@@ -94,11 +92,11 @@ static char cHttpMethod[HTTP_METHOD_COUNT][64] = {
     "GetPartyShow",
     "up",
     "GetUserMore",
-    "Register1",
+    "Register",
     "Register2",
     "GetArea",
     "GetBase",
-    "userLogin",
+    "appLogin",
     "sandinfo",
     "GetGbook",
     "GetPartyList",

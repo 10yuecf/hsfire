@@ -29,7 +29,7 @@
 
 /**
  *  cluster算法核心
- * @param zoom map的级别
+ * @param zoomLevel map的级别
  * @return BMKCluster数组
  */
 - (NSArray*)getClusters:(CGFloat) zoomLevel;

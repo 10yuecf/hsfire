@@ -22,6 +22,8 @@
 		880059F11F3EF7540042441A /* JYJCommenItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 880059EC1F3EF7540042441A /* JYJCommenItem.m */; };
 		880059F21F3EF7540042441A /* JYJProfileCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 880059EF1F3EF7540042441A /* JYJProfileCell.m */; };
 		880059F51F3EFA640042441A /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 880059F41F3EFA640042441A /* MapViewController.m */; };
+		8808CCB31F49692E00CEE75F /* ClusterDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8808CCB21F49692E00CEE75F /* ClusterDemoViewController.m */; };
+		8808CCB81F49766700CEE75F /* MapOneViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8808CCB71F49766700CEE75F /* MapOneViewController.m */; };
 		88121E061F41479E002A2129 /* 临时.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 88121E051F41479E002A2129 /* 临时.rtf */; };
 		88121E091F419F9B002A2129 /* RegViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88121E081F419F9B002A2129 /* RegViewController.m */; };
 		8818F0561F42EB8400F50CB9 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 8818F0511F42EB8400F50CB9 /* User.m */; };
@@ -49,6 +51,11 @@
 		8818F09C1F42F45200F50CB9 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 8818F08B1F42F45200F50CB9 /* UIImageView+WebCache.m */; };
 		8818F09D1F42F45200F50CB9 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8818F08D1F42F45200F50CB9 /* UIView+WebCacheOperation.m */; };
 		882D7B641F3F2BB40063E8B5 /* 日志.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 882D7B631F3F2BB40063E8B5 /* 日志.rtf */; };
+		88825F501F4B158D00A4189E /* UMMobClick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88825F4F1F4B158D00A4189E /* UMMobClick.framework */; };
+		88825F521F4B15B400A4189E /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 88825F511F4B15B400A4189E /* libz.tbd */; };
+		88825F561F4C7B5200A4189E /* libUMessage_Sdk_1.5.0a.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 88825F541F4C7B5200A4189E /* libUMessage_Sdk_1.5.0a.a */; };
+		88825F581F4C7B9D00A4189E /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88825F571F4C7B9D00A4189E /* UserNotifications.framework */; };
+		88D1FB381F4D8066005D365A /* ForPassViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88D1FB371F4D8066005D365A /* ForPassViewController.m */; };
 		88D39A5E1F469308009370C1 /* MyAnimatedAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 88D39A5D1F469308009370C1 /* MyAnimatedAnnotationView.m */; };
 		88D39A641F46D11F009370C1 /* TestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88D39A631F46D11F009370C1 /* TestViewController.m */; };
 		88D5760F1F3D59E50082F6F7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 88D5760E1F3D59E50082F6F7 /* main.m */; };
@@ -103,6 +110,7 @@
 		88FF7D9C1F481E4700670C0F /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 88FF7D951F481E4700670C0F /* SVProgressHUD.bundle */; };
 		88FF7D9D1F481E4700670C0F /* SVProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FF7D971F481E4700670C0F /* SVProgressHUD.m */; };
 		88FF7D9E1F481E4700670C0F /* SVRadialGradientLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FF7D991F481E4700670C0F /* SVRadialGradientLayer.m */; };
+		88FF7DB91F49369200670C0F /* TestVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FF7DB81F49369200670C0F /* TestVC.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -153,6 +161,10 @@
 		880059EF1F3EF7540042441A /* JYJProfileCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYJProfileCell.m; sourceTree = "<group>"; };
 		880059F31F3EFA640042441A /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		880059F41F3EFA640042441A /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		8808CCB11F49692E00CEE75F /* ClusterDemoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClusterDemoViewController.h; sourceTree = "<group>"; };
+		8808CCB21F49692E00CEE75F /* ClusterDemoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ClusterDemoViewController.m; sourceTree = "<group>"; };
+		8808CCB61F49766700CEE75F /* MapOneViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapOneViewController.h; sourceTree = "<group>"; };
+		8808CCB71F49766700CEE75F /* MapOneViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapOneViewController.m; sourceTree = "<group>"; };
 		88121E051F41479E002A2129 /* 临时.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = "临时.rtf"; sourceTree = "<group>"; };
 		88121E071F419F9B002A2129 /* RegViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegViewController.h; sourceTree = "<group>"; };
 		88121E081F419F9B002A2129 /* RegViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegViewController.m; sourceTree = "<group>"; };
@@ -206,6 +218,14 @@
 		8818F08C1F42F45200F50CB9 /* UIView+WebCacheOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WebCacheOperation.h"; sourceTree = "<group>"; };
 		8818F08D1F42F45200F50CB9 /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
 		882D7B631F3F2BB40063E8B5 /* 日志.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = "日志.rtf"; sourceTree = "<group>"; };
+		88825F4F1F4B158D00A4189E /* UMMobClick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UMMobClick.framework; path = hsfire/UMMAPI/UMMobClick.framework; sourceTree = "<group>"; };
+		88825F511F4B15B400A4189E /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		88825F541F4C7B5200A4189E /* libUMessage_Sdk_1.5.0a.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libUMessage_Sdk_1.5.0a.a; sourceTree = "<group>"; };
+		88825F551F4C7B5200A4189E /* UMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMessage.h; sourceTree = "<group>"; };
+		88825F571F4C7B9D00A4189E /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
+		88825F591F4C7D7400A4189E /* hsfire.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = hsfire.entitlements; sourceTree = "<group>"; };
+		88D1FB361F4D8066005D365A /* ForPassViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ForPassViewController.h; sourceTree = "<group>"; };
+		88D1FB371F4D8066005D365A /* ForPassViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ForPassViewController.m; sourceTree = "<group>"; };
 		88D39A5C1F469308009370C1 /* MyAnimatedAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyAnimatedAnnotationView.h; sourceTree = "<group>"; };
 		88D39A5D1F469308009370C1 /* MyAnimatedAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyAnimatedAnnotationView.m; sourceTree = "<group>"; };
 		88D39A621F46D11F009370C1 /* TestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestViewController.h; sourceTree = "<group>"; };
@@ -298,6 +318,8 @@
 		88FF7D971F481E4700670C0F /* SVProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVProgressHUD.m; sourceTree = "<group>"; };
 		88FF7D981F481E4700670C0F /* SVRadialGradientLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVRadialGradientLayer.h; sourceTree = "<group>"; };
 		88FF7D991F481E4700670C0F /* SVRadialGradientLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVRadialGradientLayer.m; sourceTree = "<group>"; };
+		88FF7DB71F49369200670C0F /* TestVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TestVC.h; sourceTree = "<group>"; };
+		88FF7DB81F49369200670C0F /* TestVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestVC.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -305,13 +327,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88825F581F4C7B9D00A4189E /* UserNotifications.framework in Frameworks */,
+				88D576611F3D94850082F6F7 /* Security.framework in Frameworks */,
+				88825F521F4B15B400A4189E /* libz.tbd in Frameworks */,
+				88825F501F4B158D00A4189E /* UMMobClick.framework in Frameworks */,
 				88D576671F3D94A60082F6F7 /* libstdc++.6.0.9.tbd in Frameworks */,
 				88D576651F3D949A0082F6F7 /* CoreTelephony.framework in Frameworks */,
 				88D576631F3D948F0082F6F7 /* libsqlite3.0.tbd in Frameworks */,
-				88D576611F3D94850082F6F7 /* Security.framework in Frameworks */,
 				88D5765F1F3D947B0082F6F7 /* CoreGraphics.framework in Frameworks */,
 				88D5765D1F3D94720082F6F7 /* SystemConfiguration.framework in Frameworks */,
 				88D5765B1F3D94680082F6F7 /* OpenGLES.framework in Frameworks */,
+				88825F561F4C7B5200A4189E /* libUMessage_Sdk_1.5.0a.a in Frameworks */,
 				88D576591F3D945E0082F6F7 /* QuartzCore.framework in Frameworks */,
 				88D576571F3D94540082F6F7 /* CoreLocation.framework in Frameworks */,
 				88D576541F3D93C80082F6F7 /* libcrypto.a in Frameworks */,
@@ -396,6 +422,23 @@
 				880059EF1F3EF7540042441A /* JYJProfileCell.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		8808CCB41F49764C00CEE75F /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				8808CCB51F49764C00CEE75F /* view */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
+		8808CCB51F49764C00CEE75F /* view */ = {
+			isa = PBXGroup;
+			children = (
+				8808CCB61F49766700CEE75F /* MapOneViewController.h */,
+				8808CCB71F49766700CEE75F /* MapOneViewController.m */,
+			);
+			path = view;
 			sourceTree = "<group>";
 		};
 		8818F04F1F42EB8400F50CB9 /* model */ = {
@@ -499,6 +542,15 @@
 			path = doc;
 			sourceTree = "<group>";
 		};
+		88825F531F4C7B5200A4189E /* UMessage_Sdk_1.5.0a */ = {
+			isa = PBXGroup;
+			children = (
+				88825F541F4C7B5200A4189E /* libUMessage_Sdk_1.5.0a.a */,
+				88825F551F4C7B5200A4189E /* UMessage.h */,
+			);
+			path = UMessage_Sdk_1.5.0a;
+			sourceTree = "<group>";
+		};
 		88D576011F3D59E50082F6F7 = {
 			isa = PBXGroup;
 			children = (
@@ -523,10 +575,12 @@
 		88D5760C1F3D59E50082F6F7 /* hsfire */ = {
 			isa = PBXGroup;
 			children = (
+				88825F591F4C7D7400A4189E /* hsfire.entitlements */,
 				88D576101F3D59E50082F6F7 /* AppDelegate.h */,
 				88D576111F3D59E50082F6F7 /* AppDelegate.mm */,
 				88D576A11F3DA6820082F6F7 /* CustomTabBarController.h */,
 				88D576A21F3DA6820082F6F7 /* CustomTabBarController.m */,
+				8808CCB41F49764C00CEE75F /* Map */,
 				8818F0591F42EC5E00F50CB9 /* MyCenter */,
 				882D7B621F3F2BB40063E8B5 /* doc */,
 				880059D71F3EF7120042441A /* JYNav */,
@@ -572,6 +626,9 @@
 		88D576431F3D93B20082F6F7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				88825F571F4C7B9D00A4189E /* UserNotifications.framework */,
+				88825F511F4B15B400A4189E /* libz.tbd */,
+				88825F4F1F4B158D00A4189E /* UMMobClick.framework */,
 				88D576661F3D94A60082F6F7 /* libstdc++.6.0.9.tbd */,
 				88D576641F3D949A0082F6F7 /* CoreTelephony.framework */,
 				88D576621F3D948F0082F6F7 /* libsqlite3.0.tbd */,
@@ -611,6 +668,8 @@
 				88D5766B1F3D965B0082F6F7 /* LoginViewController.m */,
 				88121E071F419F9B002A2129 /* RegViewController.h */,
 				88121E081F419F9B002A2129 /* RegViewController.m */,
+				88D1FB361F4D8066005D365A /* ForPassViewController.h */,
+				88D1FB371F4D8066005D365A /* ForPassViewController.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -636,6 +695,10 @@
 				88D39A631F46D11F009370C1 /* TestViewController.m */,
 				88FF7D8C1F4818F700670C0F /* HouseTypeMapVC.h */,
 				88FF7D8D1F4818F700670C0F /* HouseTypeMapVC.m */,
+				88FF7DB71F49369200670C0F /* TestVC.h */,
+				88FF7DB81F49369200670C0F /* TestVC.m */,
+				8808CCB11F49692E00CEE75F /* ClusterDemoViewController.h */,
+				8808CCB21F49692E00CEE75F /* ClusterDemoViewController.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -643,6 +706,7 @@
 		88D576721F3D96820082F6F7 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				88825F531F4C7B5200A4189E /* UMessage_Sdk_1.5.0a */,
 				88FF7D8F1F481E4700670C0F /* SVProgressHUD */,
 				88FF7D7C1F47D73200670C0F /* Cluster */,
 				8818F06C1F42F45200F50CB9 /* SDWebImage */,
@@ -809,6 +873,11 @@
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = HB8WY9FJWV;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					88D576221F3D59E60082F6F7 = {
 						CreatedOnToolsVersion = 8.3.3;
@@ -888,6 +957,7 @@
 				88FF7D9D1F481E4700670C0F /* SVProgressHUD.m in Sources */,
 				880059F01F3EF7540042441A /* JYJPersonViewController.m in Sources */,
 				880059F11F3EF7540042441A /* JYJCommenItem.m in Sources */,
+				8808CCB81F49766700CEE75F /* MapOneViewController.m in Sources */,
 				88D5769B1F3D96820082F6F7 /* CKHttpCommunicate.m in Sources */,
 				88121E091F419F9B002A2129 /* RegViewController.m in Sources */,
 				8818F0971F42F45200F50CB9 /* UIButton+WebCache.m in Sources */,
@@ -918,6 +988,8 @@
 				8818F06B1F42F3BF00F50CB9 /* HQSelectView.m in Sources */,
 				880059F51F3EFA640042441A /* MapViewController.m in Sources */,
 				88FF7D8E1F4818F700670C0F /* HouseTypeMapVC.m in Sources */,
+				88FF7DB91F49369200670C0F /* TestVC.m in Sources */,
+				8808CCB31F49692E00CEE75F /* ClusterDemoViewController.m in Sources */,
 				88D576951F3D96820082F6F7 /* AFURLSessionManager.m in Sources */,
 				8818F09A1F42F45200F50CB9 /* UIImage+WebP.m in Sources */,
 				88FF7D871F47D73200670C0F /* BMKClusterManager.m in Sources */,
@@ -949,6 +1021,7 @@
 				88D576711F3D966D0082F6F7 /* IndexViewController.m in Sources */,
 				8818F09D1F42F45200F50CB9 /* UIView+WebCacheOperation.m in Sources */,
 				88D576981F3D96820082F6F7 /* MBProgressHUD.m in Sources */,
+				88D1FB381F4D8066005D365A /* ForPassViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1091,16 +1164,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = hsfire/hsfire.entitlements;
 				DEVELOPMENT_TEAM = HB8WY9FJWV;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/hsfire/BaiDuAPI",
+					"$(PROJECT_DIR)/hsfire/UMMAPI",
 				);
 				INFOPLIST_FILE = hsfire/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/hsfire/BaiDuAPI/thirdlibs",
+					"$(PROJECT_DIR)/hsfire/Utils/UMessage_Sdk_1.5.0a",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.hsdcw.hsfire;
@@ -1112,16 +1188,19 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = hsfire/hsfire.entitlements;
 				DEVELOPMENT_TEAM = HB8WY9FJWV;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/hsfire/BaiDuAPI",
+					"$(PROJECT_DIR)/hsfire/UMMAPI",
 				);
 				INFOPLIST_FILE = hsfire/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/hsfire/BaiDuAPI/thirdlibs",
+					"$(PROJECT_DIR)/hsfire/Utils/UMessage_Sdk_1.5.0a",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = cn.hsdcw.hsfire;

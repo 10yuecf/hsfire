@@ -24,7 +24,7 @@
 
 #import <BaiduMapAPI_Map/BMKMapView.h>//只引入所需的单个头文件
 
-@interface AppDelegate : NSObject <UIApplicationDelegate, BMKGeneralDelegate> {
+@interface AppDelegate : UIResponder <UIApplicationDelegate, BMKGeneralDelegate> {
     UIWindow *window;
     UINavigationController *navigationController;
 }

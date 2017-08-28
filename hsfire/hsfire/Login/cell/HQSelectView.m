@@ -32,8 +32,8 @@
 
 #pragma mark ----- 设置 ----
 -(void)setup{
-    self.nomalImage = [UIImage imageNamed:@"unchecked_checkbox@2x"];
-    self.selectedImage = [UIImage imageNamed:@"checked_checkbox@2x"];
+    self.nomalImage = [UIImage imageNamed:@"chkno"];
+    self.selectedImage = [UIImage imageNamed:@"chk"];
     if (_selectedBtn == nil) {
         UIButton *selectedBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         selectedBtn.frame = self.bounds;
@@ -46,10 +46,6 @@
         [_selectedBtn setImage:self.nomalImage forState:UIControlStateNormal];
         [_selectedBtn setImage:self.selectedImage forState:UIControlStateSelected];
     }
-}
-
--(void)awakeFromNib {
-    [self setup];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {

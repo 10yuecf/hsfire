@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UserEntity.h"
 
 @interface LoginViewController : UIViewController
-
+@property (retain,nonatomic) UserEntity *userEntity;
 @end

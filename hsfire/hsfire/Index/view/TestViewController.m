@@ -14,11 +14,80 @@
 #import <BaiduMapAPI_Search/BMKRouteSearch.h>
 #import <BaiduMapAPI_Utils/BMKUtilsComponent.h>
 
+#import "BMKClusterManager.h"
+
 #import "TestViewController.h"
 #import "Macro.h"
 #import "SVProgressHUD.h"
 
-@interface TestViewController ()<BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,UITextFieldDelegate,BMKPoiSearchDelegate,BMKRouteSearchDelegate>
+/*
+ *点聚合Annotation
+ */
+@interface ClusterAnnotation : BMKPointAnnotation
+    //所包含annotation个数
+    @property (nonatomic, assign) NSInteger size;
+@end
+
+@implementation ClusterAnnotation
+    @synthesize size = _size;
+@end
+
+/*
+ *点聚合AnnotationView
+ */
+@interface ClusterAnnotationView : BMKPinAnnotationView {
+    
+}
+    @property (nonatomic, assign) NSInteger size;
+    @property (nonatomic, strong) UILabel *label;
+@end
+
+@implementation ClusterAnnotationView
+
+    @synthesize size = _size;
+    @synthesize label = _label;
+
+- (id)initWithAnnotation:(id<BMKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier {
+    self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
+    if (self) {
+        [self setBounds:CGRectMake(0.f, 0.f, 22.f, 22.f)];
+        _label = [[UILabel alloc] initWithFrame:CGRectMake(0.f, 0.f, 22.f, 22.f)];
+        _label.textColor = [UIColor whiteColor];
+        _label.font = [UIFont systemFontOfSize:11];
+        _label.textAlignment = NSTextAlignmentCenter;
+        
+        [self addSubview:_label];
+        self.alpha = 0.85;
+    }
+    return self;
+}
+
+- (void)setSize:(NSInteger)size {
+    _size = size;
+    if (_size == 1) {
+        self.label.hidden = YES;
+        self.pinColor = BMKPinAnnotationColorRed;
+        return;
+    }
+    self.label.hidden = NO;
+    if (size > 20) {
+        self.label.backgroundColor = [UIColor redColor];
+    } else if (size > 10) {
+        self.label.backgroundColor = [UIColor purpleColor];
+    } else if (size > 5) {
+        self.label.backgroundColor = [UIColor blueColor];
+    } else {
+        self.label.backgroundColor = [UIColor greenColor];
+    }
+    _label.text = [NSString stringWithFormat:@"%ld", size];
+}
+@end
+
+@interface TestViewController ()<BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,UITextFieldDelegate,BMKPoiSearchDelegate,BMKRouteSearchDelegate> {
+    BMKClusterManager *_clusterManager;//点聚合管理类
+    NSInteger _clusterZoom;//聚合级别
+    NSMutableArray *_clusterCaches;//点聚合缓存标注
+}
 @property (nonatomic, strong) BMKMapView *mapView;
 @property (nonatomic, strong) BMKLocationService *locService;
 @property (nonatomic, strong) BMKGeoCodeSearch *geoCodeSearch;
@@ -62,34 +131,87 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    //适配ios7
+    if(([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0)) {
+        self.navigationController.navigationBar.translucent = NO;
+    }
+
     _locService = [[BMKLocationService alloc]init];
     _geoCodeSearch = [[BMKGeoCodeSearch alloc] init];
     _mapAnnoView = [[BMKAnnotationView alloc] init];
     _searchAddress = [[BMKGeoCodeSearch alloc] init];
+    _clusterCaches = [[NSMutableArray alloc] init];
+    
+    for (NSInteger i = 3; i < 22; i++) {
+        [_clusterCaches addObject:[NSMutableArray array]];
+    }
+    
+    //点聚合管理类
+    _clusterManager = [[BMKClusterManager alloc] init];
+    CLLocationCoordinate2D coor = CLLocationCoordinate2DMake(30.223752, 115.091656);
+    //向点聚合管理类中添加标注
+    for (NSInteger i = 0; i < 20; i++) {
+        double lat =  (arc4random() % 100) * 0.001f;
+        double lon =  (arc4random() % 100) * 0.001f;
+        BMKClusterItem *clusterItem = [[BMKClusterItem alloc] init];
+        clusterItem.coor = CLLocationCoordinate2DMake(coor.latitude + lat, coor.longitude + lon);
+        [_clusterManager addClusterItem:clusterItem];
+    }
     
     _mapView = [[BMKMapView alloc] initWithFrame:CGRectMake(0, 100, kWidth, kHeight - 100)];
     [self.view addSubview:_mapView];
     
-    for (NSInteger i = 0; i < 20; i++) {
-        _pointAnnotation2 = [[BMKPointAnnotation alloc]init];
-        CLLocationCoordinate2D coor2;
-        
-        double lat =  (arc4random() % 100) * 0.001f;
-        double lon =  (arc4random() % 100) * 0.001f;
-        
-        coor2.longitude = 115.092267 + lon;
-        coor2.latitude = 30.22411 + lat;
-        
-        NSLog(@"%f",coor2.longitude);
-        NSLog(@"%f",coor2.latitude);
-        
-        _pointAnnotation2.coordinate = coor2;  //每次不同的gps坐标
-        _pointAnnotation2.title = @"tttt";
-        _pointAnnotation2.subtitle = @"此Annotation可拖拽!";
-        //[_mapView addAnnotation:_pointAnnotation2];
-    }
+//    for (NSInteger i = 0; i < 20; i++) {
+//        _pointAnnotation2 = [[BMKPointAnnotation alloc]init];
+//        CLLocationCoordinate2D coor2;
+//        
+//        double lat =  (arc4random() % 100) * 0.001f;
+//        double lon =  (arc4random() % 100) * 0.001f;
+//        
+//        coor2.longitude = 115.092267 + lon;
+//        coor2.latitude = 30.22411 + lat;
+//        
+//        NSLog(@"%f",coor2.longitude);
+//        NSLog(@"%f",coor2.latitude);
+//        
+//        _pointAnnotation2.coordinate = coor2;  //每次不同的gps坐标
+//        _pointAnnotation2.title = @"tttt";
+//        _pointAnnotation2.subtitle = @"此Annotation可拖拽!";
+//        //[_mapView addAnnotation:_pointAnnotation2];
+//    }
     
     [self creatbtns];
+}
+
+//更新聚合状态
+- (void)updateClusters {
+    _clusterZoom = (NSInteger)_mapView.zoomLevel;
+    @synchronized(_clusterCaches) {
+        __block NSMutableArray *clusters = [_clusterCaches objectAtIndex:(_clusterZoom - 3)];
+        
+        if (clusters.count > 0) {
+            [_mapView removeAnnotations:_mapView.annotations];
+            [_mapView addAnnotations:clusters];
+        } else {
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{
+                
+                ///获取聚合后的标注
+                __block NSArray *array = [_clusterManager getClusters:_clusterZoom];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    for (BMKCluster *item in array) {
+                        ClusterAnnotation *annotation = [[ClusterAnnotation alloc] init];
+                        annotation.coordinate = item.coordinate;
+                        annotation.size = item.size;
+                        annotation.title = [NSString stringWithFormat:@"我是%ld个", item.size];
+                        [clusters addObject:annotation];
+                    }
+                    [_mapView removeAnnotations:_mapView.annotations];
+                    [_mapView addAnnotations:clusters];
+                });
+            });
+        }
+    }
 }
 
 -(void)creatbtns {
@@ -130,8 +252,8 @@
     //115.091656,30.223752
     _pointAnnotation = [[BMKPointAnnotation alloc]init];
     CLLocationCoordinate2D coor;
-    coor.longitude = 115.091656;
-    coor.latitude = 30.223752;
+    coor.longitude = 115.091656; //经度
+    coor.latitude = 30.223752; //维度
     _pointAnnotation.coordinate = coor;  //每次不同的gps坐标
     _pointAnnotation.title = @"test";
     _pointAnnotation.subtitle = @"此Annotation可拖拽!";
@@ -196,22 +318,56 @@
     NSLog(@"this is sure btn click");
 }
 
+// 根据anntation生成对应的View
+- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation
+{
+    //普通annotation
+    NSString *AnnotationViewID = @"ClusterMark";
+    ClusterAnnotation *cluster = (ClusterAnnotation*)annotation;
+    ClusterAnnotationView *annotationView = [[ClusterAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+    annotationView.size = cluster.size;
+    annotationView.draggable = YES;
+    annotationView.annotation = cluster;
+    return annotationView;
+    
+}
+
 - (void)mapView:(BMKMapView *)mapView annotationViewForBubble:(BMKAnnotationView *)view{
     NSLog(@"点击了");
-    CLLocationCoordinate2D pt=(CLLocationCoordinate2D){0,0};
-    pt=(CLLocationCoordinate2D){mapView.region.center.latitude,mapView.region.center.longitude};
+    CLLocationCoordinate2D pt = (CLLocationCoordinate2D){0,0};
+    pt = (CLLocationCoordinate2D){mapView.region.center.latitude,mapView.region.center.longitude};
     BMKReverseGeoCodeOption * option = [[BMKReverseGeoCodeOption alloc]init];
     option.reverseGeoPoint = pt;
-    BOOL flag=[_searchAddress reverseGeoCode:option];
+    BOOL flag = [_searchAddress reverseGeoCode:option];
     
     if (flag) {
         //_mapView.showsUserLocation = NO;//不显示自己的位置
     }
+    
+//    if ([view isKindOfClass:[ClusterAnnotationView class]]) {
+//        ClusterAnnotation *clusterAnnotation = (ClusterAnnotation*)view.annotation;
+//        if (clusterAnnotation.size > 1) {
+//            [mapView setCenterCoordinate:view.annotation.coordinate];
+//            [mapView zoomIn];
+//        }
+//    }
 }
+
+/**
+ *地图初始化完毕时会调用此接口
+ *@param mapView 地图View
+ */
+- (void)mapViewDidFinishLoading:(BMKMapView *)mapView {
+    [self updateClusters];
+}
+
 
 //地图被拖动的时候，需要时时的渲染界面，当渲染结束的时候我们就去定位然后获取图片对应的经纬度
 - (void)mapView:(BMKMapView *)mapView onDrawMapFrame:(BMKMapStatus*)status {
     //NSLog(@"onDrawMapFrame");
+    if (_clusterZoom != 0 && _clusterZoom != (NSInteger)mapView.zoomLevel) {
+        [self updateClusters];
+    }
 }
 
 - (void)mapView:(BMKMapView *)mapView regionWillChangeAnimated:(BOOL)animated {
@@ -311,7 +467,7 @@
     //定位
     [_locService startUserLocationService];
     
-    [_mapView removeAnnotation:_pointAnnotation];
+    //[_mapView removeAnnotation:_pointAnnotation];
     
     //添加大头针
     //    _pointAnnotation = [[BMKPointAnnotation alloc] init];
@@ -353,12 +509,12 @@
     //    _mapView.centerCoordinate = userLocation.location.coordinate; //让地图的中心位置在这里
     [_locService stopUserLocationService];
     
-    _pointAnnotation = [[BMKPointAnnotation alloc] init];
-    _pointAnnotation.coordinate = userLocation.location.coordinate;
-    _pointAnnotation.title = @"我在这个地方";
-    _pointAnnotation.subtitle = @"你在哪呢";
-    [_mapView addAnnotation:_pointAnnotation];
-    [_mapView selectAnnotation:_pointAnnotation animated:YES];
+//    _pointAnnotation = [[BMKPointAnnotation alloc] init];
+//    _pointAnnotation.coordinate = userLocation.location.coordinate;
+//    _pointAnnotation.title = @"我在这个地方";
+//    _pointAnnotation.subtitle = @"你在哪呢";
+//    [_mapView addAnnotation:_pointAnnotation];
+//    [_mapView selectAnnotation:_pointAnnotation animated:YES];
     [self createLocationSignImage];
 }
 

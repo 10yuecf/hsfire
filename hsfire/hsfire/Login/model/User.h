@@ -12,33 +12,37 @@
 
 @property (nonatomic, copy) NSString *ID;
 @property (nonatomic, copy) NSString *userID;
-@property (nonatomic, copy) NSString *usertoken;
-@property (nonatomic, copy) NSString *username;
-@property (nonatomic, copy) NSString *nickname;
-@property (nonatomic, copy) NSString *photo_s;
-@property (nonatomic, copy) NSString *sex;
-@property (nonatomic, copy) NSString *bir;
-@property (nonatomic, copy) NSString *area;
-@property (nonatomic, copy) NSString *heigh;
-@property (nonatomic, copy) NSString *edu;
-@property (nonatomic, copy) NSString *pay;
-@property (nonatomic, copy) NSString *love;
+@property (nonatomic, copy) NSString *devicetoken;
+@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *account;
+@property (nonatomic, copy) NSString *status;
+@property (nonatomic, copy) NSString *zw;
+@property (nonatomic, copy) NSString *bz;
+@property (nonatomic, copy) NSString *createtime;
+@property (nonatomic, copy) NSString *groupid;
+@property (nonatomic, copy) NSString *tagid;
+@property (nonatomic, copy) NSString *tagname;
+@property (nonatomic, copy) NSString *dwtype;
+@property (nonatomic, copy) NSString *tel;
+@property (nonatomic, copy) NSString *dwname;
+@property (nonatomic, copy) NSString *dwid;
 @property (nonatomic, copy) NSString *loginstatus;
-@property (nonatomic, copy) NSString *degree;
 
 +(instancetype)userWithName:(NSString *)ID
                     userID:(NSString *)userID
-                    usertoken:(NSString *)usertoken
-                    username:(NSString *)username
-                    nickname:(NSString *)nickname
-                    photo_s:(NSString *)photo_s
-                    sex:(NSString *)sex
-                    bir:(NSString *)bir
-                    area:(NSString *)area
-                    heigh:(NSString *)heigh
-                    edu:(NSString *)edu
-                    pay:(NSString *)pay
-                    love:(NSString *)love
-                    loginstatus:(NSString *)loginstatus
-                    degree:(NSString *)degree;
+                    devicetoken:(NSString *)devicetoken
+                    name:(NSString *)name
+                    account:(NSString *)account
+                    status:(NSString *)status
+                    zw:(NSString *)zw
+                    bz:(NSString *)bz
+                    createtime:(NSString *)createtime
+                    groupid:(NSString *)groupid
+                    tagid:(NSString *)tagid
+                    tagname:(NSString *)tagname
+                    dwtype:(NSString *)dwtype
+                    tel:(NSString *)tel
+                    dwname:(NSString *)dwname
+                    dwid:(NSString *)dwid
+                    loginstatus:(NSString *)loginstatus;
 @end

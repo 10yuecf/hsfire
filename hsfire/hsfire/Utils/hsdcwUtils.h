@@ -12,6 +12,8 @@
 
 -(BOOL)isBlankString:(NSString *)string;
 
+-(BOOL)validateMobile:(NSString *)mobile;
+
 -(NSMutableArray *)getUserInfo;
 
 -(int)getRandomNumber:(int)from to:(int)to;

@@ -30,14 +30,12 @@
 - (void)callJavaScriptWithFunctionName:(NSString *)fn param:(id)param;
 /**
  *  当webView完成加载后要ObjC主动去调用的JavaScript方法
- *
- *  @param fn
  */
 - (void)callJavaScriptFunctionWhenWebViewFinishLoadWithFunctionName:(NSString *)fn param:(id)param;
 /**
  *  接收到的JS数据
- *  @param reslut JS返回结果
- *  @param registerFunctionName 注册时使用的方法名,当注册了多个方法时用于区分不同方法的回调
+ *  reslut JS返回结果
+ *  registerFunctionName 注册时使用的方法名,当注册了多个方法时用于区分不同方法的回调
  */
 @property (nonatomic,copy) void (^handleResultDictionary)(NSDictionary *reslut,NSString *registerFunctionName);
 

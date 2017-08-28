@@ -15,6 +15,7 @@
 #import <BaiduMapAPI_Map/BMKMapComponent.h>
 #import <BaiduMapAPI_Location/BMKLocationComponent.h>
 #import <BaiduMapAPI_Search/BMKGeocodeSearch.h>
+#import "UserEntity.h"
 
 @interface MapViewController : UIViewController<BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate> {
     BMKMapView* _mapView; //地图
@@ -22,5 +23,8 @@
     BMKGeoCodeSearch *_geocodesearch; //地理编码主类，用来查询、返回结果信息
     UISegmentedControl* segment; //分段控制器
 }
+
+/** userEntity */
+@property (retain,nonatomic) UserEntity *userEntity;
 
 @end

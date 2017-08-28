@@ -19,11 +19,18 @@
 #import "MyMD5.h"
 #import "hsdcwUtils.h"
 #import "CKHttpCommunicate.h"
-#import "MBProgressHUD.h"
+#import "MBProgressHUD+Add.h"
 #import "Macro.h"
+#import "UserTool.h"
+#import "User.h"
+#import "UserEntity.h"
+#import "BaseInfo.h"
 
 #import "TestViewController.h"
 #import "HouseTypeMapVC.h"
+#import "MapOneViewController.h"
+
+#import "ForPassViewController.h"
 
 static void *ProgressObserverContext = &ProgressObserverContext;
 @interface LoginViewController ()<UITextFieldDelegate>
@@ -31,9 +38,11 @@ static void *ProgressObserverContext = &ProgressObserverContext;
 @property (nonatomic ,strong)UIButton *registerBtn;
 @property (nonatomic ,strong)UILabel *loginLabel;
 @property (nonatomic, strong)UITextField *accountFiled;
-@property (nonatomic, strong)UITextField *passTextFiled;
+@property (nonatomic, strong)UITextField *passFiled;
 @property (nonatomic, strong)UIView *accountView;
 @property (nonatomic, strong)UIView *passView;
+
+@property (nonatomic, strong) NSMutableArray *datas;
 @end
 
 @implementation LoginViewController
@@ -92,13 +101,13 @@ static void *ProgressObserverContext = &ProgressObserverContext;
     //_phoneTextFiled.keyboardType = UIKeyboardTypeNumberPad;
     [_accountView addSubview:_accountFiled];
     
-    _passTextFiled = [[UITextField alloc]initWithFrame:CGRectMake(40, 5, 190, 20)];
-    _passTextFiled.delegate = self;
-    _passTextFiled.placeholder = @"密码";
-    _passTextFiled.font = [UIFont systemFontOfSize:14];
-    _passTextFiled.clearButtonMode = UITextFieldViewModeWhileEditing;
-    _passTextFiled.secureTextEntry = YES;
-    [_passView addSubview:_passTextFiled];
+    _passFiled = [[UITextField alloc]initWithFrame:CGRectMake(40, 5, 190, 20)];
+    _passFiled.delegate = self;
+    _passFiled.placeholder = @"密码";
+    _passFiled.font = [UIFont systemFontOfSize:14];
+    _passFiled.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _passFiled.secureTextEntry = YES;
+    [_passView addSubview:_passFiled];
     
     UIImageView *accountIV = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 30, 30)];
     accountIV.image = [UIImage imageNamed:@"account"];
@@ -135,47 +144,184 @@ static void *ProgressObserverContext = &ProgressObserverContext;
     //[regButton setBackgroundColor:[UIColor colorWithRed:255/255.0f green:0/255.0f blue:0/255.0f alpha:1]];
     [self.view addSubview:regButton];
     
-    UIButton *forgetButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    forgetButton.titleLabel.font = [UIFont systemFontOfSize:13];
-    forgetButton.frame = CGRectMake(kWidth / 3, kHeight / 1.5, 100, 30);
-    [forgetButton setTitle:@"忘记密码?" forState:UIControlStateNormal];
-    [forgetButton setTitleColor:[UIColor colorWithRed:225/255.0f green:208/255.0f blue:208/255.0f alpha:1] forState:UIControlStateNormal];
-    [forgetButton addTarget:self action:@selector(forgotPwdButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:forgetButton];
+//    UIButton *forgetButton = [UIButton buttonWithType:UIButtonTypeCustom];
+//    forgetButton.titleLabel.font = [UIFont systemFontOfSize:13];
+//    forgetButton.frame = CGRectMake(kWidth / 3, kHeight / 1.5, 100, 30);
+//    [forgetButton setTitle:@"忘记密码?" forState:UIControlStateNormal];
+//    [forgetButton setTitleColor:[UIColor colorWithRed:225/255.0f green:208/255.0f blue:208/255.0f alpha:1] forState:UIControlStateNormal];
+//    [forgetButton addTarget:self action:@selector(forgotPwdButtonClick:) forControlEvents:UIControlEventTouchUpInside];
+    //[self.view addSubview:forgetButton];
+    
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(kWidth / 2.5, kHeight / 1.5, 100, 30)];
+    label.text = @"忘记密码?";
+    label.textColor = [UIColor colorWithRed:225/255.0f green:208/255.0f blue:208/255.0f alpha:1];
+    label.textAlignment = NSTextAlignmentLeft;
+    label.font = [UIFont systemFontOfSize:13];
+    [self.view addSubview:label];
+    
+    //为label添加点击事件
+    label.userInteractionEnabled = YES;
+    UITapGestureRecognizer *labelTapGestureRecognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(labelTouchUpInside:)];
+    [label addGestureRecognizer:labelTapGestureRecognizer];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     [self.view endEditing:YES];
 }
 
--(void)forgotPwdButtonClick:(UIButton *)button {
-    NSLog(@"%s","forgot pass");
+//忘记密码
+-(void)labelTouchUpInside:(UITapGestureRecognizer *)recognizer {
+    //UILabel *label=(UILabel*)recognizer.view;
+    //NSLog(@"%@被点击了",label.text);
+    
+    ForPassViewController *forpass = [[ForPassViewController alloc]init];
+    [self.navigationController pushViewController:forpass animated:YES];
 }
 
 -(void)registerButtonClick:(UIButton *)button {
-    //RegViewController *reg = [[RegViewController alloc]init];
-    //[self.navigationController pushViewController:reg animated:YES];
+    RegViewController *reg = [[RegViewController alloc]init];
+    [self.navigationController pushViewController:reg animated:YES];
     
-    TestViewController *test = [[TestViewController alloc]init];
-    [self.navigationController pushViewController:test animated:YES];
+    //TestViewController *test = [[TestViewController alloc]init];
+    //[self.navigationController pushViewController:test animated:YES];
     
     //ClusterDemoViewController *cluster = [[ClusterDemoViewController alloc]init];
     ///[self.navigationController pushViewController:cluster animated:YES];
     
     //HouseTypeMapVC *hs = [[HouseTypeMapVC alloc]init];
     //[self.navigationController pushViewController:hs animated:YES];
+    
+    //MapOneViewController *mp = [[MapOneViewController alloc]init];
+    //[self.navigationController pushViewController:mp animated:YES];
 }
 
 -(void)loginButtonClick:(UIButton *)button {
-    MapViewController *map = [[MapViewController alloc]init];
-    [self.navigationController pushViewController:map animated:YES];
+    hsdcwUtils *utils = [[hsdcwUtils alloc]init];
+    
+    //用户登陆接口
+    NSString *log_account = _accountFiled.text;
+    NSString *log_pass = [MyMD5 md5:_passFiled.text];
+    
+    if ([utils isBlankString:log_account]) {
+        [MBProgressHUD showError:@"请输入账号" toView:self.view];
+    }
+    else if ([utils isBlankString:_passFiled.text]) {
+        [MBProgressHUD showError:@"请输入密码" toView:self.view];
+    }
+    else {
+        NSDictionary *parameter = @{@"account":log_account,
+                                    @"pass":log_pass};
+        [CKHttpCommunicate createRequest:appLogin WithParam:parameter withMethod:POST success:^(id response) {
+            //NSLog(@"%@",response);
+            
+            if (response) {
+                NSString *result = response[@"code"];
+                //NSLog(@"%@",result);
+                
+                //登陆成功
+                if ([result isEqualToString:@"200"]) {
+                    NSString *uid = response[@"data"][0][@"id"];
+                    NSString *acc = response[@"data"][0][@"account"];
+                    NSString *name = response[@"data"][0][@"name"];
+                    NSString *status = response[@"data"][0][@"status"];
+                    NSString *zw = response[@"data"][0][@"zw"];
+                    NSString *bz = response[@"data"][0][@"bz"];
+                    NSString *createtime = response[@"data"][0][@"create_time"];
+                    NSString *groupid = response[@"data"][0][@"groupid"];
+                    NSString *tagid = response[@"data"][0][@"tagid"];
+                    NSString *tagname = response[@"data"][0][@"tagname"];
+                    NSString *dwtype = response[@"data"][0][@"dwtype"];
+                    NSString *tel = response[@"data"][0][@"tel"];
+                    NSString *dwname = response[@"data"][0][@"dwname"];
+                    NSString *dwid = response[@"data"][0][@"dwid"];
+                    
+                    //----------------查询本地库最新设备码start--------------
+                    NSString *chkdev = [NSString stringWithFormat:@"select * from t_base order by id desc limit 1"];
+                    NSMutableArray *dev_arr = [UserTool baseWithSql:chkdev];
+                    NSString *devcode;
+                    if(dev_arr.count > 0) {
+                        BaseInfo *ba = dev_arr[0];
+                        devcode = ba.keyValue;
+                        NSLog(@"devcode==========%@",devcode);
+                        
+                        //登录成功更新远程用户设备码
+                        NSDictionary *param_dev = @{@"type":@"ios",
+                                                    @"id":uid,
+                                                    @"code":devcode
+                                                    };
+                        [CKHttpCommunicate createRequest:SandUmcode WithParam:param_dev withMethod:POST success:^(id response) {
+                            if (response) {
+                                NSString *result = response[@"code"];
+                                if ([result isEqualToString:@"200"]) {
+                                    NSLog(@"%s","update dev code successful!");
+                                }
+                                else if ([result isEqualToString:@"400"]) {
+                                    NSLog(@"%s","update dev code error!");
+                                }
+                            }
+                        } failure:^(NSError *error) {
+                            NSLog(@"%@",error);
+                        } showHUD:self.inputView];
+                    }
+                    //----------------查询本地库最新设备码end--------------
+                    
+                    //----------------判断用户信息是否存在本地start---------
+                    NSString *chkuser = [NSString stringWithFormat:@"select * from t_user where account = '%@' and tel = '%@'",acc,tel];
+                    _datas = [UserTool userWithSql:chkuser];
+                    if (_datas.count == 0) {
+                        NSString *insert = [NSString stringWithFormat:@"insert into t_user (userID,devicetoken,name,account,status,zw,bz,createtime,groupid,tagid,tagname,dwtype,tel,dwname,dwid,loginstatus) values('%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','%@','1')",uid,devcode,name,acc,status,zw,bz,createtime,groupid,tagid,tagname,dwtype,tel,dwname,dwid];
+                        [UserTool userWithSql:insert];
+                    }
+                    else {
+                        //更新此用户登录状态
+                        NSString *uplogin = [NSString stringWithFormat:@"update t_user set devicetoken = '%@',name = '%@', status = '%@', zw = '%@',bz = '%@',groupid = '%@',tagid = '%@',tagname = '%@',dwtype = '%@',tel = '%@',dwname = '%@',dwid = '%@',loginstatus = '1' where userID = '%@'", devcode, name, status, zw, bz, groupid, tagid, tagname, dwtype, tel, dwname, dwid, uid];
+                        [UserTool userWithSql:uplogin];
+                        
+                        //更新其他数据为未登录状态
+                        NSString *upall = [NSString stringWithFormat:@"update t_user set loginstatus = '0' where userID != '%@' and tel != '%@'",uid, tel];
+                        [UserTool userWithSql:upall];
+                    }
+                    //----------------判断用户信息是否存在本地end-----------
+                    
+                    //建立临时变量传值
+                    UserEntity *userEntity = [[UserEntity alloc]init];
+                    userEntity.userId = uid;
+                    userEntity.name = name;
+                    userEntity.zw = zw;
+                    userEntity.groupid = groupid;
+                    userEntity.tagid = tagid;
+                    userEntity.tagname = tagname;
+                    userEntity.dwtype = dwtype;
+                    userEntity.devcode = devcode;
+                    userEntity.tel = tel;
+                    userEntity.dwname = dwname;
+                    userEntity.dwid = dwid;
+                    
+                    //登陆成功跳转
+                    MapViewController *mapvc = [[MapViewController alloc]init];
+                    [self.navigationController pushViewController:mapvc animated:YES];
+                    mapvc.userEntity = userEntity;
+                }
+                else if ([result isEqualToString:@"400"]) {
+                    NSString *text = response[@"data"][@"text"];
+                    
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:text message:nil preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+                    [alert addAction:action];
+                    [self presentViewController:alert animated:YES completion:nil];
+                }
+            }
+        } failure:^(NSError *error) {
+            NSLog(@"%@",error);
+        } showHUD:self.view];
+    }
 }
 
-- (BOOL)prefersStatusBarHidden{
+- (BOOL)prefersStatusBarHidden {
     return YES;
 }
 
-- (UIStatusBarStyle)preferredStatusBarStyle{
+- (UIStatusBarStyle)preferredStatusBarStyle {
     return UIStatusBarStyleDefault;
 }
 
