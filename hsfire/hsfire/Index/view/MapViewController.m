@@ -237,12 +237,11 @@
     self.navigationItem.leftBarButtonItems = @[negativeSpacer, profile];
     
     //搜索按钮
-//    UIButton *searchButton = [[UIButton alloc] init];
-//    [searchButton setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
-//    [searchButton setImage:[UIImage imageNamed:@"search_down"] forState:UIControlStateHighlighted];
-//    searchButton.frame = CGRectMake(0, 0, 44, 44);
-//    [searchButton addTarget:self action:@selector(msgClick) forControlEvents:UIControlEventTouchUpInside];
-//    [rightView addSubview:searchButton];
+    UIButton *searchButton = [[UIButton alloc] init];
+    [searchButton setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
+    [searchButton setImage:[UIImage imageNamed:@"search_down"] forState:UIControlStateHighlighted];
+    searchButton.frame = CGRectMake(0, 0, 44, 44);
+    [searchButton addTarget:self action:@selector(msgClick) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *msgButton = [[UIButton alloc] init];
     [msgButton setImage:[UIImage imageNamed:@"mymsg"] forState:UIControlStateNormal];
@@ -252,6 +251,7 @@
     UIView *rightView = [[UIView alloc] init];
     rightView.frame = CGRectMake(0, 0, 88, 44);
     [rightView addSubview:msgButton];
+    [rightView addSubview:searchButton];
     
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightView];
     self.navigationItem.rightBarButtonItems = @[negativeSpacer, rightItem];

@@ -86,11 +86,11 @@ BMKMapManager* _mapManager;
     //NSLog(@"%lu",(unsigned long)_datas.count);
     if (_datas.count == 1) {
         // 自动登录
-        //MapViewController *map = [[MapViewController alloc]init];
-        //window.rootViewController = [[JYJNavigationController alloc]initWithRootViewController:map];
+        MapViewController *map = [[MapViewController alloc]init];
+        window.rootViewController = [[JYJNavigationController alloc]initWithRootViewController:map];
         
-        LoginViewController *login = [[LoginViewController alloc]init];
-        window.rootViewController = [[JYJNavigationController alloc]initWithRootViewController:login];
+        //LoginViewController *login = [[LoginViewController alloc]init];
+        //window.rootViewController = [[JYJNavigationController alloc]initWithRootViewController:login];
     }
     else {
         // 设置窗口的根控制器
@@ -175,10 +175,6 @@ BMKMapManager* _mapManager;
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     // 1.2.7版本开始不需要用户再手动注册devicetoken，SDK会自动注册
     //[UMessage registerDeviceToken:deviceToken];
-    
-    //NSLog(@"==========%@",[[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]
-    //                        stringByReplacingOccurrencesOfString: @">" withString: @""]
-    //                       stringByReplacingOccurrencesOfString: @" " withString: @""]);
     
     NSString *devcode = [[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]
                           stringByReplacingOccurrencesOfString: @">" withString: @""]

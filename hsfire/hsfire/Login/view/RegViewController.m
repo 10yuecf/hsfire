@@ -357,7 +357,7 @@
                                         @"name":name,
                                         @"account":account};
             [CKHttpCommunicate createRequest:Register WithParam:parameter withMethod:POST success:^(id response) {
-                NSLog(@"================%@",response);
+                //NSLog(@"================%@",response);
                 if (response) {
                     NSString *result = response[@"code"];
                     //NSLog(@"==========%@",result);
