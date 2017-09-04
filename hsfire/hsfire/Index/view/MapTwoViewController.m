@@ -6,12 +6,12 @@
 //  Copyright © 2017年 hsdcw. All rights reserved.
 //
 
-#import "MapViewController.h"
+#import "MapTwoViewController.h"
 #import "JYJSliderMenuTool.h"
 #import "Macro.h"
 #import "MyAnimatedAnnotationView.h"
 
-@interface MapViewController ()<UIGestureRecognizerDelegate>
+@interface MapTwoViewController ()<UIGestureRecognizerDelegate>
 {
     BMKCircle* circle;
     BMKPolygon* polygon;
@@ -36,7 +36,7 @@
 @property (nonatomic,strong) UIButton *sureButton;
 @end
 
-@implementation MapViewController
+@implementation MapTwoViewController
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];

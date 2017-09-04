@@ -20,6 +20,7 @@
 #import "Macro.h"
 
 #import "SettingViewController.h"
+#import "MapViewController.h"
 
 @interface JYJPersonViewController () <UITableViewDelegate, UITableViewDataSource>
 /** tableView */
@@ -121,7 +122,7 @@
 }
 
 - (void)setupData {
-    JYJCommenItem *my1 = [JYJCommenItem itemWithIcon:@"menu1" title:@"水源管理" subtitle:@"" destVcClass:[JYJMyWalletViewController class]];
+    JYJCommenItem *my1 = [JYJCommenItem itemWithIcon:@"menu1" title:@"水源管理" subtitle:@"" destVcClass:[MapViewController class]];
     
     JYJCommenItem *my2 = [JYJCommenItem itemWithIcon:@"menu2" title:@"重点单位" subtitle:@"" destVcClass:[JYJMyCardViewController class]];
     

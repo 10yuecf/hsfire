@@ -1,5 +1,5 @@
 //
-//  TestViewController.m
+//  Test2ViewController.m
 //  hsfire
 //
 //  Created by louislee on 2017/8/18.
@@ -16,74 +16,74 @@
 
 #import "BMKClusterManager.h"
 
-#import "TestViewController.h"
+#import "Test2ViewController.h"
 #import "Macro.h"
 #import "SVProgressHUD.h"
 
 /*
  *点聚合Annotation
  */
-@interface ClusterAnnotation : BMKPointAnnotation
-    //所包含annotation个数
-    @property (nonatomic, assign) NSInteger size;
-@end
-
-@implementation ClusterAnnotation
-    @synthesize size = _size;
-@end
+//@interface Cluster2Annotation : BMKPointAnnotation
+//    //所包含annotation个数
+//    @property (nonatomic, assign) NSInteger size;
+//@end
+//
+//@implementation Cluster2Annotation
+//    @synthesize size = _size;
+//@end
 
 /*
  *点聚合AnnotationView
  */
-@interface ClusterAnnotationView : BMKPinAnnotationView {
-    
-}
-    @property (nonatomic, assign) NSInteger size;
-    @property (nonatomic, strong) UILabel *label;
-@end
+//@interface Cluster2AnnotationView : BMKPinAnnotationView {
+//    
+//}
+//    @property (nonatomic, assign) NSInteger size;
+//    @property (nonatomic, strong) UILabel *label;
+//@end
+//
+//@implementation Cluster2AnnotationView
+//
+//    @synthesize size = _size;
+//    @synthesize label = _label;
+//
+//- (id)initWithAnnotation:(id<BMKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier {
+//    self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
+//    if (self) {
+//        [self setBounds:CGRectMake(0.f, 0.f, 22.f, 22.f)];
+//        _label = [[UILabel alloc] initWithFrame:CGRectMake(0.f, 0.f, 22.f, 22.f)];
+//        _label.textColor = [UIColor whiteColor];
+//        _label.font = [UIFont systemFontOfSize:11];
+//        _label.textAlignment = NSTextAlignmentCenter;
+//        
+//        [self addSubview:_label];
+//        self.alpha = 0.85;
+//    }
+//    return self;
+//}
+//
+//- (void)setSize:(NSInteger)size {
+//    _size = size;
+//    if (_size == 1) {
+//        self.label.hidden = YES;
+//        self.pinColor = BMKPinAnnotationColorRed;
+//        return;
+//    }
+//    self.label.hidden = NO;
+//    if (size > 20) {
+//        self.label.backgroundColor = [UIColor redColor];
+//    } else if (size > 10) {
+//        self.label.backgroundColor = [UIColor purpleColor];
+//    } else if (size > 5) {
+//        self.label.backgroundColor = [UIColor blueColor];
+//    } else {
+//        self.label.backgroundColor = [UIColor greenColor];
+//    }
+//    _label.text = [NSString stringWithFormat:@"%ld", size];
+//}
+//@end
 
-@implementation ClusterAnnotationView
-
-    @synthesize size = _size;
-    @synthesize label = _label;
-
-- (id)initWithAnnotation:(id<BMKAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier {
-    self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
-    if (self) {
-        [self setBounds:CGRectMake(0.f, 0.f, 22.f, 22.f)];
-        _label = [[UILabel alloc] initWithFrame:CGRectMake(0.f, 0.f, 22.f, 22.f)];
-        _label.textColor = [UIColor whiteColor];
-        _label.font = [UIFont systemFontOfSize:11];
-        _label.textAlignment = NSTextAlignmentCenter;
-        
-        [self addSubview:_label];
-        self.alpha = 0.85;
-    }
-    return self;
-}
-
-- (void)setSize:(NSInteger)size {
-    _size = size;
-    if (_size == 1) {
-        self.label.hidden = YES;
-        self.pinColor = BMKPinAnnotationColorRed;
-        return;
-    }
-    self.label.hidden = NO;
-    if (size > 20) {
-        self.label.backgroundColor = [UIColor redColor];
-    } else if (size > 10) {
-        self.label.backgroundColor = [UIColor purpleColor];
-    } else if (size > 5) {
-        self.label.backgroundColor = [UIColor blueColor];
-    } else {
-        self.label.backgroundColor = [UIColor greenColor];
-    }
-    _label.text = [NSString stringWithFormat:@"%ld", size];
-}
-@end
-
-@interface TestViewController ()<BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,UITextFieldDelegate,BMKPoiSearchDelegate,BMKRouteSearchDelegate> {
+@interface Test2ViewController ()<BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,UITextFieldDelegate,BMKPoiSearchDelegate,BMKRouteSearchDelegate> {
     BMKClusterManager *_clusterManager;//点聚合管理类
     NSInteger _clusterZoom;//聚合级别
     NSMutableArray *_clusterCaches;//点聚合缓存标注
@@ -109,7 +109,7 @@
 
 @end
 
-@implementation TestViewController
+@implementation Test2ViewController
 
 - (void)viewWillAppear:(BOOL)animated {
     [_mapView viewWillAppear];
@@ -200,13 +200,13 @@
                 __block NSArray *array = [_clusterManager getClusters:_clusterZoom];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    for (BMKCluster *item in array) {
-                        ClusterAnnotation *annotation = [[ClusterAnnotation alloc] init];
-                        annotation.coordinate = item.coordinate;
-                        annotation.size = item.size;
-                        annotation.title = [NSString stringWithFormat:@"我是%ld个", item.size];
-                        [clusters addObject:annotation];
-                    }
+//                    for (BMKCluster *item in array) {
+//                        Cluster2Annotation *annotation = [[Cluster2Annotation alloc] init];
+//                        annotation.coordinate = item.coordinate;
+//                        annotation.size = item.size;
+//                        annotation.title = [NSString stringWithFormat:@"我是%ld个", item.size];
+//                        [clusters addObject:annotation];
+//                    }
                     [_mapView removeAnnotations:_mapView.annotations];
                     [_mapView addAnnotations:clusters];
                 });
@@ -323,13 +323,13 @@
 - (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation
 {
     //普通annotation
-    NSString *AnnotationViewID = @"ClusterMark";
-    ClusterAnnotation *cluster = (ClusterAnnotation*)annotation;
-    ClusterAnnotationView *annotationView = [[ClusterAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
-    annotationView.size = cluster.size;
-    annotationView.draggable = YES;
-    annotationView.annotation = cluster;
-    return annotationView;
+    //NSString *AnnotationViewID = @"ClusterMark2";
+//    Cluster2Annotation *cluster = (Cluster2Annotation*)annotation;
+//    Cluster2AnnotationView *annotationView = [[Cluster2AnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+//    annotationView.size = cluster.size;
+//    annotationView.draggable = YES;
+//    annotationView.annotation = cluster;
+    return nil;
     
 }
 

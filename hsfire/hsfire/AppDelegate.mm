@@ -5,8 +5,9 @@
 //  Created by louislee on 2017/7/29.
 //  Copyright © 2017年 hsdcw. All rights reserved.
 //
-#import "AppDelegate.h"
+
 #import <BaiduMapAPI_Map/BMKMapComponent.h>
+#import "AppDelegate.h"
 #import "LoginViewController.h"
 #import "JYJNavigationController.h"
 #import "MapViewController.h"
@@ -19,6 +20,10 @@
 #import "CKHttpCommunicate.h"
 #import "UserTool.h"
 #import "User.h"
+
+#import "TestViewController.h"
+#import "MapTwoViewController.h"
+#import "ClusterDemoViewController.h"
 
 BMKMapManager* _mapManager;
 @interface AppDelegate ()<UNUserNotificationCenterDelegate>
@@ -89,8 +94,14 @@ BMKMapManager* _mapManager;
         MapViewController *map = [[MapViewController alloc]init];
         window.rootViewController = [[JYJNavigationController alloc]initWithRootViewController:map];
         
+        //MapTwoViewController *vc = [[MapTwoViewController alloc]init];
+        //window.rootViewController = [[JYJNavigationController alloc]initWithRootViewController:vc];
+        
         //LoginViewController *login = [[LoginViewController alloc]init];
         //window.rootViewController = [[JYJNavigationController alloc]initWithRootViewController:login];
+        
+        //ClusterDemoViewController *cc = [[ClusterDemoViewController alloc]init];
+        //window.rootViewController = [[JYJNavigationController alloc]initWithRootViewController:cc];
     }
     else {
         // 设置窗口的根控制器

@@ -51,6 +51,7 @@
 		8818F09C1F42F45200F50CB9 /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 8818F08B1F42F45200F50CB9 /* UIImageView+WebCache.m */; };
 		8818F09D1F42F45200F50CB9 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 8818F08D1F42F45200F50CB9 /* UIView+WebCacheOperation.m */; };
 		882D7B641F3F2BB40063E8B5 /* 日志.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 882D7B631F3F2BB40063E8B5 /* 日志.rtf */; };
+		8831E8911F5A530D007F1230 /* Test2ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8831E8901F5A530D007F1230 /* Test2ViewController.m */; };
 		88607FCE1F556E8F0006E002 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88607FCD1F556E8F0006E002 /* SettingViewController.m */; };
 		88607FD41F556ED30006E002 /* JHBCellConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 88607FD11F556ED30006E002 /* JHBCellConfig.m */; };
 		88607FD51F556ED30006E002 /* JHCellConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 88607FD31F556ED30006E002 /* JHCellConfig.m */; };
@@ -111,6 +112,7 @@
 		88D576A01F3D9F490082F6F7 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 88D5769F1F3D9F490082F6F7 /* mapapi.bundle */; };
 		88D576A31F3DA6820082F6F7 /* CustomTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88D576A21F3DA6820082F6F7 /* CustomTabBarController.m */; };
 		88D576A61F3DA6E00082F6F7 /* MyNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88D576A51F3DA6E00082F6F7 /* MyNavigationController.m */; };
+		88F037271F57FB3900E23F5A /* MapTwoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88F037261F57FB3900E23F5A /* MapTwoViewController.m */; };
 		88FF7D851F47D73200670C0F /* BMKClusterAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FF7D7E1F47D73200670C0F /* BMKClusterAlgorithm.m */; };
 		88FF7D861F47D73200670C0F /* BMKClusterItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FF7D801F47D73200670C0F /* BMKClusterItem.m */; };
 		88FF7D871F47D73200670C0F /* BMKClusterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FF7D821F47D73200670C0F /* BMKClusterManager.m */; };
@@ -229,6 +231,8 @@
 		8818F08C1F42F45200F50CB9 /* UIView+WebCacheOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+WebCacheOperation.h"; sourceTree = "<group>"; };
 		8818F08D1F42F45200F50CB9 /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
 		882D7B631F3F2BB40063E8B5 /* 日志.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = "日志.rtf"; sourceTree = "<group>"; };
+		8831E88F1F5A530D007F1230 /* Test2ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Test2ViewController.h; sourceTree = "<group>"; };
+		8831E8901F5A530D007F1230 /* Test2ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Test2ViewController.m; sourceTree = "<group>"; };
 		88607FCC1F556E8F0006E002 /* SettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
 		88607FCD1F556E8F0006E002 /* SettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
 		88607FD01F556ED30006E002 /* JHBCellConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JHBCellConfig.h; sourceTree = "<group>"; };
@@ -331,6 +335,8 @@
 		88D576A21F3DA6820082F6F7 /* CustomTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTabBarController.m; sourceTree = "<group>"; };
 		88D576A41F3DA6E00082F6F7 /* MyNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MyNavigationController.h; sourceTree = "<group>"; };
 		88D576A51F3DA6E00082F6F7 /* MyNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MyNavigationController.m; sourceTree = "<group>"; };
+		88F037251F57FB3900E23F5A /* MapTwoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapTwoViewController.h; sourceTree = "<group>"; };
+		88F037261F57FB3900E23F5A /* MapTwoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapTwoViewController.m; sourceTree = "<group>"; };
 		88FF7D7D1F47D73200670C0F /* BMKClusterAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKClusterAlgorithm.h; sourceTree = "<group>"; };
 		88FF7D7E1F47D73200670C0F /* BMKClusterAlgorithm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMKClusterAlgorithm.m; sourceTree = "<group>"; };
 		88FF7D7F1F47D73200670C0F /* BMKClusterItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKClusterItem.h; sourceTree = "<group>"; };
@@ -763,10 +769,14 @@
 		88D5766E1F3D966D0082F6F7 /* view */ = {
 			isa = PBXGroup;
 			children = (
+				8831E88F1F5A530D007F1230 /* Test2ViewController.h */,
+				8831E8901F5A530D007F1230 /* Test2ViewController.m */,
 				88D5766F1F3D966D0082F6F7 /* IndexViewController.h */,
 				88D576701F3D966D0082F6F7 /* IndexViewController.m */,
 				880059F31F3EFA640042441A /* MapViewController.h */,
 				880059F41F3EFA640042441A /* MapViewController.m */,
+				88F037251F57FB3900E23F5A /* MapTwoViewController.h */,
+				88F037261F57FB3900E23F5A /* MapTwoViewController.m */,
 				88D39A5C1F469308009370C1 /* MyAnimatedAnnotationView.h */,
 				88D39A5D1F469308009370C1 /* MyAnimatedAnnotationView.m */,
 				88D39A621F46D11F009370C1 /* TestViewController.h */,
@@ -1033,6 +1043,7 @@
 				880059E61F3EF7120042441A /* JYJMyWalletViewController.m in Sources */,
 				88D576931F3D96820082F6F7 /* AFURLRequestSerialization.m in Sources */,
 				880059C41F3EE5980042441A /* JYJNavigationController.m in Sources */,
+				88F037271F57FB3900E23F5A /* MapTwoViewController.m in Sources */,
 				88607FD51F556ED30006E002 /* JHCellConfig.m in Sources */,
 				88FF7D9D1F481E4700670C0F /* SVProgressHUD.m in Sources */,
 				880059F01F3EF7540042441A /* JYJPersonViewController.m in Sources */,
@@ -1041,6 +1052,7 @@
 				88D5769B1F3D96820082F6F7 /* CKHttpCommunicate.m in Sources */,
 				88121E091F419F9B002A2129 /* RegViewController.m in Sources */,
 				8818F0971F42F45200F50CB9 /* UIButton+WebCache.m in Sources */,
+				8831E8911F5A530D007F1230 /* Test2ViewController.m in Sources */,
 				880059E21F3EF7120042441A /* JYJMyCardViewController.m in Sources */,
 				8818F08F1F42F45200F50CB9 /* NSData+ImageContentType.m in Sources */,
 				8818F0921F42F45200F50CB9 /* SDWebImageDecoder.m in Sources */,

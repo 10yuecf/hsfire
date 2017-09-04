@@ -18,7 +18,7 @@
 #import "UserEntity.h"
 #import "JYJPushBaseViewController.h"
 
-@interface MapViewController : JYJPushBaseViewController<BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate> {
+@interface MapTwoViewController : JYJPushBaseViewController<BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate> {
     BMKMapView* _mapView; //地图
     BMKLocationService* _locService; //定位
     BMKGeoCodeSearch *_geocodesearch; //地理编码主类，用来查询、返回结果信息
