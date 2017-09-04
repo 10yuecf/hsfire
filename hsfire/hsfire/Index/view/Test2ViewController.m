@@ -197,7 +197,7 @@
             dispatch_async(dispatch_get_global_queue(0, 0), ^{
                 
                 ///获取聚合后的标注
-                __block NSArray *array = [_clusterManager getClusters:_clusterZoom];
+                //__block NSArray *array = [_clusterManager getClusters:_clusterZoom];
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
 //                    for (BMKCluster *item in array) {

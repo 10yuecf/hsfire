@@ -27,7 +27,6 @@
 #import "BaseInfo.h"
 
 #import "TestViewController.h"
-#import "HouseTypeMapVC.h"
 #import "MapOneViewController.h"
 
 #import "ForPassViewController.h"

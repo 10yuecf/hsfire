@@ -26,6 +26,8 @@
     NSString *dwtype;
     NSString *dwname;
     NSString *dwid;
+    NSString *lat;
+    NSString *lon;
 }
 
 @property(nonatomic,retain) NSString *userToken;
@@ -45,4 +47,6 @@
 @property(nonatomic,retain) NSString *dwtype;
 @property(nonatomic,retain) NSString *dwname;
 @property(nonatomic,retain) NSString *dwid;
+@property(nonatomic,retain) NSString *lat;
+@property(nonatomic,retain) NSString *lon;
 @end

@@ -23,7 +23,6 @@
 
 #import "TestViewController.h"
 #import "MapTwoViewController.h"
-#import "ClusterDemoViewController.h"
 
 BMKMapManager* _mapManager;
 @interface AppDelegate ()<UNUserNotificationCenterDelegate>

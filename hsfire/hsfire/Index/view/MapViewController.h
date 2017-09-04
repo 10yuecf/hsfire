@@ -11,20 +11,10 @@
 #define MYBUNDLE [NSBundle bundleWithPath: MYBUNDLE_PATH]
 
 #import <UIKit/UIKit.h>
-#import <Foundation/Foundation.h>
-#import <BaiduMapAPI_Map/BMKMapComponent.h>
-#import <BaiduMapAPI_Location/BMKLocationComponent.h>
-#import <BaiduMapAPI_Search/BMKGeocodeSearch.h>
 #import "UserEntity.h"
 #import "JYJPushBaseViewController.h"
 
-@interface MapViewController : JYJPushBaseViewController<BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate> {
-    BMKMapView* _mapView; //地图
-    BMKLocationService* _locService; //定位
-    BMKGeoCodeSearch *_geocodesearch; //地理编码主类，用来查询、返回结果信息
-    UISegmentedControl* segment; //分段控制器
-}
-
+@interface MapViewController : JYJPushBaseViewController
 /** userEntity */
 @property (retain,nonatomic) UserEntity *userEntity;
 

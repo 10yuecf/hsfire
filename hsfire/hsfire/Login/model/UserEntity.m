@@ -26,4 +26,6 @@
 @synthesize dwtype;
 @synthesize dwname;
 @synthesize dwid;
+@synthesize lat;
+@synthesize lon;
 @end
