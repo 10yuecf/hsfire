@@ -87,7 +87,7 @@
     int inputx = 75,inputy = 8,inputyb = 40,inputw = 200,inputh = 30; //文本框x坐标
     
     //白色背景框
-    _baceView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, kWidth - 20, 600)];
+    _baceView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, kWidth - 20, 400)];
     _baceView.layer.cornerRadius = 5.0;
     _baceView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:_baceView];
@@ -208,7 +208,7 @@
     _sytelText.keyboardType = UIKeyboardTypeNumberPad;
     [_baceView addSubview:_sytelText];
     
-    UIButton *landBtn = [[UIButton alloc]initWithFrame:CGRectMake(10,_baceView.frame.size.height + _baceView.frame.origin.y + 40, _baceView.frame.size.width, 37)];
+    UIButton *landBtn = [[UIButton alloc]initWithFrame:CGRectMake(10,_baceView.frame.size.height + _baceView.frame.origin.y + 10, _baceView.frame.size.width, 37)];
     [landBtn setTitle:@"提交" forState:UIControlStateNormal];
     [landBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     landBtn.titleLabel.font = [UIFont systemFontOfSize:17];

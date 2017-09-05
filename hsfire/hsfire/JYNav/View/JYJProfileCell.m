@@ -84,8 +84,10 @@
  */
 - (void)layoutSubviews {
     [super layoutSubviews];
+    
     CGFloat contentW = self.contentView.bounds.size.width;
     CGFloat contentH = self.contentView.bounds.size.height;
+    
     /** 1.图片 */
     CGFloat iconViewX = 15;
     CGFloat iconViewY = 0;

@@ -18,4 +18,6 @@
 
 -(int)getRandomNumber:(int)from to:(int)to;
 
+-(NSMutableArray *)myencrypt;
+
 @end

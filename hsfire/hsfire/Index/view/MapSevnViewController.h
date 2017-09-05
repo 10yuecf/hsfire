@@ -1,11 +1,10 @@
 //
-//  MapViewController.h
+//  MapSevnViewController.h
 //  hsfire
 //
-//  Created by louislee on 2017/8/12.
+//  Created by louislee on 2017/9/5.
 //  Copyright © 2017年 hsdcw. All rights reserved.
-//  水源管理
-
+//  消防知识
 #define MYBUNDLE_NAME @ "mapapi.bundle"
 #define MYBUNDLE_PATH [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent: MYBUNDLE_NAME]
 #define MYBUNDLE [NSBundle bundleWithPath: MYBUNDLE_PATH]
@@ -14,7 +13,7 @@
 #import "UserEntity.h"
 #import "JYJPushBaseViewController.h"
 
-@interface MapViewController : JYJPushBaseViewController
+@interface MapSevnViewController : JYJPushBaseViewController
 /** userEntity */
 @property (retain,nonatomic) UserEntity *userEntity;
 

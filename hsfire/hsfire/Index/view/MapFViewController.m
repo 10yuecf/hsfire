@@ -4,7 +4,7 @@
 //
 //  Created by louislee on 2017/8/12.
 //  Copyright © 2017年 hsdcw. All rights reserved.
-//
+//  战报物资
 
 #import <BaiduMapAPI_Map/BMKMapView.h>
 #import <BaiduMapAPI_Map/BMKMapComponent.h>
@@ -14,14 +14,14 @@
 #import <BaiduMapAPI_Search/BMKRouteSearch.h>
 #import <BaiduMapAPI_Utils/BMKUtilsComponent.h>
 
-#import "MapViewController.h"
+#import "MapFViewController.h"
 #import "JYJSliderMenuTool.h"
 #import "Macro.h"
 #import "MyAnimatedAnnotationView.h"
 #import "AddSyViewController.h"
 #import "UserEntity.h"
 
-@interface MapViewController ()<UIGestureRecognizerDelegate,BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,UITextFieldDelegate,BMKPoiSearchDelegate,BMKRouteSearchDelegate>
+@interface MapFViewController ()<UIGestureRecognizerDelegate,BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,UITextFieldDelegate,BMKPoiSearchDelegate,BMKRouteSearchDelegate>
 
 /** tapGestureRec */
 @property (nonatomic, weak) UITapGestureRecognizer *tapGestureRec;
@@ -51,7 +51,7 @@
 
 @end
 
-@implementation MapViewController
+@implementation MapFViewController
 
 - (void)viewWillAppear:(BOOL)animated {
     [_mapView viewWillAppear];
@@ -142,7 +142,7 @@
 }
 
 - (void)setupNav {
-    self.title = @"水源管理";
+    self.title = @"战勤保障物资";
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20], NSForegroundColorAttributeName:[UIColor colorWithRed:255 / 255.0 green:255 / 255.0 blue:255 / 255.0 alpha:1.0]}];
     
     UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
@@ -247,7 +247,7 @@
 //底部按钮组
 -(void)loadbtns {
     //按钮组
-    CGFloat btn_w = 70;
+    CGFloat btn_w = 55;
     CGFloat btn_h = 30;
     int maph = 35;
     
@@ -257,44 +257,54 @@
     [self.view addSubview:view];
     
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn1.frame = CGRectMake(5, kHeight - maph, btn_w, btn_h);
-    btn1.tag = 0;
+    btn1.frame = CGRectMake(0, kHeight - maph, btn_w, btn_h);
+    btn1.tag = 1;
     btn1.titleLabel.font = [UIFont systemFontOfSize:14.0];
-    [btn1 setTitle:@"消防栓" forState:UIControlStateNormal];
+    [btn1 setTitle:@"车辆" forState:UIControlStateNormal];
     [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn1 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
     [btn1 setImage:[UIImage imageNamed:@"xfs"] forState:UIControlStateNormal];
     [self.view addSubview:btn1];
     
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn2.frame = CGRectMake(btn_w + 5, kHeight - maph, btn_w + 10, btn_h);
-    btn2.tag = 1;
+    btn2.frame = CGRectMake(btn_w, kHeight - maph, btn_w + 10, btn_h);
+    btn2.tag = 2;
     btn2.titleLabel.font = [UIFont systemFontOfSize:14.0];
-    [btn2 setTitle:@"天然水源" forState:UIControlStateNormal];
+    [btn2 setTitle:@"装备" forState:UIControlStateNormal];
     [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn2 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
     [btn2 setImage:[UIImage imageNamed:@"water"] forState:UIControlStateNormal];
     [self.view addSubview:btn2];
     
     UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn3.frame = CGRectMake(btn_w * 2 + 25, kHeight - maph, btn_w + 10, btn_h);
-    btn3.tag = 331;
+    btn3.frame = CGRectMake(btn_w * 2 + 10, kHeight - maph, btn_w + 10, btn_h);
+    btn3.tag = 3;
     btn3.titleLabel.font = [UIFont systemFontOfSize:14.0];
-    [btn3 setTitle:@"添加水源" forState:UIControlStateNormal];
+    [btn3 setTitle:@"器材" forState:UIControlStateNormal];
     [btn3 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn3 addTarget:self action:@selector(addsy:) forControlEvents:UIControlEventTouchUpInside];
     [btn3 setImage:[UIImage imageNamed:@"addwt"] forState:UIControlStateNormal];
     [self.view addSubview:btn3];
     
     UIButton *btn4 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn4.frame = CGRectMake(btn_w * 3 + 28, kHeight - maph, btn_w + 10, btn_h);
-    btn4.tag = 3;
+    btn4.frame = CGRectMake(btn_w * 3 + 20, kHeight - maph, btn_w + 10, btn_h);
+    btn4.tag = 4;
     btn4.titleLabel.font = [UIFont systemFontOfSize:14.0];
-    [btn4 setTitle:@"刷新" forState:UIControlStateNormal];
+    [btn4 setTitle:@"灭火剂" forState:UIControlStateNormal];
     [btn4 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn4 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
     [btn4 setImage:[UIImage imageNamed:@"refwt"] forState:UIControlStateNormal];
     [self.view addSubview:btn4];
+    
+    UIButton *btn5 = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn5.frame = CGRectMake(btn_w * 4 + 30, kHeight - maph, btn_w + 10, btn_h);
+    btn5.tag = 5;
+    btn5.titleLabel.font = [UIFont systemFontOfSize:14.0];
+    [btn5 setTitle:@"船艇" forState:UIControlStateNormal];
+    [btn5 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btn5 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
+    [btn5 setImage:[UIImage imageNamed:@"refwt"] forState:UIControlStateNormal];
+    [self.view addSubview:btn5];
 }
 
 #pragma mark -- Selector
@@ -343,7 +353,7 @@
     
     //把地址信息传递到上个界面的button
     self.sureButton = [[UIButton alloc]initWithFrame:CGRectMake(self.addressLabel.frame.origin.x + self.addressLabel.frame.size.width, 0,self.messageView.frame.size.width - self.addressLabel.frame.origin.x - self.addressLabel.frame.size.width, 40)];
-
+    
     self.sureButton.backgroundColor = [UIColor redColor];
     [self.sureButton setTitle:@"确定" forState:UIControlStateNormal];
     self.sureButton.titleLabel.font = [UIFont systemFontOfSize:13.0f];
@@ -455,7 +465,7 @@
     AddSyViewController *addsy = [[AddSyViewController alloc]init];
     [self.navigationController pushViewController:addsy animated:YES];
     addsy.userEntity = ue;
-
+    
     //NSLog(@"this is sure btn click%@",self.addressLabel.text);
 }
 

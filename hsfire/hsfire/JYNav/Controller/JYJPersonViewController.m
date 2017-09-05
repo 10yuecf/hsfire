@@ -21,6 +21,12 @@
 
 #import "SettingViewController.h"
 #import "MapViewController.h"
+#import "MapTViewController.h"
+#import "MapFViewController.h"
+#import "MapFivViewController.h"
+#import "MapSixViewController.h"
+#import "MapSevnViewController.h"
+#import "MapEgViewController.h"
 
 @interface JYJPersonViewController () <UITableViewDelegate, UITableViewDataSource>
 /** tableView */
@@ -124,21 +130,21 @@
 - (void)setupData {
     JYJCommenItem *my1 = [JYJCommenItem itemWithIcon:@"menu1" title:@"水源管理" subtitle:@"" destVcClass:[MapViewController class]];
     
-    JYJCommenItem *my2 = [JYJCommenItem itemWithIcon:@"menu2" title:@"重点单位" subtitle:@"" destVcClass:[JYJMyCardViewController class]];
+    JYJCommenItem *my2 = [JYJCommenItem itemWithIcon:@"menu2" title:@"重点单位" subtitle:@"" destVcClass:[MapTViewController class]];
     
     JYJCommenItem *my3 = [JYJCommenItem itemWithIcon:@"menu3" title:@"消安委" subtitle:nil destVcClass:[JYJMyTripViewController class]];
     
-    JYJCommenItem *my4 = [JYJCommenItem itemWithIcon:@"menu4" title:@"战保物资" subtitle:nil destVcClass:[JYJMyFriendViewController class]];
+    JYJCommenItem *my4 = [JYJCommenItem itemWithIcon:@"menu4" title:@"战保物资" subtitle:nil destVcClass:[MapFViewController class]];
     
-    JYJCommenItem *my5 = [JYJCommenItem itemWithIcon:@"menu4" title:@"应急救援" subtitle:nil destVcClass:[JYJMyFriendViewController class]];
+    JYJCommenItem *my5 = [JYJCommenItem itemWithIcon:@"menu5" title:@"应急救援" subtitle:nil destVcClass:[MapFivViewController class]];
     
-    JYJCommenItem *my6 = [JYJCommenItem itemWithIcon:@"menu4" title:@"执勤力量" subtitle:nil destVcClass:[JYJMyFriendViewController class]];
+    JYJCommenItem *my6 = [JYJCommenItem itemWithIcon:@"menu6" title:@"执勤力量" subtitle:nil destVcClass:[MapSixViewController class]];
     
-    JYJCommenItem *my7 = [JYJCommenItem itemWithIcon:@"menu4" title:@"消防知识" subtitle:nil destVcClass:[JYJMyFriendViewController class]];
+    JYJCommenItem *my7 = [JYJCommenItem itemWithIcon:@"menu7" title:@"消防知识" subtitle:nil destVcClass:[JYJMyWalletViewController class]];
     
-    JYJCommenItem *my8 = [JYJCommenItem itemWithIcon:@"menu4" title:@"消防审批" subtitle:nil destVcClass:[JYJMyFriendViewController class]];
+    JYJCommenItem *my8 = [JYJCommenItem itemWithIcon:@"menu8" title:@"消防审批" subtitle:nil destVcClass:[JYJMyTripViewController class]];
     
-    JYJCommenItem *myxf = [JYJCommenItem itemWithIcon:@"menu5" title:@"我的消防" subtitle:nil destVcClass:[JYJMyStickerViewController class]];
+    JYJCommenItem *myxf = [JYJCommenItem itemWithIcon:@"menu9" title:@"我的消防" subtitle:nil destVcClass:[JYJMyStickerViewController class]];
     
     //读取权限
     

@@ -10,6 +10,8 @@
 #import "hsdcwUtils.h"
 #import "UserTool.h"
 #import "User.h"
+#import "MyMD5.h"
+#import "Macro.h"
 
 @implementation hsdcwUtils
 
@@ -66,6 +68,24 @@
 
 -(int)getRandomNumber:(int)from to:(int)to {
     return (int)(from + (arc4random() % (to - from + 1)));
+}
+
+//传输加密方法
+-(NSMutableArray *) myencrypt {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    NSDate *datenow = [NSDate date];
+    NSString *cTimeStr = [formatter stringFromDate:datenow];
+    NSString *xf_dt = [MyMD5 md5:cTimeStr];
+    NSString *md5key = @"qr4kit11";
+    NSString *tmpstr = [NSString stringWithFormat:@"%@%@",xf_dt,md5key];
+    NSString *xf_tk = [MyMD5 md5:tmpstr];
+    
+    NSMutableArray *datas = [[NSMutableArray alloc]initWithCapacity:5];
+    [datas addObject:xf_dt]; //0
+    [datas addObject:xf_tk]; //1
+    
+    return datas;
 }
 
 @end
