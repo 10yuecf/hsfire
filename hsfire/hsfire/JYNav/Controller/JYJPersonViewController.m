@@ -132,7 +132,7 @@
     
     JYJCommenItem *my2 = [JYJCommenItem itemWithIcon:@"menu2" title:@"重点单位" subtitle:@"" destVcClass:[MapTViewController class]];
     
-    JYJCommenItem *my3 = [JYJCommenItem itemWithIcon:@"menu3" title:@"消安委" subtitle:nil destVcClass:[JYJMyTripViewController class]];
+    JYJCommenItem *my3 = [JYJCommenItem itemWithIcon:@"menu3" title:@"消安委" subtitle:nil destVcClass:[JYJMyStickerViewController class]];
     
     JYJCommenItem *my4 = [JYJCommenItem itemWithIcon:@"menu4" title:@"战保物资" subtitle:nil destVcClass:[MapFViewController class]];
     

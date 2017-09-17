@@ -79,7 +79,7 @@
     } else {
         self.label.backgroundColor = [UIColor greenColor];
     }
-    _label.text = [NSString stringWithFormat:@"%ld", size];
+    _label.text = [NSString stringWithFormat:@"%ld", (long)size];
 }
 @end
 
@@ -204,7 +204,7 @@
                         ClusterAnnotation *annotation = [[ClusterAnnotation alloc] init];
                         annotation.coordinate = item.coordinate;
                         annotation.size = item.size;
-                        annotation.title = [NSString stringWithFormat:@"我是%ld个", item.size];
+                        annotation.title = [NSString stringWithFormat:@"我是%ld个", (unsigned long)item.size];
                         [clusters addObject:annotation];
                     }
                     [_mapView removeAnnotations:_mapView.annotations];

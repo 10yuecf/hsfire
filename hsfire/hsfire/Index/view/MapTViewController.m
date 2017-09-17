@@ -4,7 +4,7 @@
 //
 //  Created by louislee on 2017/8/12.
 //  Copyright © 2017年 hsdcw. All rights reserved.
-//
+//  重点单位
 
 #import <BaiduMapAPI_Map/BMKMapView.h>
 #import <BaiduMapAPI_Map/BMKMapComponent.h>
@@ -20,6 +20,8 @@
 #import "MyAnimatedAnnotationView.h"
 #import "AddSyViewController.h"
 #import "UserEntity.h"
+#import "hsdcwUtils.h"
+#import "CKHttpCommunicate.h"
 
 @interface MapTViewController ()<UIGestureRecognizerDelegate,BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,UITextFieldDelegate,BMKPoiSearchDelegate,BMKRouteSearchDelegate>
 
@@ -34,6 +36,7 @@
 @property (nonatomic, strong) BMKAnnotationView *mapAnnoView;
 @property (nonatomic, strong) BMKPointAnnotation *pointAnnotation;
 @property (nonatomic, strong) BMKPointAnnotation *pointAnnotation2;
+@property (nonatomic, strong) BMKPointAnnotation *pointAnnotation3;
 @property (nonatomic, strong) BMKPoiSearch *poiSearch;
 @property (nonatomic, strong) BMKRouteSearch *routeSearch;
 
@@ -42,13 +45,15 @@
 @property (nonatomic,strong) UIView *messageView;
 @property (nonatomic,strong) UILabel *addressLabel;
 @property (nonatomic,strong) NSString *lat;
-@property (nonatomic,strong) NSString *lon;
+@property (nonatomic,strong) NSString *lng;
+@property (nonatomic,strong) NSString *latc;
+@property (nonatomic,strong) NSString *lngc;
+@property (nonatomic,strong) NSString *latcnow;
+@property (nonatomic,strong) NSString *lngcnow;
 @property (nonatomic,strong) UIButton *sureButton;
 @property (nonatomic,strong) BMKGeoCodeSearch *searchAddress;
 @property (nonatomic,strong) NSString *name;
 @property (nonatomic,assign) CLLocationCoordinate2D location2D;
-@property (nonatomic,strong) NSString *btnflag;
-
 @end
 
 @implementation MapTViewController
@@ -79,7 +84,7 @@
         self.navigationController.navigationBar.translucent = NO;
     }
     
-    NSLog(@"================%@",self.userEntity.userId);
+    //NSLog(@"================userid%@",self.userEntity.userId);
     
     _locService = [[BMKLocationService alloc]init];
     _geoCodeSearch = [[BMKGeoCodeSearch alloc] init];
@@ -228,8 +233,6 @@
     _mapView.showsUserLocation = YES;//是否显示小蓝点，no不显示，我们下面要自定义的
     _mapView.userTrackingMode = BMKUserTrackingModeNone;
     
-    _btnflag = @"dwbtn";
-    
     //定位,启动LocationService
     [_locService startUserLocationService];
 }
@@ -263,7 +266,7 @@
     [btn1 setTitle:@"高" forState:UIControlStateNormal];
     [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn1 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
-    [btn1 setImage:[UIImage imageNamed:@"xfs"] forState:UIControlStateNormal];
+    [btn1 setImage:[UIImage imageNamed:@"zddw1"] forState:UIControlStateNormal];
     [self.view addSubview:btn1];
     
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -273,7 +276,7 @@
     [btn2 setTitle:@"大" forState:UIControlStateNormal];
     [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn2 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
-    [btn2 setImage:[UIImage imageNamed:@"water"] forState:UIControlStateNormal];
+    [btn2 setImage:[UIImage imageNamed:@"zddw2"] forState:UIControlStateNormal];
     [self.view addSubview:btn2];
     
     UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -282,8 +285,8 @@
     btn3.titleLabel.font = [UIFont systemFontOfSize:14.0];
     [btn3 setTitle:@"燃" forState:UIControlStateNormal];
     [btn3 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [btn3 addTarget:self action:@selector(addsy:) forControlEvents:UIControlEventTouchUpInside];
-    [btn3 setImage:[UIImage imageNamed:@"addwt"] forState:UIControlStateNormal];
+    [btn3 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
+    [btn3 setImage:[UIImage imageNamed:@"zddw3"] forState:UIControlStateNormal];
     [self.view addSubview:btn3];
     
     UIButton *btn4 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -293,7 +296,7 @@
     [btn4 setTitle:@"古" forState:UIControlStateNormal];
     [btn4 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn4 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
-    [btn4 setImage:[UIImage imageNamed:@"refwt"] forState:UIControlStateNormal];
+    [btn4 setImage:[UIImage imageNamed:@"zddw4"] forState:UIControlStateNormal];
     [self.view addSubview:btn4];
     
     UIButton *btn5 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -303,7 +306,7 @@
     [btn5 setTitle:@"娱" forState:UIControlStateNormal];
     [btn5 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn5 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
-    [btn5 setImage:[UIImage imageNamed:@"refwt"] forState:UIControlStateNormal];
+    [btn5 setImage:[UIImage imageNamed:@"zddw5"] forState:UIControlStateNormal];
     [self.view addSubview:btn5];
     
     UIButton *btn6 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -313,17 +316,18 @@
     [btn6 setTitle:@"社" forState:UIControlStateNormal];
     [btn6 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn6 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
-    [btn6 setImage:[UIImage imageNamed:@"refwt"] forState:UIControlStateNormal];
+    [btn6 setImage:[UIImage imageNamed:@"zddw6"] forState:UIControlStateNormal];
     [self.view addSubview:btn6];
     
     UIButton *btn7 = [UIButton buttonWithType:UIButtonTypeCustom];
     btn7.frame = CGRectMake(btn_w * 6, kHeight - maph, btn_w + 10, btn_h);
     btn7.tag = 7;
     btn7.titleLabel.font = [UIFont systemFontOfSize:14.0];
+    btn7.titleLabel.textAlignment = NSTextAlignmentLeft;
     [btn7 setTitle:@"校" forState:UIControlStateNormal];
     [btn7 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn7 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
-    [btn7 setImage:[UIImage imageNamed:@"refwt"] forState:UIControlStateNormal];
+    [btn7 setImage:[UIImage imageNamed:@"zddw7"] forState:UIControlStateNormal];
     [self.view addSubview:btn7];
 }
 
@@ -339,84 +343,6 @@
     
     if (button.tag == 3) {
         NSLog(@"刷新获取最新水源信息");
-    }
-}
-
-//这里是创建中心显示的图片和显示详细地址的View
--(void)createLocationSignImage {
-    //LocationView定位在当前位置，换算为屏幕的坐标，创建的定位的图标
-    self.locationView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, 28, 35)];
-    self.locImageView = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, 28, 35)];
-    self.locImageView.image = [UIImage imageNamed:@"xfs"];
-    
-    //messageView 展示定位信息的View和Label和button
-    self.messageView = [[UIView alloc]init];
-    self.messageView.backgroundColor = [UIColor whiteColor];
-    
-    //把当前定位的经纬度换算为了View上的坐标
-    CGPoint point = [self.mapView convertCoordinate:_mapView.centerCoordinate toPointToView:_mapView];
-    //NSLog(@"Point------%f-----%f",point.x,point.y);
-    
-    //重新定位了LocationView
-    self.locationView.center = point;
-    [self.locationView setFrame:CGRectMake(point.x-14, point.y-18, 28, 35)];
-    
-    //重新定位了messageView
-    [self.messageView setFrame:CGRectMake(30, point.y-40-20, kWidth-60, 40)];
-    
-    //展示地址信息的label
-    self.addressLabel = [[UILabel alloc]initWithFrame:CGRectMake(10, 0, self.messageView.frame.size.width - 80, 40)];
-    
-    self.addressLabel.font = [UIFont systemFontOfSize:12.0f];
-    self.addressLabel.text = @"拖动地图，停止后可显示当前位置";
-    self.addressLabel.numberOfLines = 0;
-    
-    //把地址信息传递到上个界面的button
-    self.sureButton = [[UIButton alloc]initWithFrame:CGRectMake(self.addressLabel.frame.origin.x + self.addressLabel.frame.size.width, 0,self.messageView.frame.size.width - self.addressLabel.frame.origin.x - self.addressLabel.frame.size.width, 40)];
-    
-    self.sureButton.backgroundColor = [UIColor redColor];
-    [self.sureButton setTitle:@"确定" forState:UIControlStateNormal];
-    self.sureButton.titleLabel.font = [UIFont systemFontOfSize:13.0f];
-    [self.sureButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.sureButton addTarget:self action:@selector(sureButtonClick:) forControlEvents:UIControlEventTouchUpInside];
-    
-    [self.mapView addSubview:self.messageView];
-    [self.mapView addSubview:self.locationView];
-    [self.messageView addSubview:self.sureButton];
-    [self.messageView addSubview:self.addressLabel];
-    [self.locationView addSubview:self.locImageView];
-}
-
-//添加水源
-- (void)addsy:(UIButton *)button {
-    if(button.tag == 331) {
-        //NSLog(@"取消");
-        //NSog(@"====%ld",(long)button.tag);
-        //初始化BMKLocationService
-        _locService = [[BMKLocationService alloc]init];
-        _locService.delegate = self;
-        
-        _mapView.zoomLevel = 17;
-        _mapView.showsUserLocation = YES;//是否显示小蓝点，no不显示，我们下面要自定义的
-        _mapView.userTrackingMode = BMKUserTrackingModeNone;
-        
-        _btnflag = @"addsybtn";
-        
-        //定位,启动LocationService
-        [_locService startUserLocationService];
-        
-        [button setTitle:@"取消添加" forState:UIControlStateNormal];
-        [button setTag:332];
-    }
-    else if(button.tag == 332) {
-        //NSLog(@"====%ld",(long)button.tag);
-        //NSLog(@"添加水源");
-        [button setTitle:@"添加水源" forState:UIControlStateNormal];
-        [button setTag:331];
-        
-        //关闭定位view
-        [self.messageView removeFromSuperview];
-        [self.locationView removeFromSuperview];
     }
 }
 
@@ -439,10 +365,10 @@
 //根据经纬度返回点击的位置的名称
 -(void)onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error {
     
-    NSString * resultAddress = @"";
-    NSString * houseName = @"";
+    [self.mapView removeAnnotation:_pointAnnotation3];
     
-    CLLocationCoordinate2D coor = result.location;
+    NSString *resultAddress = @"";
+    NSString *houseName = @"";
     
     if(result.poiList.count > 0){
         BMKPoiInfo * info = result.poiList[0];
@@ -458,43 +384,119 @@
         resultAddress =result.address;
     }
     
-    if(resultAddress.length == 0){
+    if(resultAddress.length == 0) {
         self.addressLabel.text = @"位置解析错误，请拖动重试！";
         return;
     }
     
     self.addressLabel.text = resultAddress;
-    _lat = [NSString stringWithFormat:@"%lf",result.location.latitude];
-    _lon = [NSString stringWithFormat:@"%lf",result.location.longitude];
-    //self.longitudeLabel.text =
+    //NSLog(@"label的值==========%@",resultAddress);
     
-    NSLog(@"label的值==========%@",resultAddress);
-    NSLog(@"经纬度的值==========%f %f",result.location.latitude,result.location.longitude);
+    CLLocationCoordinate2D coor = result.location;
+    
+    CLLocationCoordinate2D centercoor = _mapView.centerCoordinate;
+    _latcnow = [NSString stringWithFormat:@"%lf",centercoor.latitude];
+    _lngcnow = [NSString stringWithFormat:@"%lf",centercoor.longitude];
+    //NSLog(@"初始化中心点的经纬度=======%@ %@",_latc,_lngc);
+    //NSLog(@"当前中心点的经纬度=======%@ %@",_latcnow,_lngcnow);
+    
+    _pointAnnotation3 = [[BMKPointAnnotation alloc]init];
+    _pointAnnotation3.coordinate = centercoor;  //每次不同的gps坐标
+    _pointAnnotation3.title = [NSString stringWithFormat:@"水源中心点"];
+    _pointAnnotation3.subtitle = [NSString stringWithFormat:@"我的坐标是 %f %f",centercoor.latitude,centercoor.longitude];
+    //[_mapView addAnnotation:_pointAnnotation3];
+    
+    float latcd = [_latc floatValue];
+    float lngcd = [_lngc floatValue];
+    
+    float latcnowd = [_latcnow floatValue];
+    float lngcnowd = [_lngcnow floatValue];
+    
+    BMKMapPoint point1 = BMKMapPointForCoordinate(CLLocationCoordinate2DMake(latcd,lngcd));
+    BMKMapPoint point2 = BMKMapPointForCoordinate(CLLocationCoordinate2DMake(latcnowd,lngcnowd));
+    CLLocationDistance distance = BMKMetersBetweenMapPoints(point1,point2);
+    //NSLog(@"两点间的距离======%f",distance);
+    
+    //如果两点距离大于800米
+    if(distance > 400) {
+        //重新设置水源中心点坐标
+        _latc = [NSString stringWithFormat:@"%lf",centercoor.latitude];
+        _lngc = [NSString stringWithFormat:@"%lf",centercoor.longitude];
+        
+        [self.mapView removeAnnotations:self.mapView.annotations];
+        
+        //异步加载标注点
+        [self loadData:_lngc Lat:_latc];
+    }
+    
+//    for (NSInteger i = 0; i < x; i++) {
+//        _pointAnnotation2 = [[BMKPointAnnotation alloc]init];
+//        CLLocationCoordinate2D coor2;
+//        
+//        double lat =  (arc4random() % 100) * 0.0001f;
+//        double lon =  (arc4random() % 100) * 0.0001f;
+//        
+//        coor2.longitude = result.location.longitude + lon;
+//        coor2.latitude = result.location.latitude + lat;
+//        
+//        NSLog(@"%f",coor2.longitude);
+//        NSLog(@"%f",coor2.latitude);
+//        
+//        _pointAnnotation2.coordinate = coor2;  //每次不同的gps坐标
+//        _pointAnnotation2.title = [NSString stringWithFormat:@"%ld 水源标题",(long)i];
+//        _pointAnnotation2.subtitle = @"此Annotation可拖拽!";
+//        [_mapView addAnnotation:_pointAnnotation2];
+//    }
     
     self.location2D = coor;
     self.name = houseName;
 }
 
--(void)sureButtonClick:(UIButton *)button {
-    //建立临时变量传值
-    UserEntity *ue = [[UserEntity alloc]init];
-    ue.title = self.addressLabel.text;
-    ue.lat = self.lat;
-    ue.lon = self.lon;
+//加载地图所有标注点
+-(void)loadData:(NSString*)lng Lat:(NSString*)lat {
+    //[self.mapView removeAnnotation:_pointAnnotation2];
     
-    AddSyViewController *addsy = [[AddSyViewController alloc]init];
-    [self.navigationController pushViewController:addsy animated:YES];
-    addsy.userEntity = ue;
-    
-    //NSLog(@"this is sure btn click%@",self.addressLabel.text);
+    //-----------------------------------加载数据-----------------------------------------
+    NSDictionary *parameter = @{@"lng":lng,
+                                @"lat":lat};
+    [CKHttpCommunicate createRequest:GetSyInfoList WithParam:parameter withMethod:POST success:^(id response) {
+        //NSLog(@"%@",response);
+        
+        if (response) {
+            NSString *code = response[@"code"];
+            
+            //当返回值为200并num为0时
+            if ([code isEqualToString:@"200"]) {
+                NSArray *array = response[@"data"];
+                for (int i = 0; i < array.count; i++) {
+                    _pointAnnotation2 = [[BMKPointAnnotation alloc]init];
+                    CLLocationCoordinate2D coor2;
+                    
+                    double dlng = [array[i][@"syaddr_lng"] doubleValue];
+                    double dlat = [array[i][@"syaddr_lat"] doubleValue];
+                    
+                    coor2.longitude = dlng;
+                    coor2.latitude = dlat;
+                    
+                    _pointAnnotation2.coordinate = coor2;  //每次不同的gps坐标
+                    _pointAnnotation2.title = [NSString stringWithFormat:@"%@",array[i][@"sybh"]];
+                    _pointAnnotation2.subtitle = [NSString stringWithFormat:@"%@",array[i][@"syaddr"]];
+                    [_mapView addAnnotation:_pointAnnotation2];
+                }
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    } showHUD:self.view];
+    //-----------------------------------加载数据-----------------------------------------
 }
 
 - (void)willStartLocatingUser {
-    NSLog(@"start locate");
+    //NSLog(@"start locate");
 }
 
 - (void)didStopLocatingUser {
-    NSLog(@"stop locate");
+    //NSLog(@"stop locate");
 }
 
 - (void)didFailToLocateUserWithError:(NSError *)error {
@@ -502,31 +504,57 @@
 }
 
 -(void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation {
-    //NSLog(@"didUpdateUserLocation lat %f,long %f",userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);
-    
     [_mapView updateLocationData:userLocation]; //更新地图上的位置
     _mapView.centerCoordinate = userLocation.location.coordinate; //更新当前位置到地图中间
+    
+    //获取初始化中心点坐标
+    _latc = [NSString stringWithFormat:@"%lf",userLocation.location.coordinate.latitude];
+    _lngc = [NSString stringWithFormat:@"%lf",userLocation.location.coordinate.longitude];
+    
+    //异步加载标注点
+    [self loadData:_lngc Lat:_latc];
     
     //地理反编码
     BMKReverseGeoCodeOption *reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc]init];
     reverseGeocodeSearchOption.reverseGeoPoint = userLocation.location.coordinate;
     BOOL flag = [_geoCodeSearch reverseGeoCode:reverseGeocodeSearchOption];
     if(flag) {
-        NSLog(@"反geo检索发送成功");
+        //NSLog(@"反geo检索发送成功");
         [_locService stopUserLocationService];
     }
     else {
         NSLog(@"反geo检索发送失败");
     }
+}
+
+- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation {
+    //NSLog(@"%@",annotation);
     
-    NSLog(@"点击了%@",_btnflag);
+    if (annotation == _pointAnnotation) {
+        NSLog(@"点1");
+    }
+    else if (annotation == _pointAnnotation2) {
+        NSLog(@"点2");
+        NSString *AnnotationViewID = @"renameMark";
+        BMKPinAnnotationView *annotationView = (BMKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+        if (annotationView == nil) {
+            annotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+            // 设置颜色
+            annotationView.pinColor = BMKPinAnnotationColorPurple;
+            // 从天上掉下效果
+            annotationView.animatesDrop = YES;
+            // 设置可拖拽
+            annotationView.draggable = YES;
+            // 把大头针换成别的图片
+            annotationView.image = [UIImage imageNamed:@"xfs"];
+        }
+        return annotationView;
+    }
+    else if (annotation == _pointAnnotation3) {
+        NSLog(@"点3");
+    }
     
-    if([_btnflag  isEqual: @"dwbtn"]) {
-        //nothing to do...
-    }
-    else if([_btnflag  isEqual: @"addsybtn"]) {
-        [self createLocationSignImage];
-    }
+    return nil;
 }
 
 - (void)didUpdateUserHeading:(BMKUserLocation *)userLocation {

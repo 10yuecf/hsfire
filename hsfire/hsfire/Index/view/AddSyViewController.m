@@ -87,7 +87,7 @@
     int inputx = 75,inputy = 8,inputyb = 40,inputw = 200,inputh = 30; //文本框x坐标
     
     //白色背景框
-    _baceView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, kWidth - 20, 400)];
+    _baceView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, kWidth - 20, 430)];
     _baceView.layer.cornerRadius = 5.0;
     _baceView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:_baceView];
@@ -219,7 +219,105 @@
 }
 
 -(void)next:(UIButton *)button {
-
+    hsdcwUtils *utils = [[hsdcwUtils alloc]init];
+    //读取本地数据用户token
+    //NSArray *u_arr = [utils getUserInfo];
+    
+    NSString *chkuser = [NSString stringWithFormat:@"select * from t_user where loginstatus = '1' limit 1"];
+    NSMutableArray *user_arr = [UserTool userWithSql:chkuser];
+    User *u = user_arr[0];
+    
+    //加密
+    NSString *xf_dt = utils.myencrypt[0];
+    NSString *xf_tk = utils.myencrypt[1];
+    
+    //提交注册完成接口
+    NSString *syaddr = self.userEntity.title;
+    NSString *sylat = self.userEntity.lat;
+    NSString *sylon = self.userEntity.lon;
+    NSString *syarea = _syareaText.text;
+    NSString *sybh = _sybhText.text;
+    NSString *sydw = _sydwText.text;
+    NSString *sylx = _sylxText.text;
+    NSString *syqk = _syqkText.text;
+    NSString *sylxr = _sylxrText.text;
+    NSString *sytel = _sytelText.text;
+    NSString *addp = u.name;
+    
+    if ([utils isBlankString:syaddr]) {
+        [MBProgressHUD showError:@"未获取到水源地址，请返回上页重新获取" toView:self.view];
+    }
+    else if ([utils isBlankString:sylat]) {
+        [MBProgressHUD showError:@"未获取到水源经度，请返回上页重新获取" toView:self.view];
+    }
+    else if ([utils isBlankString:sylon]) {
+        [MBProgressHUD showError:@"未获取到水源维度，请返回上页重新获取" toView:self.view];
+    }
+    else if ([utils isBlankString:syarea]) {
+        [MBProgressHUD showError:@"请选择水源地区" toView:self.view];
+    }
+    else if ([utils isBlankString:sybh]) {
+        [MBProgressHUD showError:@"请输入水源编号" toView:self.view];
+    }
+    else if ([utils isBlankString:sydw]) {
+        [MBProgressHUD showError:@"请选择水源归属单位" toView:self.view];
+    }
+    else if ([utils isBlankString:sylx]) {
+        [MBProgressHUD showError:@"请选择水源类型" toView:self.view];
+    }
+    else if ([utils isBlankString:syqk]) {
+        [MBProgressHUD showError:@"请选择水源情况" toView:self.view];
+    }
+    else if ([utils isBlankString:sylxr]) {
+        [MBProgressHUD showError:@"请输入水源联系人" toView:self.view];
+    }
+    else if (![utils validateMobile:sytel]) {
+        [MBProgressHUD showError:@"请输入正确的联系电话" toView:self.view];
+    }
+    else {
+        //验证水源编号是否存在
+        NSDictionary *param_syadd = @{@"syaddr":syaddr,
+                                    @"sylat":sylat,
+                                    @"sylon":sylon,
+                                    @"syarea":syarea,
+                                    @"sybh":sybh,
+                                    @"sydw":sydw,
+                                    @"sylx":sylx,
+                                    @"syqk":syqk,
+                                    @"sylxr":sylxr,
+                                    @"sytel":sytel,
+                                    @"addp":addp,
+                                    @"xf_dt":xf_dt,
+                                    @"xf_tk":xf_tk};
+        
+        [CKHttpCommunicate createRequest:Sybhchk WithParam:param_syadd withMethod:POST success:^(id response) {
+            //NSLog(@"%@",response);
+            
+            if (response) {
+                NSString *result = response[@"code"];
+                
+                if ([result isEqualToString:@"200"]) {
+                    NSLog(@"添加成功");
+                }
+                else if ([result isEqualToString:@"400"]) {
+                    NSString *text = response[@"data"][@"text"];
+                    
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:text message:nil preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+                    [alert addAction:action];
+                    [self presentViewController:alert animated:YES completion:nil];
+                }
+                else if ([result isEqualToString:@"404"]) {
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"网络异常提交失败！" message:nil preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil];
+                    [alert addAction:action];
+                    [self presentViewController:alert animated:YES completion:nil];
+                }
+            }
+        } failure:^(NSError *error) {
+            NSLog(@"%@",error);
+        } showHUD:self.view];
+    }
 }
 
 -(UITextField *)createTextFiledWithFrame:(CGRect)frame font:(UIFont *)font placeholder:(NSString *)placeholder {
@@ -231,11 +329,11 @@
     return textField;
 }
 
--(BOOL)textFieldShouldReturn:(UITextField *)textField {
-    textField = _sybhText;
-    [_sybhText resignFirstResponder];
-    return YES;
-}
+//-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+//    textField = _sybhText;
+//    [_sybhText resignFirstResponder];
+//    return YES;
+//}
 
 - (void)pickerArea:(STPickerArea *)pickerArea province:(NSString *)province city:(NSString *)city area:(NSString *)area {
     NSString *text = [NSString stringWithFormat:@"%@ %@ %@", province, city, area];

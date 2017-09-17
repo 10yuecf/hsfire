@@ -263,7 +263,7 @@
     [btn1 setTitle:@"救援队伍" forState:UIControlStateNormal];
     [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn1 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
-    [btn1 setImage:[UIImage imageNamed:@"xfs"] forState:UIControlStateNormal];
+    [btn1 setImage:[UIImage imageNamed:@"jy1"] forState:UIControlStateNormal];
     [self.view addSubview:btn1];
     
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -273,7 +273,7 @@
     [btn2 setTitle:@"特种车辆" forState:UIControlStateNormal];
     [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn2 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
-    [btn2 setImage:[UIImage imageNamed:@"water"] forState:UIControlStateNormal];
+    [btn2 setImage:[UIImage imageNamed:@"jy2"] forState:UIControlStateNormal];
     [self.view addSubview:btn2];
     
     UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -283,7 +283,7 @@
     [btn3 setTitle:@"应急物资" forState:UIControlStateNormal];
     [btn3 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn3 addTarget:self action:@selector(addsy:) forControlEvents:UIControlEventTouchUpInside];
-    [btn3 setImage:[UIImage imageNamed:@"addwt"] forState:UIControlStateNormal];
+    [btn3 setImage:[UIImage imageNamed:@"jy3"] forState:UIControlStateNormal];
     [self.view addSubview:btn3];
 }
 

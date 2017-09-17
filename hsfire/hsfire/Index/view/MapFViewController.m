@@ -263,7 +263,7 @@
     [btn1 setTitle:@"车辆" forState:UIControlStateNormal];
     [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn1 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
-    [btn1 setImage:[UIImage imageNamed:@"xfs"] forState:UIControlStateNormal];
+    [btn1 setImage:[UIImage imageNamed:@"zqbz1"] forState:UIControlStateNormal];
     [self.view addSubview:btn1];
     
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -273,7 +273,7 @@
     [btn2 setTitle:@"装备" forState:UIControlStateNormal];
     [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn2 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
-    [btn2 setImage:[UIImage imageNamed:@"water"] forState:UIControlStateNormal];
+    [btn2 setImage:[UIImage imageNamed:@"zqbz2"] forState:UIControlStateNormal];
     [self.view addSubview:btn2];
     
     UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -283,7 +283,7 @@
     [btn3 setTitle:@"器材" forState:UIControlStateNormal];
     [btn3 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn3 addTarget:self action:@selector(addsy:) forControlEvents:UIControlEventTouchUpInside];
-    [btn3 setImage:[UIImage imageNamed:@"addwt"] forState:UIControlStateNormal];
+    [btn3 setImage:[UIImage imageNamed:@"zqbz3"] forState:UIControlStateNormal];
     [self.view addSubview:btn3];
     
     UIButton *btn4 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -293,7 +293,7 @@
     [btn4 setTitle:@"灭火剂" forState:UIControlStateNormal];
     [btn4 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn4 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
-    [btn4 setImage:[UIImage imageNamed:@"refwt"] forState:UIControlStateNormal];
+    [btn4 setImage:[UIImage imageNamed:@"zqbz4"] forState:UIControlStateNormal];
     [self.view addSubview:btn4];
     
     UIButton *btn5 = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -303,7 +303,7 @@
     [btn5 setTitle:@"船艇" forState:UIControlStateNormal];
     [btn5 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn5 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
-    [btn5 setImage:[UIImage imageNamed:@"refwt"] forState:UIControlStateNormal];
+    [btn5 setImage:[UIImage imageNamed:@"zqbz5"] forState:UIControlStateNormal];
     [self.view addSubview:btn5];
 }
 
@@ -444,13 +444,6 @@
     }
     
     self.addressLabel.text = resultAddress;
-    _lat = [NSString stringWithFormat:@"%lf",result.location.latitude];
-    _lon = [NSString stringWithFormat:@"%lf",result.location.longitude];
-    //self.longitudeLabel.text =
-    
-    NSLog(@"label的值==========%@",resultAddress);
-    NSLog(@"经纬度的值==========%f %f",result.location.latitude,result.location.longitude);
-    
     self.location2D = coor;
     self.name = houseName;
 }

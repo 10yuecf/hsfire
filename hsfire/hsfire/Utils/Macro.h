@@ -20,3 +20,6 @@
 
 #define kWidth [UIScreen mainScreen].bounds.size.width //获取设备的物理宽度
 #define kHeight [UIScreen mainScreen].bounds.size.height //获取设备的物理高度
+
+#define CCWidth  [UIScreen mainScreen].bounds.size.width
+#define CCHeight [UIScreen mainScreen].bounds.size.height

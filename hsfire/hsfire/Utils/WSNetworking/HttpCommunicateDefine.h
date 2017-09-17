@@ -25,8 +25,8 @@ typedef NS_ENUM(NSInteger,HTTP_COMMAND_LIST){
     GetYzm,
     //修改密码
     FindPassword,
-    //取用户列表
-    selectUser,
+    //获取水源列表
+    GetSyInfoList,
     //获取活动详情
     GetPartyShow,
     //上传头像接口
@@ -75,6 +75,10 @@ typedef NS_ENUM(NSInteger,HTTP_COMMAND_LIST){
     DelGbook,
     //检验是否拉入消息黑名单
     chk_Friend_isblack,
+    //验证水源编号是否存在
+    Sybhchk,
+    //添加水源信息
+    SyAdd,
     //demo
     HTTP_UPDATE_AVATA,
     /*******************/
@@ -88,7 +92,7 @@ typedef NS_ENUM(NSInteger,HTTP_COMMAND_LIST){
 static char cHttpMethod[HTTP_METHOD_COUNT][64] = {
     "GetYzm",
     "FindPassword",
-    "selectUser",
+    "GetSyInfoList",
     "GetPartyShow",
     "up",
     "GetUserMore",
@@ -113,6 +117,8 @@ static char cHttpMethod[HTTP_METHOD_COUNT][64] = {
     "Sand_Friend_del",
     "DelGbook",
     "chk_Friend_isblack",
+    "sybhchk",
+    "syadd",
     "toutiao/avatar",
 };
 

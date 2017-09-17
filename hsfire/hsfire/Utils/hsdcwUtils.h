@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <sys/utsname.h>
 
 @interface hsdcwUtils : NSObject
 
@@ -19,5 +20,7 @@
 -(int)getRandomNumber:(int)from to:(int)to;
 
 -(NSMutableArray *)myencrypt;
+
+- (NSString *)iphoneType;
 
 @end

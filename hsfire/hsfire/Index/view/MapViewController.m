@@ -79,7 +79,7 @@
         self.navigationController.navigationBar.translucent = NO;
     }
     
-    NSLog(@"================%@",self.userEntity.userId);
+    NSLog(@"================userId%@",self.userEntity.userId);
     
     _locService = [[BMKLocationService alloc]init];
     _geoCodeSearch = [[BMKGeoCodeSearch alloc] init];
@@ -438,8 +438,8 @@
     _lon = [NSString stringWithFormat:@"%lf",result.location.longitude];
     //self.longitudeLabel.text =
     
-    NSLog(@"label的值==========%@",resultAddress);
-    NSLog(@"经纬度的值==========%f %f",result.location.latitude,result.location.longitude);
+    //NSLog(@"label的值==========%@",resultAddress);
+    //NSLog(@"经纬度的值==========%f %f",result.location.latitude,result.location.longitude);
     
     self.location2D = coor;
     self.name = houseName;
@@ -460,11 +460,11 @@
 }
 
 - (void)willStartLocatingUser {
-    NSLog(@"start locate");
+    //NSLog(@"start locate");
 }
 
 - (void)didStopLocatingUser {
-    NSLog(@"stop locate");
+    //NSLog(@"stop locate");
 }
 
 - (void)didFailToLocateUserWithError:(NSError *)error {
@@ -482,14 +482,14 @@
     reverseGeocodeSearchOption.reverseGeoPoint = userLocation.location.coordinate;
     BOOL flag = [_geoCodeSearch reverseGeoCode:reverseGeocodeSearchOption];
     if(flag) {
-        NSLog(@"反geo检索发送成功");
+        //NSLog(@"反geo检索发送成功");
         [_locService stopUserLocationService];
     }
     else {
         NSLog(@"反geo检索发送失败");
     }
     
-    NSLog(@"点击了%@",_btnflag);
+    //NSLog(@"点击了%@",_btnflag);
     
     if([_btnflag  isEqual: @"dwbtn"]) {
         //nothing to do...

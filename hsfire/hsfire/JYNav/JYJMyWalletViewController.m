@@ -8,6 +8,7 @@
 
 #import "JYJMyWalletViewController.h"
 #import "WKWebviewController.h"
+#import "Macro.h"
 
 @interface JYJMyWalletViewController ()
 
@@ -22,45 +23,113 @@
     
     [self setupNav];
     
+//    UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
+//    btn1.tag = 1;
+//    btn1.frame = CGRectMake(10, 50, self.view.frame.size.width - 100, 37);
+//    btn1.titleLabel.font = [UIFont systemFontOfSize:19];
+//    [btn1 setTitle:@"科普宣传" forState:UIControlStateNormal];
+//    [btn1 addTarget:self action:@selector(tourl:) forControlEvents:UIControlEventTouchUpInside];
+//    [btn1 setBackgroundColor:[UIColor colorWithRed:204/255.0f green:0/255.0f blue:0/255.0f alpha:1]];
+//    btn1.layer.cornerRadius = 5.0;
+    //[self.view addSubview:btn1];
+    
+//    UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
+//    btn2.tag = 2;
+//    btn2.frame = CGRectMake(10, 100, self.view.frame.size.width - 100, 37);
+//    btn2.titleLabel.font = [UIFont systemFontOfSize:19];
+//    [btn2 setTitle:@"消防云课堂" forState:UIControlStateNormal];
+//    [btn2 addTarget:self action:@selector(tourl:) forControlEvents:UIControlEventTouchUpInside];
+//    [btn2 setBackgroundColor:[UIColor colorWithRed:204/255.0f green:0/255.0f blue:0/255.0f alpha:1]];
+//    btn2.layer.cornerRadius = 5.0;
+    //[self.view addSubview:btn2];
+    
+//    UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
+//    btn3.tag = 3;
+//    btn3.frame = CGRectMake(10, 150, self.view.frame.size.width - 100, 37);
+//    btn3.titleLabel.font = [UIFont systemFontOfSize:19];
+//    [btn3 setTitle:@"消防职业资格考试" forState:UIControlStateNormal];
+//    [btn3 addTarget:self action:@selector(tourl:) forControlEvents:UIControlEventTouchUpInside];
+//    [btn3 setBackgroundColor:[UIColor colorWithRed:204/255.0f green:0/255.0f blue:0/255.0f alpha:1]];
+//    btn3.layer.cornerRadius = 5.0;
+    //[self.view addSubview:btn3];
+    
+//    UIButton *btn4 = [UIButton buttonWithType:UIButtonTypeCustom];
+//    btn4.tag = 4;
+//    btn4.frame = CGRectMake(10, 200, self.view.frame.size.width - 100, 37);
+//    btn4.titleLabel.font = [UIFont systemFontOfSize:19];
+//    [btn4 setTitle:@"市民消防知识考试" forState:UIControlStateNormal];
+//    [btn4 addTarget:self action:@selector(tourl:) forControlEvents:UIControlEventTouchUpInside];
+//    [btn4 setBackgroundColor:[UIColor colorWithRed:204/255.0f green:0/255.0f blue:0/255.0f alpha:1]];
+//    btn4.layer.cornerRadius = 5.0;
+    //[self.view addSubview:btn4];
+    
+    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(20, 40, 280, 30)];
+    label.text = @"欢迎使用黄石消防在线教育系统";
+    label.textColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:1];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.font = [UIFont boldSystemFontOfSize:16];
+    [self.view addSubview:label];
+    
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
     btn1.tag = 1;
-    btn1.frame = CGRectMake(10, 50, self.view.frame.size.width - 100, 37);
-    btn1.titleLabel.font = [UIFont systemFontOfSize:19];
-    [btn1 setTitle:@"科普宣传" forState:UIControlStateNormal];
+    btn1.frame = CGRectMake(45, 140, 70, 70);
     [btn1 addTarget:self action:@selector(tourl:) forControlEvents:UIControlEventTouchUpInside];
-    [btn1 setBackgroundColor:[UIColor colorWithRed:204/255.0f green:0/255.0f blue:0/255.0f alpha:1]];
-    btn1.layer.cornerRadius = 5.0;
+    [btn1 setImage:[UIImage imageNamed:@"xfzs1.png"] forState:UIControlStateNormal];
     [self.view addSubview:btn1];
+    
+    UILabel *label1 = [[UILabel alloc]initWithFrame:CGRectMake(45, 225, 70, 30)];
+    label1.text = @"科普宣传";
+    label1.textColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:1];
+    label1.textAlignment = NSTextAlignmentCenter;
+    label1.font = [UIFont boldSystemFontOfSize:16];
+    [self.view addSubview:label1];
     
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
     btn2.tag = 2;
-    btn2.frame = CGRectMake(10, 100, self.view.frame.size.width - 100, 37);
-    btn2.titleLabel.font = [UIFont systemFontOfSize:19];
-    [btn2 setTitle:@"消防云课堂" forState:UIControlStateNormal];
+    btn2.frame = CGRectMake(kWidth - 115, 140, 70, 70);
     [btn2 addTarget:self action:@selector(tourl:) forControlEvents:UIControlEventTouchUpInside];
-    [btn2 setBackgroundColor:[UIColor colorWithRed:204/255.0f green:0/255.0f blue:0/255.0f alpha:1]];
-    btn2.layer.cornerRadius = 5.0;
+    [btn2 setImage:[UIImage imageNamed:@"xfzs3.png"] forState:UIControlStateNormal];
     [self.view addSubview:btn2];
+    
+    UILabel *label2 = [[UILabel alloc]initWithFrame:CGRectMake(kWidth - 130, 225, 100, 30)];
+    label2.text = @"消防云课堂";
+    label2.textColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:1];
+    label2.textAlignment = NSTextAlignmentCenter;
+    label2.font = [UIFont boldSystemFontOfSize:16];
+    [self.view addSubview:label2];
     
     UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
     btn3.tag = 3;
-    btn3.frame = CGRectMake(10, 150, self.view.frame.size.width - 100, 37);
-    btn3.titleLabel.font = [UIFont systemFontOfSize:19];
-    [btn3 setTitle:@"消防职业资格考试" forState:UIControlStateNormal];
+    btn3.frame = CGRectMake(45, 290, 70, 70);
     [btn3 addTarget:self action:@selector(tourl:) forControlEvents:UIControlEventTouchUpInside];
-    [btn3 setBackgroundColor:[UIColor colorWithRed:204/255.0f green:0/255.0f blue:0/255.0f alpha:1]];
-    btn3.layer.cornerRadius = 5.0;
+    [btn3 setImage:[UIImage imageNamed:@"xfzs4.png"] forState:UIControlStateNormal];
     [self.view addSubview:btn3];
+    
+    UILabel *label3 = [[UILabel alloc]initWithFrame:CGRectMake(30, 375, 100, 30)];
+    label3.text = @"职业资格考试";
+    label3.textColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:1];
+    label3.textAlignment = NSTextAlignmentCenter;
+    label3.font = [UIFont boldSystemFontOfSize:16];
+    [self.view addSubview:label3];
     
     UIButton *btn4 = [UIButton buttonWithType:UIButtonTypeCustom];
     btn4.tag = 4;
-    btn4.frame = CGRectMake(10, 200, self.view.frame.size.width - 100, 37);
-    btn4.titleLabel.font = [UIFont systemFontOfSize:19];
-    [btn4 setTitle:@"市民消防知识考试" forState:UIControlStateNormal];
+    btn4.frame = CGRectMake(kWidth - 115, 290, 70, 70);
     [btn4 addTarget:self action:@selector(tourl:) forControlEvents:UIControlEventTouchUpInside];
-    [btn4 setBackgroundColor:[UIColor colorWithRed:204/255.0f green:0/255.0f blue:0/255.0f alpha:1]];
-    btn4.layer.cornerRadius = 5.0;
+    [btn4 setImage:[UIImage imageNamed:@"xfzs2.png"] forState:UIControlStateNormal];
     [self.view addSubview:btn4];
+    
+    UILabel *label4 = [[UILabel alloc]initWithFrame:CGRectMake(kWidth - 130, 375, 100, 30)];
+    label4.text = @"知识常识考试";
+    label4.textColor = [UIColor colorWithRed:0/255.0f green:0/255.0f blue:0/255.0f alpha:1];
+    label4.textAlignment = NSTextAlignmentCenter;
+    label4.font = [UIFont boldSystemFontOfSize:16];
+    [self.view addSubview:label4];
+
+}
+
+-(void)loadUI {
+    
 }
 
 -(void)tourl:(UIButton *)button {
