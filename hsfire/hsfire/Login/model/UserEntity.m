@@ -28,4 +28,5 @@
 @synthesize dwid;
 @synthesize lat;
 @synthesize lon;
+@synthesize photo_s;
 @end

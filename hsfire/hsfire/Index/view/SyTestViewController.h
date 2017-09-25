@@ -1,16 +1,16 @@
 //
-//  AddSyViewController.h
+//  SyAddViewController.h
 //  hsfire
 //
-//  Created by louislee on 2017/9/4.
+//  Created by louislee on 2017/9/23.
 //  Copyright © 2017年 hsdcw. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "JYJPushBaseViewController.h"
 #import "UserEntity.h"
 
-@interface AddSyViewController : JYJPushBaseViewController
+@interface SyTestViewController : JYJPushBaseViewController<UINavigationControllerDelegate,UIImagePickerControllerDelegate>
 /** userEntity */
 @property (retain,nonatomic) UserEntity *userEntity;
+
 @end

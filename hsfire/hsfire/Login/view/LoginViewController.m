@@ -233,11 +233,12 @@ static void *ProgressObserverContext = &ProgressObserverContext;
                     NSString *tel = response[@"data"][0][@"tel"];
                     NSString *dwname = response[@"data"][0][@"dwname"];
                     NSString *dwid = response[@"data"][0][@"dwid"];
+                    NSString *devcode;
                     
                     //----------------查询本地库最新设备码start--------------
+                    
                     NSString *chkdev = [NSString stringWithFormat:@"select * from t_base order by id desc limit 1"];
                     NSMutableArray *dev_arr = [UserTool baseWithSql:chkdev];
-                    NSString *devcode;
                     if(dev_arr.count > 0) {
                         BaseInfo *ba = dev_arr[0];
                         devcode = ba.keyValue;
@@ -265,6 +266,7 @@ static void *ProgressObserverContext = &ProgressObserverContext;
                     //----------------查询本地库最新设备码end--------------
                     
                     //----------------判断用户信息是否存在本地start---------
+                    
                     NSString *chkuser = [NSString stringWithFormat:@"select * from t_user where account = '%@' and tel = '%@'",acc,tel];
                     _datas = [UserTool userWithSql:chkuser];
                     if (_datas.count == 0) {
@@ -280,6 +282,7 @@ static void *ProgressObserverContext = &ProgressObserverContext;
                         NSString *upall = [NSString stringWithFormat:@"update t_user set loginstatus = '0' where userID != '%@' and tel != '%@'",uid, tel];
                         [UserTool userWithSql:upall];
                     }
+                    
                     //----------------判断用户信息是否存在本地end-----------
                     
                     //建立临时变量传值

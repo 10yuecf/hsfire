@@ -18,7 +18,7 @@
 #import "JYJSliderMenuTool.h"
 #import "Macro.h"
 #import "MyAnimatedAnnotationView.h"
-#import "AddSyViewController.h"
+//#import "AddSyViewController.h"
 #import "UserEntity.h"
 
 @interface MapFivViewController ()<UIGestureRecognizerDelegate,BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,UITextFieldDelegate,BMKPoiSearchDelegate,BMKRouteSearchDelegate>
@@ -442,9 +442,9 @@
     ue.lat = self.lat;
     ue.lon = self.lon;
     
-    AddSyViewController *addsy = [[AddSyViewController alloc]init];
-    [self.navigationController pushViewController:addsy animated:YES];
-    addsy.userEntity = ue;
+    //AddSyViewController *addsy = [[AddSyViewController alloc]init];
+    //[self.navigationController pushViewController:addsy animated:YES];
+    //addsy.userEntity = ue;
     
     //NSLog(@"this is sure btn click%@",self.addressLabel.text);
 }

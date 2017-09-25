@@ -92,15 +92,6 @@ BMKMapManager* _mapManager;
         // 自动登录
         MapViewController *map = [[MapViewController alloc]init];
         window.rootViewController = [[JYJNavigationController alloc]initWithRootViewController:map];
-        
-        //MapTwoViewController *vc = [[MapTwoViewController alloc]init];
-        //window.rootViewController = [[JYJNavigationController alloc]initWithRootViewController:vc];
-        
-        //LoginViewController *login = [[LoginViewController alloc]init];
-        //window.rootViewController = [[JYJNavigationController alloc]initWithRootViewController:login];
-        
-        //ClusterDemoViewController *cc = [[ClusterDemoViewController alloc]init];
-        //window.rootViewController = [[JYJNavigationController alloc]initWithRootViewController:cc];
     }
     else {
         // 设置窗口的根控制器

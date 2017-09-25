@@ -31,7 +31,7 @@ static sqlite3 *_db;
     NSLog(@"-ios app local database path-%@",documentPath);
     
     // 2、创建数据库user
-    NSString *sql = @"create table t_user (id integer primary key autoincrement,userID interger,devicetoken text,name text, account text, status text DEFAULT '1',zw text DEFAULT ' ',bz text DEFAULT ' ',createtime text DEFAULT ' ',groupid text DEFAULT ' ',tagid text DEFAULT ' ',tagname text DEFAULT ' ',dwtype text DEFAULT ' ',tel text DEFAULT ' ',dwname text DEFAULT ' ',dwid text DEFAULT ' ',loginstatus text DEFAULT '0')";
+    NSString *sql = @"create table t_user (id integer primary key autoincrement,userID interger,devicetoken text,name text, account text, status text DEFAULT '1',zw text DEFAULT ' ',bz text DEFAULT ' ',createtime text DEFAULT ' ',groupid text DEFAULT ' ',tagid text DEFAULT ' ',tagname text DEFAULT ' ',dwtype text DEFAULT ' ',tel text DEFAULT ' ',dwname text DEFAULT ' ',dwid text DEFAULT ' ',loginstatus text DEFAULT '0',photo_s text DEFAULT ' ')";
     
     // 3、创建数据库base
     NSString *sqlb = @"create table t_base (id integer primary key autoincrement,strname text,keyname text, keyvalue text)";
@@ -43,7 +43,6 @@ static sqlite3 *_db;
     if (sqlite3_exec(_db, sqlb.UTF8String, NULL, NULL, &error) == SQLITE_OK) {
         NSLog(@"创建base成功");
     }
-    
 }
 
 +(NSMutableArray *)userWithSql:(NSString *)sql {
@@ -86,7 +85,9 @@ static sqlite3 *_db;
             
             NSString *loginstatus = [NSString stringWithCString:(const char*)sqlite3_column_text(stmt,16) encoding:NSUTF8StringEncoding];
             
-            User *user = [User userWithName:ID userID:userID devicetoken:devicetoken name:name account:account status:status zw:zw bz:bz createtime:createtime groupid:groupid tagid:tagid tagname:tagname dwtype:dwtype tel:tel dwname:dwname dwid:dwid loginstatus:loginstatus];
+            NSString *photo_s = [NSString stringWithCString:(const char*)sqlite3_column_text(stmt,17) encoding:NSUTF8StringEncoding];
+            
+            User *user = [User userWithName:ID userID:userID devicetoken:devicetoken name:name account:account status:status zw:zw bz:bz createtime:createtime groupid:groupid tagid:tagid tagname:tagname dwtype:dwtype tel:tel dwname:dwname dwid:dwid loginstatus:loginstatus photo_s:photo_s];
             [arr addObject:user];
         }
         

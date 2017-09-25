@@ -28,6 +28,7 @@
     NSString *dwid;
     NSString *lat;
     NSString *lon;
+    NSString *photo_s;
 }
 
 @property(nonatomic,retain) NSString *userToken;
@@ -49,4 +50,5 @@
 @property(nonatomic,retain) NSString *dwid;
 @property(nonatomic,retain) NSString *lat;
 @property(nonatomic,retain) NSString *lon;
+@property(nonatomic,retain) NSString *photo_s;
 @end

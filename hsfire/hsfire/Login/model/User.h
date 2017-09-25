@@ -27,6 +27,7 @@
 @property (nonatomic, copy) NSString *dwname;
 @property (nonatomic, copy) NSString *dwid;
 @property (nonatomic, copy) NSString *loginstatus;
+@property (nonatomic, copy) NSString *photo_s;
 
 +(instancetype)userWithName:(NSString *)ID
                     userID:(NSString *)userID
@@ -44,5 +45,6 @@
                     tel:(NSString *)tel
                     dwname:(NSString *)dwname
                     dwid:(NSString *)dwid
-                    loginstatus:(NSString *)loginstatus;
+                    loginstatus:(NSString *)loginstatus
+                    photo_s:(NSString *)photo_s;
 @end

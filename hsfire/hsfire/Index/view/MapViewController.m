@@ -18,8 +18,9 @@
 #import "JYJSliderMenuTool.h"
 #import "Macro.h"
 #import "MyAnimatedAnnotationView.h"
-#import "AddSyViewController.h"
+#import "SyAddViewController.h"
 #import "UserEntity.h"
+#import "CKHttpCommunicate.h"
 
 @interface MapViewController ()<UIGestureRecognizerDelegate,BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,UITextFieldDelegate,BMKPoiSearchDelegate,BMKRouteSearchDelegate>
 
@@ -42,12 +43,21 @@
 @property (nonatomic,strong) UIView *messageView;
 @property (nonatomic,strong) UILabel *addressLabel;
 @property (nonatomic,strong) NSString *lat;
-@property (nonatomic,strong) NSString *lon;
+@property (nonatomic,strong) NSString *lng;
+@property (nonatomic,strong) NSString *latc;
+@property (nonatomic,strong) NSString *lngc;
+@property (nonatomic,strong) NSString *latcnow;
+@property (nonatomic,strong) NSString *lngcnow;
+
 @property (nonatomic,strong) UIButton *sureButton;
 @property (nonatomic,strong) BMKGeoCodeSearch *searchAddress;
 @property (nonatomic,strong) NSString *name;
 @property (nonatomic,assign) CLLocationCoordinate2D location2D;
 @property (nonatomic,strong) NSString *btnflag;
+
+@property (nonatomic,strong) NSString *sytype;
+@property (nonatomic, strong) BMKPointAnnotation *pointXfs;
+@property (nonatomic, strong) BMKPointAnnotation *pointSy;
 
 @end
 
@@ -73,6 +83,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    _sytype = @"1"; //消防栓
     
     //适配ios7
     if(([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0)) {
@@ -301,14 +313,22 @@
 - (void)buttonTap:(UIButton *)button {
     if (button.tag == 0) {
         NSLog(@"显示消防栓");
+        _sytype = @"1";
+        [self.mapView removeAnnotations:self.mapView.annotations];
+        [self loadData:_lngcnow Lat:_latcnow Sytype:@"1"];
     }
     
     if (button.tag == 1) {
         NSLog(@"天然水源");
+        _sytype = @"2";
+        [self.mapView removeAnnotations:self.mapView.annotations];
+        [self loadData:_lngcnow Lat:_latcnow Sytype:@"2"];
     }
     
     if (button.tag == 3) {
         NSLog(@"刷新获取最新水源信息");
+        [self.mapView removeAnnotations:self.mapView.annotations];
+        [self loadData:_lngcnow Lat:_latcnow Sytype:_sytype];
     }
 }
 
@@ -433,14 +453,36 @@
         return;
     }
     
+    CLLocationCoordinate2D centercoor = _mapView.centerCoordinate;
+    _latcnow = [NSString stringWithFormat:@"%lf",centercoor.latitude];
+    _lngcnow = [NSString stringWithFormat:@"%lf",centercoor.longitude];
+    //NSLog(@"初始化中心点的经纬度=======%@ %@",_latc,_lngc);
+    //NSLog(@"当前中心点的经纬度=======%@ %@",_latcnow,_lngcnow);
+    
+    float latcd = [_latc floatValue];
+    float lngcd = [_lngc floatValue];
+    
+    float latcnowd = [_latcnow floatValue];
+    float lngcnowd = [_lngcnow floatValue];
+    
+    BMKMapPoint point1 = BMKMapPointForCoordinate(CLLocationCoordinate2DMake(latcd,lngcd));
+    BMKMapPoint point2 = BMKMapPointForCoordinate(CLLocationCoordinate2DMake(latcnowd,lngcnowd));
+    CLLocationDistance distance = BMKMetersBetweenMapPoints(point1,point2);
+    //NSLog(@"两点间的距离======%f",distance);
+    
+    //如果两点距离大于800米
+    if(distance > 800) {
+        //重新设置水源中心点坐标
+        _latc = [NSString stringWithFormat:@"%lf",centercoor.latitude];
+        _lngc = [NSString stringWithFormat:@"%lf",centercoor.longitude];
+        
+        [self.mapView removeAnnotations:self.mapView.annotations];
+        
+        //异步加载标注点
+        [self loadData:_lngc Lat:_latc Sytype:_sytype];
+    }
+    
     self.addressLabel.text = resultAddress;
-    _lat = [NSString stringWithFormat:@"%lf",result.location.latitude];
-    _lon = [NSString stringWithFormat:@"%lf",result.location.longitude];
-    //self.longitudeLabel.text =
-    
-    //NSLog(@"label的值==========%@",resultAddress);
-    //NSLog(@"经纬度的值==========%f %f",result.location.latitude,result.location.longitude);
-    
     self.location2D = coor;
     self.name = houseName;
 }
@@ -449,10 +491,10 @@
     //建立临时变量传值
     UserEntity *ue = [[UserEntity alloc]init];
     ue.title = self.addressLabel.text;
-    ue.lat = self.lat;
-    ue.lon = self.lon;
+    ue.lat = self.latcnow;
+    ue.lon = self.lngcnow;
     
-    AddSyViewController *addsy = [[AddSyViewController alloc]init];
+    SyAddViewController *addsy = [[SyAddViewController alloc]init];
     [self.navigationController pushViewController:addsy animated:YES];
     addsy.userEntity = ue;
 
@@ -472,10 +514,15 @@
 }
 
 -(void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation {
-    //NSLog(@"didUpdateUserLocation lat %f,long %f",userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);
-    
     [_mapView updateLocationData:userLocation]; //更新地图上的位置
     _mapView.centerCoordinate = userLocation.location.coordinate; //更新当前位置到地图中间
+    
+    //获取初始化中心点坐标
+    _latc = [NSString stringWithFormat:@"%lf",userLocation.location.coordinate.latitude];
+    _lngc = [NSString stringWithFormat:@"%lf",userLocation.location.coordinate.longitude];
+    
+    //异步加载标注点
+    [self loadData:_lngc Lat:_latc Sytype:_sytype];
     
     //地理反编码
     BMKReverseGeoCodeOption *reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc]init];
@@ -489,14 +536,100 @@
         NSLog(@"反geo检索发送失败");
     }
     
-    //NSLog(@"点击了%@",_btnflag);
-    
     if([_btnflag  isEqual: @"dwbtn"]) {
         //nothing to do...
     }
     else if([_btnflag  isEqual: @"addsybtn"]) {
         [self createLocationSignImage];
     }
+}
+
+- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation {
+    if (annotation == _pointXfs) {
+        //NSLog(@"消防栓");
+        NSString *AnnotationViewID = @"xfsmark";
+        BMKPinAnnotationView *annotationView = (BMKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+        if (annotationView == nil) {
+            annotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+            // 设置颜色
+            annotationView.pinColor = BMKPinAnnotationColorPurple;
+            // 从天上掉下效果
+            annotationView.animatesDrop = YES;
+            // 设置可拖拽
+            annotationView.draggable = YES;
+            // 把大头针换成别的图片
+            annotationView.image = [UIImage imageNamed:@"xfs"];
+        }
+        return annotationView;
+    }
+    else if (annotation == _pointSy) {
+        NSLog(@"水源");
+        NSString *AnnotationViewID = @"xfsymark";
+        BMKPinAnnotationView *annotationView = (BMKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+        if (annotationView == nil) {
+            annotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+            // 设置颜色
+            annotationView.pinColor = BMKPinAnnotationColorPurple;
+            // 从天上掉下效果
+            annotationView.animatesDrop = YES;
+            // 设置可拖拽
+            annotationView.draggable = YES;
+            // 把大头针换成别的图片
+            annotationView.image = [UIImage imageNamed:@"water"];
+        }
+        return annotationView;
+    }
+    
+    return nil;
+}
+
+//动态请求加载地图标注点
+-(void)loadData:(NSString*)lng Lat:(NSString*)lat Sytype:(NSString*) sytype {
+    //-----------------------------------加载数据-----------------------------------------
+    NSDictionary *parameter = @{@"lng":lng,
+                                @"lat":lat,
+                                @"sytype":sytype};
+    [CKHttpCommunicate createRequest:GetSyInfoList WithParam:parameter withMethod:POST success:^(id response) {
+        //NSLog(@"%@",response);
+        
+        if (response) {
+            NSString *code = response[@"code"];
+            
+            //当返回值为200并num为0时
+            if ([code isEqualToString:@"200"]) {
+                NSArray *array = response[@"data"];
+                for (int i = 0; i < array.count; i++) {
+                    CLLocationCoordinate2D coor2;
+                    
+                    double dlng = [array[i][@"syaddr_lng"] doubleValue];
+                    double dlat = [array[i][@"syaddr_lat"] doubleValue];
+                    
+                    coor2.longitude = dlng;
+                    coor2.latitude = dlat;
+                    
+                    if ([_sytype isEqual: @"1"]) {
+                        _pointXfs = [[BMKPointAnnotation alloc]init];
+                        
+                        _pointXfs.coordinate = coor2;  //每次不同的gps坐标
+                        _pointXfs.title = [NSString stringWithFormat:@"%@",array[i][@"sybh"]];
+                        _pointXfs.subtitle = [NSString stringWithFormat:@"%@",array[i][@"syaddr"]];
+                        [_mapView addAnnotation:_pointXfs];
+                    }
+                    else if ([_sytype isEqual: @"2"]) {
+                        _pointSy = [[BMKPointAnnotation alloc]init];
+                        
+                        _pointSy.coordinate = coor2;  //每次不同的gps坐标
+                        _pointSy.title = [NSString stringWithFormat:@"%@",array[i][@"sybh"]];
+                        _pointSy.subtitle = [NSString stringWithFormat:@"%@",array[i][@"syaddr"]];
+                        [_mapView addAnnotation:_pointSy];
+                    }
+                }
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    } showHUD:self.view];
+    //-----------------------------------加载数据-----------------------------------------
 }
 
 - (void)didUpdateUserHeading:(BMKUserLocation *)userLocation {

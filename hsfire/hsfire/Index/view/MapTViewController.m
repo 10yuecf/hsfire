@@ -18,7 +18,6 @@
 #import "JYJSliderMenuTool.h"
 #import "Macro.h"
 #import "MyAnimatedAnnotationView.h"
-#import "AddSyViewController.h"
 #import "UserEntity.h"
 #import "hsdcwUtils.h"
 #import "CKHttpCommunicate.h"
@@ -54,6 +53,10 @@
 @property (nonatomic,strong) BMKGeoCodeSearch *searchAddress;
 @property (nonatomic,strong) NSString *name;
 @property (nonatomic,assign) CLLocationCoordinate2D location2D;
+@property (nonatomic,strong) NSString *dwtype;
+@property (nonatomic, strong) BMKPointAnnotation *point1;
+@property (nonatomic, strong) BMKPointAnnotation *point2;
+@property (nonatomic, strong) BMKPointAnnotation *point3;
 @end
 
 @implementation MapTViewController
@@ -85,6 +88,9 @@
     }
     
     //NSLog(@"================userid%@",self.userEntity.userId);
+    
+    //初始化重点单位类型
+    _dwtype = @"1"; //高层建筑
     
     _locService = [[BMKLocationService alloc]init];
     _geoCodeSearch = [[BMKGeoCodeSearch alloc] init];
@@ -333,16 +339,22 @@
 
 #pragma mark -- Selector
 - (void)buttonTap:(UIButton *)button {
-    if (button.tag == 0) {
-        NSLog(@"显示消防栓");
+    if (button.tag == 1) {
+        NSLog(@"高层建筑");
+        _dwtype = @"1";
+        [self.mapView removeAnnotations:self.mapView.annotations];
     }
     
-    if (button.tag == 1) {
-        NSLog(@"天然水源");
+    if (button.tag == 2) {
+        NSLog(@"大型建筑");
+        _dwtype = @"2";
+        [self.mapView removeAnnotations:self.mapView.annotations];
     }
     
     if (button.tag == 3) {
-        NSLog(@"刷新获取最新水源信息");
+        NSLog(@"易燃建筑");
+        _dwtype = @"3";
+        [self.mapView removeAnnotations:self.mapView.annotations];
     }
 }
 
@@ -452,10 +464,8 @@
     self.name = houseName;
 }
 
-//加载地图所有标注点
+//动态请求加载地图标注点
 -(void)loadData:(NSString*)lng Lat:(NSString*)lat {
-    //[self.mapView removeAnnotation:_pointAnnotation2];
-    
     //-----------------------------------加载数据-----------------------------------------
     NSDictionary *parameter = @{@"lng":lng,
                                 @"lat":lat};
@@ -469,7 +479,6 @@
             if ([code isEqualToString:@"200"]) {
                 NSArray *array = response[@"data"];
                 for (int i = 0; i < array.count; i++) {
-                    _pointAnnotation2 = [[BMKPointAnnotation alloc]init];
                     CLLocationCoordinate2D coor2;
                     
                     double dlng = [array[i][@"syaddr_lng"] doubleValue];
@@ -478,10 +487,30 @@
                     coor2.longitude = dlng;
                     coor2.latitude = dlat;
                     
-                    _pointAnnotation2.coordinate = coor2;  //每次不同的gps坐标
-                    _pointAnnotation2.title = [NSString stringWithFormat:@"%@",array[i][@"sybh"]];
-                    _pointAnnotation2.subtitle = [NSString stringWithFormat:@"%@",array[i][@"syaddr"]];
-                    [_mapView addAnnotation:_pointAnnotation2];
+                    if ([_dwtype isEqual: @"1"]) {
+                        _point1 = [[BMKPointAnnotation alloc]init];
+                        
+                        _point1.coordinate = coor2;  //每次不同的gps坐标
+                        _point1.title = [NSString stringWithFormat:@"%@",array[i][@"sybh"]];
+                        _point1.subtitle = [NSString stringWithFormat:@"%@",array[i][@"syaddr"]];
+                        [_mapView addAnnotation:_point1];
+                    }
+                    else if ([_dwtype isEqual: @"2"]) {
+                        _point2 = [[BMKPointAnnotation alloc]init];
+                        
+                        _point2.coordinate = coor2;  //每次不同的gps坐标
+                        _point2.title = [NSString stringWithFormat:@"%@",array[i][@"sybh"]];
+                        _point2.subtitle = [NSString stringWithFormat:@"%@",array[i][@"syaddr"]];
+                        [_mapView addAnnotation:_point2];
+                    }
+                    else if ([_dwtype isEqual: @"3"]) {
+                        _point3 = [[BMKPointAnnotation alloc]init];
+                        
+                        _point3.coordinate = coor2;  //每次不同的gps坐标
+                        _point3.title = [NSString stringWithFormat:@"%@",array[i][@"sybh"]];
+                        _point3.subtitle = [NSString stringWithFormat:@"%@",array[i][@"syaddr"]];
+                        [_mapView addAnnotation:_point3];
+                    }
                 }
             }
         }
@@ -530,12 +559,9 @@
 - (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation {
     //NSLog(@"%@",annotation);
     
-    if (annotation == _pointAnnotation) {
+    if (annotation == _point1) {
         NSLog(@"点1");
-    }
-    else if (annotation == _pointAnnotation2) {
-        NSLog(@"点2");
-        NSString *AnnotationViewID = @"renameMark";
+        NSString *AnnotationViewID = @"zddw1mark";
         BMKPinAnnotationView *annotationView = (BMKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
         if (annotationView == nil) {
             annotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
@@ -546,12 +572,43 @@
             // 设置可拖拽
             annotationView.draggable = YES;
             // 把大头针换成别的图片
-            annotationView.image = [UIImage imageNamed:@"xfs"];
+            annotationView.image = [UIImage imageNamed:@"zddw1"];
         }
         return annotationView;
     }
-    else if (annotation == _pointAnnotation3) {
+    else if (annotation == _point2) {
+        NSLog(@"点2");
+        NSString *AnnotationViewID = @"zddw2mark";
+        BMKPinAnnotationView *annotationView = (BMKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+        if (annotationView == nil) {
+            annotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+            // 设置颜色
+            annotationView.pinColor = BMKPinAnnotationColorPurple;
+            // 从天上掉下效果
+            annotationView.animatesDrop = YES;
+            // 设置可拖拽
+            annotationView.draggable = YES;
+            // 把大头针换成别的图片
+            annotationView.image = [UIImage imageNamed:@"zddw2"];
+        }
+        return annotationView;
+    }
+    else if (annotation == _point3) {
         NSLog(@"点3");
+        NSString *AnnotationViewID = @"zddw3mark";
+        BMKPinAnnotationView *annotationView = (BMKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+        if (annotationView == nil) {
+            annotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+            // 设置颜色
+            annotationView.pinColor = BMKPinAnnotationColorPurple;
+            // 从天上掉下效果
+            annotationView.animatesDrop = YES;
+            // 设置可拖拽
+            annotationView.draggable = YES;
+            // 把大头针换成别的图片
+            annotationView.image = [UIImage imageNamed:@"zddw3"];
+        }
+        return annotationView;
     }
     
     return nil;

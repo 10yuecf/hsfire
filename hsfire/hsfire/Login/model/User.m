@@ -10,7 +10,7 @@
 
 @implementation User
 
-+(instancetype)userWithName:(NSString *)ID userID:(NSString *)userID devicetoken:(NSString *)devicetoken name:(NSString *)name account:(NSString *)account status:(NSString *)status zw:(NSString *)zw bz:(NSString *)bz createtime:(NSString *)createtime groupid:(NSString *)groupid tagid:(NSString *)tagid tagname:(NSString *)tagname dwtype:(NSString *)dwtype tel:(NSString *)tel dwname:(NSString *)dwname dwid:(NSString *)dwid loginstatus:(NSString *)loginstatus {
++(instancetype)userWithName:(NSString *)ID userID:(NSString *)userID devicetoken:(NSString *)devicetoken name:(NSString *)name account:(NSString *)account status:(NSString *)status zw:(NSString *)zw bz:(NSString *)bz createtime:(NSString *)createtime groupid:(NSString *)groupid tagid:(NSString *)tagid tagname:(NSString *)tagname dwtype:(NSString *)dwtype tel:(NSString *)tel dwname:(NSString *)dwname dwid:(NSString *)dwid loginstatus:(NSString *)loginstatus photo_s:(NSString *)photo_s {
     
     User *user = [[self alloc]init];
     user.ID = ID;
@@ -30,6 +30,7 @@
     user.dwtype = dwname;
     user.dwid = dwid;
     user.loginstatus = loginstatus;
+    user.photo_s = photo_s;
     
     return user;
 }

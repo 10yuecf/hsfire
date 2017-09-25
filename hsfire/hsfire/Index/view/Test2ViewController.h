@@ -7,7 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UserEntity.h"
 
 @interface Test2ViewController : UIViewController
-
+/** userEntity */
+@property (retain,nonatomic) UserEntity *userEntity;
 @end
