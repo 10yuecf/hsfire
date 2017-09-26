@@ -22,6 +22,8 @@
 #import "UserEntity.h"
 #import "CKHttpCommunicate.h"
 
+#import "SyTestViewController.h"
+
 @interface MapViewController ()<UIGestureRecognizerDelegate,BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,UITextFieldDelegate,BMKPoiSearchDelegate,BMKRouteSearchDelegate>
 
 /** tapGestureRec */
@@ -302,7 +304,7 @@
     btn4.frame = CGRectMake(btn_w * 3 + 28, kHeight - maph, btn_w + 10, btn_h);
     btn4.tag = 3;
     btn4.titleLabel.font = [UIFont systemFontOfSize:14.0];
-    [btn4 setTitle:@"刷新" forState:UIControlStateNormal];
+    [btn4 setTitle:@"我的" forState:UIControlStateNormal];
     [btn4 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn4 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
     [btn4 setImage:[UIImage imageNamed:@"refwt"] forState:UIControlStateNormal];
@@ -494,7 +496,8 @@
     ue.lat = self.latcnow;
     ue.lon = self.lngcnow;
     
-    SyAddViewController *addsy = [[SyAddViewController alloc]init];
+    //SyAddViewController *addsy = [[SyAddViewController alloc]init];
+    SyTestViewController *addsy = [[SyTestViewController alloc]init];
     [self.navigationController pushViewController:addsy animated:YES];
     addsy.userEntity = ue;
 

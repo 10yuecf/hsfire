@@ -39,6 +39,7 @@
 		8817B1601F77B931002A1EF6 /* photo.png in Resources */ = {isa = PBXBuildFile; fileRef = 8817B15E1F77B931002A1EF6 /* photo.png */; };
 		8817B1631F77BEC3002A1EF6 /* CustomAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8817B1621F77BEC3002A1EF6 /* CustomAlertView.m */; };
 		8817B1671F79014B002A1EF6 /* SyTestViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8817B1661F79014B002A1EF6 /* SyTestViewController.m */; };
+		8817B1691F790643002A1EF6 /* choose_add@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8817B1681F790643002A1EF6 /* choose_add@2x.png */; };
 		8818F0561F42EB8400F50CB9 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 8818F0511F42EB8400F50CB9 /* User.m */; };
 		8818F0571F42EB8400F50CB9 /* UserEntity.m in Sources */ = {isa = PBXBuildFile; fileRef = 8818F0531F42EB8400F50CB9 /* UserEntity.m */; };
 		8818F0581F42EB8400F50CB9 /* UserTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 8818F0551F42EB8400F50CB9 /* UserTool.m */; };
@@ -97,6 +98,7 @@
 		88825F521F4B15B400A4189E /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 88825F511F4B15B400A4189E /* libz.tbd */; };
 		88825F561F4C7B5200A4189E /* libUMessage_Sdk_1.5.0a.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 88825F541F4C7B5200A4189E /* libUMessage_Sdk_1.5.0a.a */; };
 		88825F581F4C7B9D00A4189E /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88825F571F4C7B9D00A4189E /* UserNotifications.framework */; };
+		88C242EF1F7A3E5900DC8D07 /* MXBasePhotoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 88C242ED1F7A3E5800DC8D07 /* MXBasePhotoView.m */; };
 		88D121D31F5E4AC200A745F9 /* MapTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88D121D21F5E4AC200A745F9 /* MapTViewController.m */; };
 		88D121D61F5E82C100A745F9 /* MapFViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88D121D51F5E82C100A745F9 /* MapFViewController.m */; };
 		88D121D91F5E88C800A745F9 /* MapFivViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88D121D81F5E88C800A745F9 /* MapFivViewController.m */; };
@@ -239,6 +241,7 @@
 		8817B1621F77BEC3002A1EF6 /* CustomAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomAlertView.m; sourceTree = "<group>"; };
 		8817B1651F79014B002A1EF6 /* SyTestViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyTestViewController.h; sourceTree = "<group>"; };
 		8817B1661F79014B002A1EF6 /* SyTestViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyTestViewController.m; sourceTree = "<group>"; };
+		8817B1681F790643002A1EF6 /* choose_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "choose_add@2x.png"; sourceTree = "<group>"; };
 		8818F0501F42EB8400F50CB9 /* User.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = User.h; sourceTree = "<group>"; };
 		8818F0511F42EB8400F50CB9 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		8818F0521F42EB8400F50CB9 /* UserEntity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserEntity.h; sourceTree = "<group>"; };
@@ -336,6 +339,8 @@
 		88825F551F4C7B5200A4189E /* UMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UMessage.h; sourceTree = "<group>"; };
 		88825F571F4C7B9D00A4189E /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		88825F591F4C7D7400A4189E /* hsfire.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = hsfire.entitlements; sourceTree = "<group>"; };
+		88C242ED1F7A3E5800DC8D07 /* MXBasePhotoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXBasePhotoView.m; sourceTree = "<group>"; };
+		88C242EE1F7A3E5800DC8D07 /* MXBasePhotoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MXBasePhotoView.h; sourceTree = "<group>"; };
 		88D121D11F5E4AC200A745F9 /* MapTViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapTViewController.h; sourceTree = "<group>"; };
 		88D121D21F5E4AC200A745F9 /* MapTViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapTViewController.m; sourceTree = "<group>"; };
 		88D121D41F5E82C100A745F9 /* MapFViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapFViewController.h; sourceTree = "<group>"; };
@@ -954,8 +959,6 @@
 		88D576721F3D96820082F6F7 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				8817B1611F77BEC3002A1EF6 /* CustomAlertView.h */,
-				8817B1621F77BEC3002A1EF6 /* CustomAlertView.m */,
 				8804F89B1F760C66002F01D7 /* ST */,
 				88607FCF1F556ED30006E002 /* JHCellConfig */,
 				88825F531F4C7B5200A4189E /* UMessage_Sdk_1.5.0a */,
@@ -967,6 +970,10 @@
 				88D5768C1F3D96820082F6F7 /* WSNetworking */,
 				88D576811F3D96820082F6F7 /* hsdcwUtils.h */,
 				88D576821F3D96820082F6F7 /* hsdcwUtils.m */,
+				88C242EE1F7A3E5800DC8D07 /* MXBasePhotoView.h */,
+				88C242ED1F7A3E5800DC8D07 /* MXBasePhotoView.m */,
+				8817B1611F77BEC3002A1EF6 /* CustomAlertView.h */,
+				8817B1621F77BEC3002A1EF6 /* CustomAlertView.m */,
 				88D576831F3D96820082F6F7 /* Macro.h */,
 				88D576841F3D96820082F6F7 /* MBProgressHUD+Add.h */,
 				88D576851F3D96820082F6F7 /* MBProgressHUD+Add.m */,
@@ -1021,6 +1028,7 @@
 		88D5769E1F3D9EF80082F6F7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8817B1681F790643002A1EF6 /* choose_add@2x.png */,
 				8817B15D1F77B931002A1EF6 /* nophoto.png */,
 				8817B15E1F77B931002A1EF6 /* photo.png */,
 				887DE8611F6742C50085C520 /* xfzs1.png */,
@@ -1132,7 +1140,7 @@
 		88D576021F3D59E50082F6F7 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0830;
+				LastUpgradeCheck = 0900;
 				ORGANIZATIONNAME = hsdcw;
 				TargetAttributes = {
 					88D576091F3D59E50082F6F7 = {
@@ -1191,6 +1199,7 @@
 				88121E061F41479E002A2129 /* 临时.rtf in Resources */,
 				883E807F1F61A0A900FDEFD6 /* Default-568h@2x.png in Resources */,
 				887DE8671F6742C50085C520 /* xfzs3.png in Resources */,
+				8817B1691F790643002A1EF6 /* choose_add@2x.png in Resources */,
 				882D7B641F3F2BB40063E8B5 /* 日志.rtf in Resources */,
 				88D5761A1F3D59E50082F6F7 /* Assets.xcassets in Resources */,
 				8817B1601F77B931002A1EF6 /* photo.png in Resources */,
@@ -1312,6 +1321,7 @@
 				8818F0941F42F45200F50CB9 /* SDWebImageDownloaderOperation.m in Sources */,
 				8817B1631F77BEC3002A1EF6 /* CustomAlertView.m in Sources */,
 				88607FDD1F557EE00006E002 /* Model.m in Sources */,
+				88C242EF1F7A3E5900DC8D07 /* MXBasePhotoView.m in Sources */,
 				88FF7D9A1F481E4700670C0F /* SVIndefiniteAnimatedView.m in Sources */,
 				88607FE01F557F340006E002 /* EditPassViewController.m in Sources */,
 				88607FEF1F557F9E0006E002 /* NoticeViewController.m in Sources */,
@@ -1388,7 +1398,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -1396,7 +1408,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -1437,7 +1453,9 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
@@ -1445,7 +1463,11 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;

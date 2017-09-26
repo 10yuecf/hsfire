@@ -7,7 +7,7 @@
 //
 #import <AVFoundation/AVFoundation.h>
 #import <sqlite3.h>
-#import "SyTestViewController.h"
+#import "SyAddViewController.h"
 #import "UITextField+Shake.h"
 #import "UIImageView+WebCache.h"
 #import "User.h"
@@ -25,28 +25,21 @@
 #import "STPickerSingle.h"
 #import "STPickerDate.h"
 
-#import "MXBasePhotoView.h"
-
 #define IOS7DEVICE ([[[UIDevice currentDevice] systemVersion] floatValue] >= 7.0)
 #define DOCUMENTS_FOLDER_TEMPIMAGE [NSHomeDirectory() stringByAppendingFormat:@"/Library/Caches/tempimage/"]
-//调整间隙
-#define SPACES 10
 
-@interface SyTestViewController ()<UITextFieldDelegate, STPickerAreaDelegate, STPickerSingleDelegate, UIImagePickerControllerDelegate, MXBasePhotoViewDelegate> {
-    CGFloat _viewDefaultHeight;
-}
-@property (nonatomic, strong) UIView *baceView;
-@property (nonatomic, strong) UIView *photoView;
-@property (nonatomic, strong) UITextField *syaddrText; //水源地址
-@property (nonatomic, strong) UITextField *syareaText; //水源地区
-@property (nonatomic, strong) UITextField *sylanText;  //水源经度
-@property (nonatomic, strong) UITextField *sylonText;  //水源纬度
-@property (nonatomic, strong) UITextField *sybhText;   //水源编号
-@property (nonatomic, strong) UITextField *sydwText;   //水源单位
-@property (nonatomic, strong) UITextField *sylxText;   //水源类型
-@property (nonatomic, strong) UITextField *syqkText;   //水源情况
-@property (nonatomic, strong) UITextField *sylxrText;   //水源联系人
-@property (nonatomic, strong) UITextField *sytelText;   //水源联系人电话
+@interface SyAddViewController ()<UITextFieldDelegate, STPickerAreaDelegate, STPickerSingleDelegate, UIImagePickerControllerDelegate>
+@property (nonatomic ,strong) UIView *baceView;
+@property (nonatomic ,strong) UITextField *syaddrText; //水源地址
+@property (nonatomic ,strong) UITextField *syareaText; //水源地区
+@property (nonatomic ,strong) UITextField *sylanText;  //水源经度
+@property (nonatomic ,strong) UITextField *sylonText;  //水源纬度
+@property (nonatomic ,strong) UITextField *sybhText;   //水源编号
+@property (nonatomic ,strong) UITextField *sydwText;   //水源单位
+@property (nonatomic ,strong) UITextField *sylxText;   //水源类型
+@property (nonatomic ,strong) UITextField *syqkText;   //水源情况
+@property (nonatomic ,strong) UITextField *sylxrText;   //水源联系人
+@property (nonatomic ,strong) UITextField *sytelText;   //水源联系人电话
 @property (nonatomic, strong) UIImage *headImage;
 @property (nonatomic, strong) MBProgressHUD *HUD;
 @property (nonatomic, strong) NSString *str;
@@ -56,19 +49,9 @@
 @property (nonatomic, strong) UIImageView *p4;
 @property (nonatomic, strong) UIImageView *p5;
 @property (nonatomic, assign) int upcot;
-@property (nonatomic, strong) NSString *uid; //uid
-@property (nonatomic, strong) NSString *devcode; //devcode
-//一行显示几个图片
-@property (nonatomic) NSInteger showNum;
-//图片宽 高
-@property (nonatomic) CGFloat imageWidth;
-@property (nonatomic) CGFloat imageHeight;
-//删除按钮
-@property (nonatomic , strong) UIButton *deleBt;
-
 @end
 
-@implementation SyTestViewController
+@implementation SyAddViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -79,8 +62,6 @@
     NSLog(@"================%@",self.userEntity.title);
     NSLog(@"================%@",self.userEntity.lat);
     NSLog(@"================%@",self.userEntity.lon);
-    
-    self.edgesForExtendedLayout = UIRectEdgeNone;
     
     self.sybhText.delegate = self;
     self.syareaText.delegate = self;
@@ -97,7 +78,7 @@
 }
 
 - (void)setupNav {
-    self.title = @"水源上报test";
+    self.title = @"水源上报";
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20], NSForegroundColorAttributeName:[UIColor colorWithRed:255 / 255.0 green:255 / 255.0 blue:255 / 255.0 alpha:1.0]}];
     
     UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
@@ -124,11 +105,6 @@
     _baceView.layer.cornerRadius = 5.0;
     _baceView.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:_baceView];
-    
-    //照片view
-    _photoView = [[UIView alloc]initWithFrame:CGRectMake(10, labelyb * 7.1, kWidth - 20, 160)];
-    _photoView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:_photoView];
     
     UILabel *syarealabel = [[UILabel alloc]initWithFrame:CGRectMake(labelx, labely, labelw, labelh)];
     UILabel *sybhlabel = [[UILabel alloc]initWithFrame:CGRectMake(labelx, labely + labelyb, labelw, labelh)];
@@ -263,50 +239,42 @@
     [photoBtn.layer setMasksToBounds:YES];
     [photoBtn.layer setCornerRadius:3.0];
     [photoBtn addTarget:self action:@selector(uploadHeadImg:) forControlEvents:UIControlEventTouchUpInside];
-    //[self.view addSubview:photoBtn];
+    [self.view addSubview:photoBtn];
     
-    //初始化图片视图 加手势 点击弹框提示选择拍照or相册
-    UIImageView *mxImageV = [[UIImageView alloc] initWithFrame:CGRectMake(SPACES, SPACES+5, 60, 60)];
-    _viewDefaultHeight = self.view.frame.size.height;
-    _imageWidth = 70;
-    _imageHeight = 70;
-    mxImageV.tag = 100;
-    mxImageV.image = [UIImage imageNamed:@"choose_add"];
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(clickImageToSelect:)];
-    mxImageV.userInteractionEnabled = YES;
-    [mxImageV addGestureRecognizer:tap];
-    [_photoView addSubview:mxImageV];
-}
-
-- (void)clickImageToSelect:(UITapGestureRecognizer *)tap {
-    //NSLog(@"拍照");
-    hsdcwUtils *utils = [[hsdcwUtils alloc]init];
-    _str = @"photo";
+    _p1 = [[UIImageView alloc] initWithFrame:CGRectZero];
+    _p1.frame = CGRectMake(90, inputy + inputyb * 6 + 50, 60, 60);
+    _p1.layer.masksToBounds = YES;
+    _p1.layer.cornerRadius = 3.0;
+    _p1.image = [UIImage imageNamed:@"nophoto.png"];
+    [self.view addSubview:_p1];
     
-    NSString *sybh = _sybhText.text;
-    if ([utils isBlankString:sybh]) {
-        [MBProgressHUD showError:@"请输入水源编号" toView:self.view];
-    }
-    else {
-        if(_upcot >= 5) {
-            [MBProgressHUD showError:@"对不起，最多只能上传五张照片！" toView:self.view];
-        }
-        else {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"上传照片" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-            UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-            UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [self snapImage];
-            }];
-            UIAlertAction *action3 = [UIAlertAction actionWithTitle:@"从相册中上传" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [self localPhoto];
-            }];
-            [alert addAction:action1];
-            [alert addAction:action2];
-            [alert addAction:action3];
-            
-            [self presentViewController:alert animated:YES completion:nil];
-        }
-    }
+    _p2 = [[UIImageView alloc] initWithFrame:CGRectZero];
+    _p2.frame = CGRectMake(160, inputy + inputyb * 6 + 50, 60, 60);
+    _p2.layer.masksToBounds = YES;
+    _p2.layer.cornerRadius = 3.0;
+    _p2.image = [UIImage imageNamed:@"nophoto.png"];
+    [self.view addSubview:_p2];
+    
+    _p3 = [[UIImageView alloc] initWithFrame:CGRectZero];
+    _p3.frame = CGRectMake(20, inputy + inputyb * 6 + 120, 60, 60);
+    _p3.layer.masksToBounds = YES;
+    _p3.layer.cornerRadius = 3.0;
+    _p3.image = [UIImage imageNamed:@"nophoto.png"];
+    [self.view addSubview:_p3];
+    
+    _p4 = [[UIImageView alloc] initWithFrame:CGRectZero];
+    _p4.frame = CGRectMake(90, inputy + inputyb * 6 + 120, 60, 60);
+    _p4.layer.masksToBounds = YES;
+    _p4.layer.cornerRadius = 3.0;
+    _p4.image = [UIImage imageNamed:@"nophoto.png"];
+    [self.view addSubview:_p4];
+    
+    _p5 = [[UIImageView alloc] initWithFrame:CGRectZero];
+    _p5.frame = CGRectMake(160, inputy + inputyb * 6 + 120, 60, 60);
+    _p5.layer.masksToBounds = YES;
+    _p5.layer.cornerRadius = 3.0;
+    _p5.image = [UIImage imageNamed:@"nophoto.png"];
+    [self.view addSubview:_p5];
 }
 
 - (void)uploadHeadImg:(UIButton *)sender {
@@ -314,23 +282,22 @@
     _str = @"photo";
     
     if(_upcot >= 5) {
-        [MBProgressHUD showError:@"最多只能上传五张照片！" toView:self.view];
+        [MBProgressHUD showError:@"未获取到水源地址，请返回上页重新获取" toView:self.view];
     }
-    else {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"上传照片" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-        UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self snapImage];
-        }];
-        UIAlertAction *action3 = [UIAlertAction actionWithTitle:@"从相册中上传" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self localPhoto];
-        }];
-        [alert addAction:action1];
-        [alert addAction:action2];
-        [alert addAction:action3];
-        
-        [self presentViewController:alert animated:YES completion:nil];
-    }
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"上传照片" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"拍照" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self snapImage];
+    }];
+    UIAlertAction *action3 = [UIAlertAction actionWithTitle:@"从相册中上传" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self localPhoto];
+    }];
+    [alert addAction:action1];
+    [alert addAction:action2];
+    [alert addAction:action3];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 -(void)next:(UIButton *)button {
@@ -682,33 +649,29 @@
     NSMutableArray *user_arr = [UserTool userWithSql:chkuser];
     
     NSString *uid;
-    NSString *devcode;
-    NSString *sybh = _sybhText.text;
     
     if (user_arr.count == 0) {
-        [MBProgressHUD showError:@"未获取到用户登录信息，请重新登录！" toView:self.view];
         uid = @"0";
-        devcode = @"no";
     }
     else {
         User *u = user_arr[0];
         uid = u.userID;
-        _uid = uid; //赋值给全局变量
-        devcode = u.devicetoken;
-        _devcode = devcode; //赋值给全局变量
-        //NSLog(@"%@",uid);
-        
-        NSDictionary *dic = @{@"uid":uid,@"devcode":devcode,@"uptype":@"photo",@"sybh":sybh};
-        [self updateImageToServer:imageData paramDict:dic];
-        //图片上传网络服务器
-        [CustomAlertView showCustomAlertViewWithContent:@"正在上传中..." andRect:KTOASTRECT andTime:1.50f andObject:self];
     }
+    NSLog(@"%@",uid);
+    
+    NSDictionary *dic = @{@"uid":uid,@"token":@"123",@"uptype":@"photo"};
+    //NSDictionary *dic = @{@"uid":u_arr[1],@"token":u_arr[2],@"uptype":uType};
+    
+    [self updateImageToServer:imageData paramDict:dic];
+    //图片上传网络服务器
+    [CustomAlertView showCustomAlertViewWithContent:@"正在上传中..." andRect:KTOASTRECT andTime:1.50f andObject:self];
 }
 
 /*上传图片*/
 - (void)updateImageToServer:(NSData *)imageData paramDict:(NSDictionary *)paramDict {
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/html",@"text/plain", nil];
+    //NSDictionary * parametDic = @{@"uid":@(15100),@"op":@"123"};
     
     // 上传文件时，文件不允许被覆盖(文件重名)
     //可以在上传时使用当前的系统时间作为文件名
@@ -717,16 +680,10 @@
     NSString *str = [formatter stringFromDate:[NSDate date]];
     NSString *fileName = [NSString stringWithFormat:@"%@.png", str];
     
-    _upcot++;
-    int viewtag = 100 + _upcot;
-    NSMutableDictionary *dict = [NSMutableDictionary dictionaryWithDictionary:paramDict];
-    [dict setValue:[NSNumber numberWithInt:viewtag] forKey:@"apptag"];
-    [dict setValue:@"ios" forKey:@"devtype"];
-    //NSLog(@"new dict is%@",dict);
-    
     [self hudTipWillShow:YES];
+    //NSString *urlStr = @"http://www.jhb1314.com/api/socket.php?action=up";
     NSString *urlStr = @"http://10yue.hsdcw.com/fireyun/api/socket.php?action=up";
-    [manager POST:urlStr parameters:dict constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
+    [manager POST:urlStr parameters:paramDict constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [self hudTipWillShow:NO];
         
         //imageData 要上传的[二进制数据]
@@ -758,13 +715,27 @@
                 //NSLog(@"filepath %@",filePath);
                 //NSLog(@"filename %@",fileName);
                 
-                [self addImageLayoutSubviews];
-                MXBasePhotoView *imageView = [[MXBasePhotoView alloc] initWithFrame:CGRectMake(SPACES, SPACES, _imageWidth, _imageHeight)];
-                imageView.tag = viewtag;
-                imageView.photoDelegate = self;
-                imageView.showImageView.image = [UIImage imageNamed:filePath];
-                imageView.deleBt.tag = viewtag;
-                [_photoView addSubview:imageView];
+                //[_p1 sd_setImageWithURL:fileName placeholderImage:[UIImage imageNamed:@""]];
+                
+                _upcot++;
+                if(_upcot == 1) {
+                    _p1.image = [UIImage imageNamed:filePath];
+                }
+                else if(_upcot == 2) {
+                    _p2.image = [UIImage imageNamed:filePath];
+                }
+                else if(_upcot == 3) {
+                    _p3.image = [UIImage imageNamed:filePath];
+                }
+                else if(_upcot == 4) {
+                    _p4.image = [UIImage imageNamed:filePath];
+                }
+                else if(_upcot == 5) {
+                    _p5.image = [UIImage imageNamed:filePath];
+                }
+                
+                // 刷新TableView
+                //[self.mainTableView reloadData];
             }
             
             [self hudTipWillShow:NO];
@@ -832,123 +803,6 @@
     }
 }
 //-------------------------------上传图片处理end------------------------------------------
-
-//删除图片
-- (void)clickDeleBtToDelePhotoWithView:(UIView *)view BtnTag:(NSString*)btntag {
-    //NSLog(@"%ld", view.tag);
-    __weak typeof(self) ws = self;
-    //记录删除视图的标签
-    NSInteger tag = view.tag;
-    //记录删除视图的frame
-    __block CGRect frame = view.frame;
-    //从父视图中删除
-    [view removeFromSuperview];
-    //调整布局
-    [UIView animateWithDuration:0.3 animations:^{
-        for (int i = (int)tag-1; i>= 100; i--) {
-            UIView *vw = [ws.photoView viewWithTag:i];
-            CGRect tempFrame = vw.frame;
-            if (i == 100) {
-                frame.size.width = frame.size.width-SPACES;
-                frame.size.height = frame.size.height-SPACES;
-                frame.origin.x = frame.origin.x+5;
-                frame.origin.y = frame.origin.y+5;
-            }
-            vw.frame = frame;
-            frame = tempFrame;
-        }
-    }];
-    UIView *imgV = [self.photoView viewWithTag:100];
-    __block CGRect sframe = self.photoView.frame;
-    //调整默认自身高度
-    [UIView animateWithDuration:0.3 animations:^{
-        if (imgV.frame.origin.y-5+_imageHeight*2+2*SPACES < ws.photoView.frame.size.height && ws.photoView.frame.size.height-_imageHeight-SPACES >= _viewDefaultHeight) {
-            sframe.size.height = sframe.size.height-_imageHeight-SPACES;
-            ws.photoView.frame = sframe;
-        }
-    }];
-    //减小tag count 防止出鬼
-    for (int i = (int)tag+1; i<=100+_upcot; i++) {
-        UIView *vw = [self.photoView viewWithTag:i];
-        vw.tag = vw.tag-1;
-    }
-    
-    //远程删除数据库
-    //NSLog(@"btntag==========%@",btntag);
-    NSDictionary *param_sydel = @{@"userid":_uid,
-                                  @"apptag":btntag,
-                                  @"sybh":_sybhText.text,
-                                  @"devcode":_devcode
-                                  };
-    [CKHttpCommunicate createRequest:DelSyPic WithParam:param_sydel withMethod:POST success:^(id response) {
-        //NSLog(@"%@",response);
-        
-        if (response) {
-            NSString *result = response[@"code"];
-            
-            if ([result isEqualToString:@"200"]) {
-                NSLog(@"删除成功");
-            }
-            else if ([result isEqualToString:@"400"]) {
-                NSLog(@"删除失败");
-            }
-            else if ([result isEqualToString:@"404"]) {
-                NSLog(@"网络异常删除失败！");
-            }
-        }
-    } failure:^(NSError *error) {
-        NSLog(@"%@",error);
-    } showHUD:self.view];
-    
-    _upcot--;
-}
-
-- (void)addImageLayoutSubviews {
-    __block CGFloat height = 0.0;
-    __weak typeof(self) ws = self;
-    //NSLog(@"ws=============%@",ws);
-    [UIView animateWithDuration:0.5 animations:^{
-        //添加图片，已经存在的图片后移 最新添加的现实在最前面
-        for (UIView *view in ws.photoView.subviews) {
-            CGRect frame = view.frame;
-            //默认的图片和选择的图片要分开处理 尺寸不同
-            CGFloat x = 0.f;
-            if (view.tag == 100) {
-                x = frame.origin.x-5;
-            }
-            else {
-                x = frame.origin.x;
-            }
-            
-            //做换行处理
-            if (x+_imageWidth*2+SPACES*2>ws.photoView.frame.size.width) {
-                if (view.tag == 100) {
-                    frame.origin.x = SPACES+5;
-                }
-                else {
-                    frame.origin.x = SPACES;
-                }
-                frame.origin.y = frame.origin.y+_imageHeight+SPACES;
-            }
-            else {
-                frame.origin.x = frame.origin.x+_imageWidth+SPACES;
-            }
-            
-            //记录高度
-            if (frame.origin.y + _imageHeight+SPACES > height) {
-                height = frame.origin.y + _imageHeight+SPACES;
-            }
-            view.frame = frame;
-        }
-        
-        //根据前面纪录的高度调整视图高度
-        if (height > ws.photoView.frame.size.height) {
-            CGRect frame = ws.photoView.frame;
-            frame.size.height = frame.size.height + _imageHeight +SPACES;
-            ws.photoView.frame = frame;
-        }
-    }];
-}
 
 -(void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-typedef void (^JYJCommenItemOption)();
+typedef void (^JYJCommenItemOption)(void);
 
 @interface JYJCommenItem : NSObject
 /**

@@ -21,12 +21,12 @@
  *当前cloud组件版本 : 3.3.2
  *return  返回当前API cloud组件 的版本号
  */
-UIKIT_EXTERN NSString* BMKGetMapApiCloudComponentVersion();
+UIKIT_EXTERN NSString* BMKGetMapApiCloudComponentVersion(void);
 
 /**
  *检查cloud组件的版本号是否和base组件的版本号一致
  *return    版本号一致返回YES
  */
-UIKIT_EXTERN BOOL BMKCheckCloudComponentIsLegal();
+UIKIT_EXTERN BOOL BMKCheckCloudComponentIsLegal(void);
 
 #endif /* BMKCloudVersion_h */
