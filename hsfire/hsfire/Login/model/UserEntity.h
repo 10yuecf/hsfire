@@ -29,6 +29,12 @@
     NSString *lat;
     NSString *lon;
     NSString *photo_s;
+    NSString *antitle; //气泡标题
+    NSString *ansubtitle;
+    NSString *anlat;
+    NSString *anlon;
+    NSString *clat;
+    NSString *clon;
 }
 
 @property(nonatomic,retain) NSString *userToken;
@@ -51,4 +57,10 @@
 @property(nonatomic,retain) NSString *lat;
 @property(nonatomic,retain) NSString *lon;
 @property(nonatomic,retain) NSString *photo_s;
+@property(nonatomic,retain) NSString *antitle;
+@property(nonatomic,retain) NSString *ansubtitle;
+@property(nonatomic,retain) NSString *anlat;
+@property(nonatomic,retain) NSString *anlon;
+@property(nonatomic,retain) NSString *clat;
+@property(nonatomic,retain) NSString *clon;
 @end

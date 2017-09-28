@@ -24,6 +24,9 @@
 #import "TestViewController.h"
 #import "MapTwoViewController.h"
 
+#import "BNCoreServices.h"
+#define NAVI_BUNDLE_ID @"cn.hsdcw.fireyun"  //sdk自测bundle ID
+#define NAVI_APP_KEY   @"sKt44yP9nO2Vp6PbfaRDGcxfrvy2qmzX"  //sdk自测APP KEY
 BMKMapManager* _mapManager;
 @interface AppDelegate ()<UNUserNotificationCenterDelegate>
 @property (nonatomic, strong) NSMutableArray *datas;
@@ -101,6 +104,14 @@ BMKMapManager* _mapManager;
     
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
+    
+    //初始化导航SDK
+    [BNCoreServices_Instance initServices: NAVI_APP_KEY];
+    //TTS在线授权
+    [BNCoreServices_Instance setTTSAppId:@"9945092"];
+    //设置是否自动退出导航
+    [BNCoreServices_Instance setAutoExitNavi:NO];
+    [BNCoreServices_Instance startServicesAsyn:nil fail:nil];
     
     return YES;
 }
@@ -181,7 +192,7 @@ BMKMapManager* _mapManager;
                           stringByReplacingOccurrencesOfString: @">" withString: @""]
                          stringByReplacingOccurrencesOfString: @" " withString: @""];
     
-    NSLog(@"ios dev code%@",devcode);
+    //NSLog(@"ios dev code%@",devcode);
     
     //记录最新设备码至本地数据库
     //写本地前判断一下是否存在设备码信息

@@ -66,6 +66,8 @@
 //删除按钮
 @property (nonatomic , strong) UIButton *deleBt;
 
+@property (nonatomic, strong) UIScrollView *scrollView;
+
 @end
 
 @implementation SyTestViewController
@@ -112,6 +114,20 @@
     [profileButton addTarget:self action:@selector(backBtnClick) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *profile = [[UIBarButtonItem alloc] initWithCustomView:profileButton];
     self.navigationItem.leftBarButtonItems = @[negativeSpacer, profile];
+    
+    _scrollView = [[UIScrollView alloc]initWithFrame:CGRectMake(0, 0, kWidth, 510)];
+    //_scrollView.backgroundColor = [UIColor blueColor];
+    _scrollView.contentSize = self.view.bounds.size;
+    CGSize size = self.view.bounds.size;
+    NSLog(@"size: %@",NSStringFromCGSize(size));
+    [self.view addSubview:_scrollView];
+    
+    UITapGestureRecognizer *myTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(scrollTap:)];
+    [_scrollView addGestureRecognizer:myTap];
+}
+
+-(void)scrollTap:(id)sender {
+    [self.view endEditing:YES];
 }
 
 -(void)createTextFiled {
@@ -120,15 +136,15 @@
     int inputx = 75,inputy = 8,inputyb = 40,inputw = 200,inputh = 30; //文本框x坐标
     
     //白色背景框
-    _baceView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, kWidth - 20, 430)];
+    _baceView = [[UIView alloc]initWithFrame:CGRectMake(10, 10, kWidth - 20, 600)];
     _baceView.layer.cornerRadius = 5.0;
     _baceView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:_baceView];
+    [_scrollView addSubview:_baceView];
     
     //照片view
-    _photoView = [[UIView alloc]initWithFrame:CGRectMake(10, labelyb * 7.1, kWidth - 20, 160)];
+    _photoView = [[UIView alloc]initWithFrame:CGRectMake(10, labelyb * 8.2, kWidth - 20, 160)];
     _photoView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:_photoView];
+    [_scrollView addSubview:_photoView];
     
     UILabel *syarealabel = [[UILabel alloc]initWithFrame:CGRectMake(labelx, labely, labelw, labelh)];
     UILabel *sybhlabel = [[UILabel alloc]initWithFrame:CGRectMake(labelx, labely + labelyb, labelw, labelh)];
@@ -137,6 +153,7 @@
     UILabel *syqklabel = [[UILabel alloc]initWithFrame:CGRectMake(labelx, labely + labelyb * 4, labelw, labelh)];
     UILabel *sylxrlabel = [[UILabel alloc]initWithFrame:CGRectMake(labelx, labely + labelyb * 5, labelw, labelh)];
     UILabel *sytellabel = [[UILabel alloc]initWithFrame:CGRectMake(labelx, labely + labelyb * 6, labelw, labelh)];
+    UILabel *syaddrlabel = [[UILabel alloc]initWithFrame:CGRectMake(labelx, labely + labelyb * 7, labelw, labelh)];
     
     _syareaText = [self createTextFiledWithFrame:CGRectMake(inputx, inputy, inputw, inputh) font:[UIFont systemFontOfSize:14] placeholder:@"请选择水源地区"];
     _sybhText = [self createTextFiledWithFrame:CGRectMake(inputx, inputy + inputyb, inputw, inputh) font:[UIFont systemFontOfSize:14] placeholder:@"请输入水源编号"];
@@ -145,6 +162,8 @@
     _syqkText = [self createTextFiledWithFrame:CGRectMake(inputx, inputy + inputyb * 4, inputw, inputh) font:[UIFont systemFontOfSize:14] placeholder:@"请选择水源情况"];
     _sylxrText = [self createTextFiledWithFrame:CGRectMake(inputx, inputy + inputyb * 5, inputw, inputh) font:[UIFont systemFontOfSize:14] placeholder:@"请输入水源联系人"];
     _sytelText = [self createTextFiledWithFrame:CGRectMake(inputx, inputy + inputyb * 6, inputw, inputh) font:[UIFont systemFontOfSize:14] placeholder:@"请输入水源联系人电话"];
+    _syaddrText = [self createTextFiledWithFrame:CGRectMake(inputx, inputy + inputyb * 7, inputw, inputh) font:[UIFont systemFontOfSize:14] placeholder:@"请输入水源详细地址"];
+
     
     UIImageView *line1 = [[UIImageView alloc]initWithFrame:CGRectMake(linex, labelyb, _baceView.frame.size.width - 30, 1)];
     line1.backgroundColor = [UIColor colorWithRed:180/255.0 green:180/255.0 blue:180/255.0 alpha:0.3];
@@ -246,14 +265,25 @@
     _sytelText.keyboardType = UIKeyboardTypeNumberPad;
     [_baceView addSubview:_sytelText];
     
-    UIButton *landBtn = [[UIButton alloc]initWithFrame:CGRectMake(10,_baceView.frame.size.height + _baceView.frame.origin.y + 10, _baceView.frame.size.width, 37)];
+    syaddrlabel.text = @"水源地址";
+    syaddrlabel.textColor = [UIColor blackColor];
+    syaddrlabel.textAlignment = NSTextAlignmentLeft;
+    syaddrlabel.font = [UIFont systemFontOfSize:14];
+    [_baceView addSubview:syaddrlabel];
+    
+    _syaddrText.clearButtonMode = UITextFieldViewModeWhileEditing;
+    _syaddrText.delegate = self;
+    _syaddrText.text = self.userEntity.title;
+    [_baceView addSubview:_syaddrText];
+    
+    UIButton *landBtn = [[UIButton alloc]initWithFrame:CGRectMake(10, _photoView.frame.size.height, _baceView.frame.size.width, 37)];
     [landBtn setTitle:@"提交" forState:UIControlStateNormal];
     [landBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     landBtn.titleLabel.font = [UIFont systemFontOfSize:17];
     [landBtn addTarget:self action:@selector(next:) forControlEvents:UIControlEventTouchUpInside];
     landBtn.backgroundColor = [UIColor colorWithRed:204/255.0f green:0/255.0f blue:0/255.0f alpha:1];
     landBtn.layer.cornerRadius = 5.0;
-    [self.view addSubview:landBtn];
+    [_baceView addSubview:landBtn];
     
     //拍照按钮
     UIButton *photoBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -448,10 +478,12 @@
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
     //NSLog(@"%ld",(long)textField.tag);
     //NSLog(@"%@",textField);
-    NSInteger tag = textField.tag;
-    if (tag == 0 || tag == 4) {
-        [self.view endEditing:YES];
-    }
+//    NSInteger tag = textField.tag;
+//    if (tag == 0 || tag == 4) {
+//        [self.view endEditing:YES];
+//    }
+    
+    [self.view endEditing:YES];
     
     return YES;
 }

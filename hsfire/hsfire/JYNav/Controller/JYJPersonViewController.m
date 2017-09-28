@@ -28,6 +28,8 @@
 #import "MapSevnViewController.h"
 #import "MapEgViewController.h"
 
+#import "Test2ViewController.h"
+
 @interface JYJPersonViewController () <UITableViewDelegate, UITableViewDataSource>
 /** tableView */
 @property (nonatomic, weak) UITableView *tableView;
@@ -123,7 +125,8 @@
 
 //离线地图
 -(void)hplab:(UITapGestureRecognizer *)recognizer {
-    JYJMyWalletViewController *my1 = [[JYJMyWalletViewController alloc]init];
+    Test2ViewController *my1 = [[Test2ViewController alloc]init];
+    //JYJMyWalletViewController *my1 = [[JYJMyWalletViewController alloc]init];
     [self.navigationController pushViewController:my1 animated:YES];
 }
 

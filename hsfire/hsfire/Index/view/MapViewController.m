@@ -21,7 +21,9 @@
 #import "SyAddViewController.h"
 #import "UserEntity.h"
 #import "CKHttpCommunicate.h"
+#import "SyInfoViewController.h"
 
+#import "Test2ViewController.h"
 #import "SyTestViewController.h"
 
 @interface MapViewController ()<UIGestureRecognizerDelegate,BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,UITextFieldDelegate,BMKPoiSearchDelegate,BMKRouteSearchDelegate>
@@ -93,15 +95,13 @@
         self.navigationController.navigationBar.translucent = NO;
     }
     
-    NSLog(@"================userId%@",self.userEntity.userId);
-    
     _locService = [[BMKLocationService alloc]init];
     _geoCodeSearch = [[BMKGeoCodeSearch alloc] init];
     _mapAnnoView = [[BMKAnnotationView alloc] init];
     _searchAddress = [[BMKGeoCodeSearch alloc] init];
     
     _mapView = [[BMKMapView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
-    _mapView.showsUserLocation = YES; //是否显示定位图层
+    _mapView.showsUserLocation = NO; //是否显示定位图层
     _mapView.zoomLevel = 17; //地图显示比例
     [self startLocation];
     [self.view addSubview:_mapView];
@@ -239,7 +239,7 @@
     _locService.delegate = self;
     
     _mapView.zoomLevel = 17;
-    _mapView.showsUserLocation = YES;//是否显示小蓝点，no不显示，我们下面要自定义的
+    _mapView.showsUserLocation = NO;//是否显示小蓝点，no不显示，我们下面要自定义的
     _mapView.userTrackingMode = BMKUserTrackingModeNone;
     
     _btnflag = @"dwbtn";
@@ -389,7 +389,7 @@
         _locService.delegate = self;
         
         _mapView.zoomLevel = 17;
-        _mapView.showsUserLocation = YES;//是否显示小蓝点，no不显示，我们下面要自定义的
+        _mapView.showsUserLocation = NO;//是否显示小蓝点，no不显示，我们下面要自定义的
         _mapView.userTrackingMode = BMKUserTrackingModeNone;
         
         _btnflag = @"addsybtn";
@@ -424,7 +424,7 @@
     BOOL flag = [_searchAddress reverseGeoCode:option];
     
     if (flag) {
-        //_mapView.showsUserLocation = NO;//不显示自己的位置
+        _mapView.showsUserLocation = NO;//不显示自己的位置
     }
 }
 
@@ -496,8 +496,8 @@
     ue.lat = self.latcnow;
     ue.lon = self.lngcnow;
     
-    //SyAddViewController *addsy = [[SyAddViewController alloc]init];
-    SyTestViewController *addsy = [[SyTestViewController alloc]init];
+    SyAddViewController *addsy = [[SyAddViewController alloc]init];
+    //SyTestViewController *addsy = [[SyTestViewController alloc]init];
     [self.navigationController pushViewController:addsy animated:YES];
     addsy.userEntity = ue;
 
@@ -523,6 +523,11 @@
     //获取初始化中心点坐标
     _latc = [NSString stringWithFormat:@"%lf",userLocation.location.coordinate.latitude];
     _lngc = [NSString stringWithFormat:@"%lf",userLocation.location.coordinate.longitude];
+    
+    //获取初始化中心点坐标,用于导航
+    _lat = [NSString stringWithFormat:@"%lf",userLocation.location.coordinate.latitude];
+    _lng = [NSString stringWithFormat:@"%lf",userLocation.location.coordinate.longitude];
+    NSLog(@"当前位置坐标：%@ %@",_lat,_lng);
     
     //异步加载标注点
     [self loadData:_lngc Lat:_latc Sytype:_sytype];
@@ -584,6 +589,39 @@
     }
     
     return nil;
+}
+
+//点击气泡
+- (void)mapView:(BMKMapView *)mapView annotationViewForBubble:(BMKAnnotationView *)view {
+    //NSLog(@"点击了气泡!");
+    BMKPointAnnotation *tt = (BMKPointAnnotation*)view.annotation;
+    //NSLog(@"%f",tt.coordinate.latitude);
+    //NSLog(@"%f",tt.coordinate.longitude);
+    //NSLog(@"%@",tt.title);
+    //NSLog(@"%@",tt.subtitle);
+    
+    //建立临时变量传值
+    UserEntity *ue = [[UserEntity alloc]init];
+    ue.antitle = tt.title;
+    ue.ansubtitle = tt.subtitle;
+    ue.anlat = [NSString stringWithFormat:@"%lf",tt.coordinate.latitude];
+    ue.anlon = [NSString stringWithFormat:@"%lf",tt.coordinate.longitude];
+    ue.clat = _lat;
+    ue.clon = _lng;
+    
+    //Test2ViewController *navi = [[Test2ViewController alloc]init];
+    //[self.navigationController pushViewController:navi animated:YES];
+    //navi.userEntity = ue;
+    
+    SyInfoViewController *syinfo = [[SyInfoViewController alloc]init];
+    [self.navigationController pushViewController:syinfo animated:YES];
+    syinfo.userEntity = ue;
+}
+
+//选中标注点
+- (void)mapView:(BMKMapView *)mapView didSelectAnnotationView:(BMKAnnotationView *)view {
+    //_shopCoor = view.annotation.coordinate;
+    //NSLog(@"选中了标注点!");
 }
 
 //动态请求加载地图标注点

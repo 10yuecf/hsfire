@@ -81,6 +81,8 @@ typedef NS_ENUM(NSInteger,HTTP_COMMAND_LIST){
     SyAdd,
     //删除水源上传图片
     DelSyPic,
+    //查询水源信息
+    GetSyInfo,
     //demo
     HTTP_UPDATE_AVATA,
     /*******************/
@@ -122,6 +124,7 @@ static char cHttpMethod[HTTP_METHOD_COUNT][64] = {
     "sybhchk",
     "syadd",
     "DelSyPic",
+    "GetSyInfo",
     "toutiao/avatar",
 };
 

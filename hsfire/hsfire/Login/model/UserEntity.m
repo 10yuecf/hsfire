@@ -29,4 +29,10 @@
 @synthesize lat;
 @synthesize lon;
 @synthesize photo_s;
+@synthesize antitle;
+@synthesize ansubtitle;
+@synthesize anlat;
+@synthesize anlon;
+@synthesize clat;
+@synthesize clon;
 @end
