@@ -22,6 +22,9 @@
 #import "UserEntity.h"
 #import "CKHttpCommunicate.h"
 #import "SyInfoViewController.h"
+#import "User.h"
+#import "BaseInfo.h"
+#import "UserTool.h"
 
 #import "Test2ViewController.h"
 #import "SyTestViewController.h"
@@ -88,6 +91,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self updevcode];
+    
+    if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"打开[定位服务]来允许[黄石消防云]确定您的位置" message:@"请在系统设置中开启定位服务(设置>隐私>定位服务>开启)" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+        UIAlertAction *setAction = [UIAlertAction actionWithTitle:@"打开定位" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            //打开定位设置
+            NSURL *settinsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+            //[[UIApplication sharedApplication] openURL:settinsURL];
+            [[UIApplication sharedApplication] openURL:settinsURL options:@{} completionHandler:nil];// iOS 10 的跳转方式
+        }];
+        
+        [alert addAction:cancelAction];
+        [alert addAction:setAction];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    
     _sytype = @"1"; //消防栓
     
     //适配ios7
@@ -128,6 +148,53 @@
     
     //加载底部按钮组
     [self loadbtns];
+}
+
+-(void)updevcode {
+    NSString *chkdev = [NSString stringWithFormat:@"select * from t_base"];
+    NSMutableArray *dev_datas = [UserTool baseWithSql:chkdev];
+    BaseInfo *bi = dev_datas[0];
+    NSString *devcode = bi.keyValue;
+    //NSLog(@"=========================%@",devcode);
+    
+    NSString *chkuser = [NSString stringWithFormat:@"select * from t_user where loginstatus = '1' limit 1"];
+    NSMutableArray *user_arr = [UserTool userWithSql:chkuser];
+    
+    NSString *uid;
+    
+    if (user_arr.count == 0) {
+        uid = @"0";
+    }
+    else {
+        User *u = user_arr[0];
+        uid = u.userID;
+    }
+    
+    //更新本地设备码
+    NSString *update = [NSString stringWithFormat:@"update t_user set devicetoken = '%@'",devcode];
+    [UserTool userWithSql:update];
+    
+    //NSLog(@"id========%@",uid);
+    
+    //记录用户设备号
+    NSDictionary *param_dev = @{@"type":@"ios",
+                                @"id":uid,
+                                @"code":devcode
+                                };
+    [CKHttpCommunicate createRequest:SandUmcode WithParam:param_dev withMethod:POST success:^(id response) {
+        //NSLog(@"%@",response);
+        if (response) {
+            NSString *result = response[@"code"];
+            if ([result isEqualToString:@"200"]) {
+                NSLog(@"%s","update dev code successful!");
+            }
+            else if ([result isEqualToString:@"400"]) {
+                NSLog(@"%s","update dev code error!");
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    } showHUD:self.inputView];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
@@ -604,9 +671,9 @@
     UserEntity *ue = [[UserEntity alloc]init];
     ue.antitle = tt.title;
     ue.ansubtitle = tt.subtitle;
-    ue.anlat = [NSString stringWithFormat:@"%lf",tt.coordinate.latitude];
+    ue.anlat = [NSString stringWithFormat:@"%lf",tt.coordinate.latitude]; //终点
     ue.anlon = [NSString stringWithFormat:@"%lf",tt.coordinate.longitude];
-    ue.clat = _lat;
+    ue.clat = _lat; //起点
     ue.clon = _lng;
     
     //Test2ViewController *navi = [[Test2ViewController alloc]init];

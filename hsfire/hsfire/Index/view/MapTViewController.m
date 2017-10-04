@@ -110,13 +110,13 @@
     self.extendedLayoutIncludesOpaqueBars = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     
-    // 屏幕边缘pan手势(优先级高于其他手势)
-    UIScreenEdgePanGestureRecognizer *leftEdgeGesture = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self
-                                                                                                          action:@selector(moveViewWithGesture:)];
-    leftEdgeGesture.edges = UIRectEdgeLeft;// 屏幕左侧边缘响应
-    [self.view addGestureRecognizer:leftEdgeGesture];
-    // 这里是地图处理方式，遵守代理协议，实现代理方法
-    leftEdgeGesture.delegate = self;
+//    // 屏幕边缘pan手势(优先级高于其他手势)
+//    UIScreenEdgePanGestureRecognizer *leftEdgeGesture = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self
+//                                                                                                          action:@selector(moveViewWithGesture:)];
+//    leftEdgeGesture.edges = UIRectEdgeLeft;// 屏幕左侧边缘响应
+//    [self.view addGestureRecognizer:leftEdgeGesture];
+//    // 这里是地图处理方式，遵守代理协议，实现代理方法
+//    leftEdgeGesture.delegate = self;
     
     // 如果是scrollView的话，下面这行代码就可以了不用遵守代理协议，实现代理方法
     // [scrollView.panGestureRecognizer requireGestureRecognizerToFail:leftEdgeGesture];
@@ -127,19 +127,19 @@
     [self loadbtns];
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    BOOL result = NO;
-    if ([gestureRecognizer isKindOfClass:[UIScreenEdgePanGestureRecognizer class]]) {
-        result = YES;
-    }
-    return result;
-}
-
-- (void)moveViewWithGesture:(UIPanGestureRecognizer *)panGes {
-    if (panGes.state == UIGestureRecognizerStateEnded) {
-        [self profileCenter];
-    }
-}
+//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+//    BOOL result = NO;
+//    if ([gestureRecognizer isKindOfClass:[UIScreenEdgePanGestureRecognizer class]]) {
+//        result = YES;
+//    }
+//    return result;
+//}
+//
+//- (void)moveViewWithGesture:(UIPanGestureRecognizer *)panGes {
+//    if (panGes.state == UIGestureRecognizerStateEnded) {
+//        [self profileCenter];
+//    }
+//}
 
 - (void)msgClick {
     UIViewController *vc = [[UIViewController alloc] init];
@@ -161,11 +161,11 @@
     
     UIButton *profileButton = [[UIButton alloc] init];
     // 设置按钮的背景图片
-    [profileButton setImage:[UIImage imageNamed:@"tt"] forState:UIControlStateNormal];
+    [profileButton setImage:[UIImage imageNamed:@"backarr"] forState:UIControlStateNormal];
     // 设置按钮的尺寸为背景图片的尺寸
     profileButton.frame = CGRectMake(0, 0, 44, 44);
     //监听按钮的点击
-    [profileButton addTarget:self action:@selector(profileCenter) forControlEvents:UIControlEventTouchUpInside];
+    [profileButton addTarget:self action:@selector(backBtnClick) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *profile = [[UIBarButtonItem alloc] initWithCustomView:profileButton];
     self.navigationItem.leftBarButtonItems = @[negativeSpacer, profile];
     
@@ -188,6 +188,10 @@
     
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightView];
     self.navigationItem.rightBarButtonItems = @[negativeSpacer, rightItem];
+}
+
+-(void)backBtnClick {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 //地图组件按钮组

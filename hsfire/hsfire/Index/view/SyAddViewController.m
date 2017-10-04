@@ -90,6 +90,7 @@
     self.sydwText.delegate = self;
     self.sylxText.delegate = self;
     self.syqkText.delegate = self;
+    self.sylxrText.delegate = self;
     
     [self setupNav];
     [self createTextFiled];
@@ -368,7 +369,7 @@
     }
     else {
         if(_upcot >= 5) {
-            [MBProgressHUD showError:@"对不起，最多只能上传五张照片！" toView:self.view];
+            [MBProgressHUD showError:@"只能上传五张照片！" toView:self.view];
         }
         else {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"上传照片" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -577,6 +578,12 @@
     else if ([selectFlag isEqualToString:@"syqk"]) {
         self.syqkText.text = text;
     }
+    else if ([selectFlag isEqualToString:@"sylxr"]) {
+        //NSLog(@"%@",text);
+        NSArray *array = [text componentsSeparatedByString:@"|"]; //从字符A中分隔成2个元素的数组
+        self.sylxrText.text = array[0];
+        self.sytelText.text = array[1];
+    }
 }
 
 #pragma mark - --- delegate 视图委托 ---
@@ -658,6 +665,41 @@
         [single setFlag:@"syqk"];
         [single setDelegate:self];
         [single show];
+    }
+    
+    if (textField == self.sylxrText) {
+        [self.sylxrText resignFirstResponder];
+        
+        //接口
+        NSMutableArray *arrayData = [NSMutableArray array];
+        NSDictionary *parameter = @{@"type":@"1"};
+        [CKHttpCommunicate createRequest:GetXawWt WithParam:parameter withMethod:POST success:^(id response) {
+            if (response) {
+                NSString *result = response[@"code"];
+                
+                //当返回值为200并num为0时
+                if ([result isEqualToString:@"200"]) {
+                    NSArray *array = response[@"data"];
+                    
+                    for (int i = 0; i < array.count; i++) {
+                        NSString *str = [NSString stringWithFormat:@"%@|%@",array[i][@"name"],array[i][@"account"]];
+                        [arrayData addObject:str];
+                    }
+                }
+                else if ([result isEqualToString:@"400"]) {
+                    [arrayData addObject:@"李石玥|18872188121"];
+                }
+                
+                STPickerSingle *single = [[STPickerSingle alloc]init];
+                [single setArrayData:arrayData];
+                [single setTitle:@"请选择自来水公司维修人"];
+                [single setFlag:@"sylxr"];
+                [single setDelegate:self];
+                [single show];
+            }
+        } failure:^(NSError *error) {
+            NSLog(@"%@",error);
+        } showHUD:self.view];
     }
 }
 

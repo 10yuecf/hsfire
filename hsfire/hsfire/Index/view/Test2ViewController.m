@@ -13,6 +13,8 @@
 #import "BNCoreServices.h"
 #import "BNaviModel.h"
 
+#import "MapViewController.h"
+
 @interface Test2ViewController ()<BNNaviUIManagerDelegate,BNNaviRoutePlanDelegate>
 
 @end
@@ -37,7 +39,7 @@
     
     UILabel* startNodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 130, self.view.frame.size.width, 30)];
     startNodeLabel.backgroundColor = [UIColor clearColor];
-    startNodeLabel.text = @"起点：国人通信大厦";
+    startNodeLabel.text = @"起点：我的位置";
     startNodeLabel.textAlignment = NSTextAlignmentCenter;
     startNodeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [self.view addSubview:startNodeLabel];
@@ -48,6 +50,8 @@
     endNodeLabel.text = [str1 stringByAppendingString:self.userEntity.ansubtitle];
     endNodeLabel.textAlignment = NSTextAlignmentCenter;
     endNodeLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    endNodeLabel.numberOfLines = 0;
+    [endNodeLabel sizeToFit];
     [self.view addSubview:endNodeLabel];
     
     CGSize buttonSize = {240,40};
@@ -100,11 +104,19 @@
 }
 
 -(void)backBtnClick {
+//    CATransition* transition = [CATransition animation];
+//    transition.type = kCATransitionPush;//可更改为其他方式
+//    transition.subtype = kCATransitionFromLeft;//可更改为其他方式
+//    [self.navigationController.view.layer addAnimation:transition forKey:kCATransition];
+//
+//    MapViewController *mapv = [[MapViewController alloc]init];
+//    [self.navigationController pushViewController:mapv animated:NO];
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)setupNav {
-    self.title = @"导航测试";
+    self.title = @"开始导航";
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20], NSForegroundColorAttributeName:[UIColor colorWithRed:255 / 255.0 green:255 / 255.0 blue:255 / 255.0 alpha:1.0]}];
     
     UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
@@ -122,22 +134,18 @@
 }
 
 //模拟导航
-- (void)simulateNavi:(UIButton*)button
-{
+- (void)simulateNavi:(UIButton*)button {
     if (![self checkServicesInited]) return;
     [self startNavi];
-    
 }
 
 //真实GPS导航
-- (void)realNavi:(UIButton*)button
-{
+- (void)realNavi:(UIButton*)button {
     if (![self checkServicesInited]) return;
     [self startNavi];
 }
 
-- (void)startNavi
-{
+- (void)startNavi {
     //BOOL useMyLocation = NO;
     NSMutableArray *nodesArray = [[NSMutableArray alloc]initWithCapacity:2];
     //起点 传入的是原始的经纬度坐标，若使用的是百度地图坐标，可以使用BNTools类进行坐标转化
