@@ -83,6 +83,12 @@ typedef NS_ENUM(NSInteger,HTTP_COMMAND_LIST){
     DelSyPic,
     //查询水源信息
     GetSyInfo,
+    //删除水源点
+    DelSy,
+    //查询自来水联系人
+    GetXawWt,
+    //水源情况上报
+    Sysb,
     //demo
     HTTP_UPDATE_AVATA,
     /*******************/
@@ -125,6 +131,9 @@ static char cHttpMethod[HTTP_METHOD_COUNT][64] = {
     "syadd",
     "DelSyPic",
     "GetSyInfo",
+    "DelSy",
+    "GetXawWt",
+    "Sysb",
     "toutiao/avatar",
 };
 
