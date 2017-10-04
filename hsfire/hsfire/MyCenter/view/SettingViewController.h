@@ -8,8 +8,9 @@
 
 #import <UIKit/UIKit.h>
 #import "UserEntity.h"
+#import "JYJPushBaseViewController.h"
 
-@interface SettingViewController : UIViewController
+@interface SettingViewController : JYJPushBaseViewController
 
 @property (retain,nonatomic) UserEntity *userEntity;
 

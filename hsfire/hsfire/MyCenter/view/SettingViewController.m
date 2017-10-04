@@ -7,6 +7,8 @@
 //
 
 //#import <sqlite3.h>
+#import <QuartzCore/QuartzCore.h>
+#import <CoreLocation/CoreLocation.h>
 #import "SettingViewController.h"
 #import "JHBCellConfig.h"
 #import "SettingCell.h"
@@ -19,6 +21,14 @@
 #import "AboutViewController.h"
 #import "NoticeViewController.h"
 #import "LoginViewController.h"
+#import "SZKCleanCache.h"
+#import "MBProgressHUD+Add.h"
+#import "hsdcwUtils.h"
+#import "MapViewController.h"
+#import "WKWebviewController.h"
+#import "Macro.h"
+
+#define IOS8 ([[[UIDevice currentDevice] systemVersion] doubleValue] >=8.0 ? YES : NO)
 
 @interface SettingViewController ()<UITableViewDataSource, UITableViewDelegate>
 @property (nonatomic, strong) UITableView *mainTableView;
@@ -29,6 +39,9 @@
 // 数据模型
 @property (nonatomic, strong) Model *modelToShow;
 
+@property (nonatomic, strong) NSString *cachenum; //缓存
+@property (nonatomic, strong) NSString *dwflag; //定位标识
+@property (nonatomic, strong) NSString *tzflag; //通知标识
 @end
 
 @implementation SettingViewController
@@ -86,6 +99,41 @@
     [loginButton setBackgroundColor:[UIColor colorWithRed:204/255.0f green:0/255.0f blue:0/255.0f alpha:1]];
     loginButton.layer.cornerRadius = 5.0;
     [self.view addSubview:loginButton];
+    
+    //输出缓存大小 m
+    hsdcwUtils *utils = [[hsdcwUtils alloc]init];
+    NSLog(@"%.2fm",[SZKCleanCache folderSizeAtPath]);
+    
+    float cachef = [SZKCleanCache folderSizeAtPath];
+    _cachenum = [utils notRounding:cachef afterPoint:2];
+    
+    if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+        _dwflag = @"未开启"; //未开启
+    }
+    else {
+        _dwflag = @"已开启"; //已开启
+        //NSLog(@"已开启定位");
+    }
+    
+    if (IOS8) { //iOS8以上包含iOS8
+        if ([[UIApplication sharedApplication] currentUserNotificationSettings].types  == UIRemoteNotificationTypeNone) {
+            NSLog(@"未开启通知！");
+            _tzflag = @"未开启";
+        }
+        else {
+            NSLog(@"开启通知！");
+            _tzflag = @"已开启";
+        }
+    }else{ // ios7 以下
+        if ([[UIApplication sharedApplication] enabledRemoteNotificationTypes]  == UIRemoteNotificationTypeNone) {
+            NSLog(@"未开启通知！");
+            _tzflag = @"未开启";
+        }
+        else {
+            NSLog(@"开启通知！");
+            _tzflag = @"已开启";
+        }
+    }
 }
 
 -(void)backBtnClick {
@@ -150,6 +198,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     // 拿到cellConfig
     JHBCellConfig *cellConfig = self.dataArray[indexPath.section][indexPath.row];
+    NSString *valueString = cellConfig.title;
     
     // 拿到对应cell并根据模型显示
     UITableViewCell *cell = [cellConfig cellOfCellConfigWithTableView:tableView dataModel:self.modelToShow dataTitle:cellConfig.title];
@@ -157,6 +206,19 @@
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator; //显示最右边的箭头
     
     cell.detailTextLabel.font = [UIFont systemFontOfSize:12];
+    if ([valueString isEqualToString:@"清理缓存"]) {
+        NSString *str = [NSString stringWithFormat:@"%@M",_cachenum];
+        cell.detailTextLabel.text = str;
+        cell.detailTextLabel.textColor = [UIColor grayColor];
+    }
+    else if ([valueString isEqualToString:@"定位设置"]) {
+        cell.detailTextLabel.text = _dwflag;
+        cell.detailTextLabel.textColor = [UIColor grayColor];
+    }
+    else if ([valueString isEqualToString:@"通知设置"]) {
+        cell.detailTextLabel.text = _tzflag;
+        cell.detailTextLabel.textColor = [UIColor grayColor];
+    }
     
     //选中时的系统默认颜色
     //cell.selectionStyle = UITableViewCellSelectionStyleNone; //无色
@@ -176,33 +238,84 @@
     valueString = cellConfig.title;
     
     if ([valueString isEqualToString:@"通知设置"]) {
-        //NotifyViewController *notify = [[NotifyViewController alloc]init];
-        NoticeViewController *notice = [[NoticeViewController alloc]init];
-        notice.title = valueString;
-        [self.navigationController pushViewController:notice animated:YES];
+        if([_tzflag isEqualToString:@"已开启"]) {
+            [MBProgressHUD showError:@"已开启，无需重复开启！" toView:self.view];
+        }
+        else {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"打开[通知服务]来允许[黄石消防云]给您推送通知" message:@"请在系统设置中开启定位服务(设置>隐私>通知>开启)" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+            UIAlertAction *setAction = [UIAlertAction actionWithTitle:@"打开通知" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                //打开定位设置
+                NSURL *settinsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                //[[UIApplication sharedApplication] openURL:settinsURL];
+                [[UIApplication sharedApplication] openURL:settinsURL options:@{} completionHandler:nil];// iOS 10 的跳转方式
+            }];
+            
+            [alert addAction:cancelAction];
+            [alert addAction:setAction];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+    }
+    else if ([valueString isEqualToString:@"定位设置"]) {
+        if([_dwflag isEqualToString:@"已开启"]) {
+            [MBProgressHUD showError:@"已开启，无需重复开启！" toView:self.view];
+        }
+        else {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"打开[定位服务]来允许[黄石消防云]确定您的位置" message:@"请在系统设置中开启定位服务(设置>隐私>定位服务>开启)" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+            UIAlertAction *setAction = [UIAlertAction actionWithTitle:@"打开定位" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                //打开定位设置
+                NSURL *settinsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+                //[[UIApplication sharedApplication] openURL:settinsURL];
+                [[UIApplication sharedApplication] openURL:settinsURL options:@{} completionHandler:nil];// iOS 10 的跳转方式
+            }];
+            
+            [alert addAction:cancelAction];
+            [alert addAction:setAction];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+    }
+    else if ([valueString isEqualToString:@"清理缓存"]) {
+        //清楚缓存
+        [SZKCleanCache cleanCache:^{
+            //NSLog(@"清除成功");
+            NSString *txt = [NSString stringWithFormat:@"已成功清理 %@ M缓存",_cachenum];
+            [MBProgressHUD showError:txt toView:self.view];
+            
+            //更新其他数据为未登录状态
+            NSString *upall = [NSString stringWithFormat:@"update t_user set loginstatus = '0'"];
+            [UserTool userWithSql:upall];
+            
+            LoginViewController *loginvc = [[LoginViewController alloc]init];
+            [self.navigationController pushViewController:loginvc animated:YES];
+        }];
     }
     else if ([valueString isEqualToString:@"修改密码"]) {
         EditPassViewController *editpass = [[EditPassViewController alloc]init];
         editpass.title = valueString;
         [self.navigationController pushViewController:editpass animated:YES];
     }
+    else if ([valueString isEqualToString:@"使用指南"]) {
+        hsdcwUtils *utils = [[hsdcwUtils alloc]init];
+        NSString *xf_dt = utils.myencrypt[0];
+        NSString *xf_tk = utils.myencrypt[1];
+        //NSLog(@"%@========%@",xf_dt, xf_tk);
+        
+        //NSString *url = @"http://10yue.hsdcw.com/fireyun/index.php/Home/Index/splist?xf_dt=";
+        NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/guide/xf_dt/",URL_IMG];
+        url = [url stringByAppendingString:xf_dt];
+        url = [url stringByAppendingString:@"/xf_tk/"];
+        url = [url stringByAppendingString:xf_tk];
+        NSLog(@"%@",url);
+        
+        WKWebviewController *webVC = [WKWebviewController new];
+        webVC.urlString = url;
+        [self.navigationController pushViewController:webVC animated:YES];
+    }
     else if ([valueString isEqualToString:@"意见反馈"]) {
         SuggestViewController *sugg = [[SuggestViewController alloc]init];
         sugg.title = valueString;
         [self.navigationController pushViewController:sugg animated:YES];
-    }
-    else if ([valueString isEqualToString:@"不良信息举报"]) {
-        BadInfoViewController *badinfo = [[BadInfoViewController alloc]init];
-        badinfo.title = valueString;
-        [self.navigationController pushViewController:badinfo animated:YES];
-    }
-    else if ([valueString isEqualToString:@"帮助"]) {
-        UserEntity *userEntity = [[UserEntity alloc] init];
-        userEntity.pageUrl = @"/help.html";
-        HelpViewController *helpVc = [[HelpViewController alloc]init];
-        helpVc.title = valueString;
-        [self.navigationController pushViewController:helpVc animated:YES];
-        helpVc.userEntity = userEntity;
     }
     else if ([valueString isEqualToString:@"联系我们"]) {
         ContactUsViewController *contact = [[ContactUsViewController alloc]init];
@@ -210,9 +323,20 @@
         [self.navigationController pushViewController:contact animated:YES];
     }
     else if ([valueString isEqualToString:@"关于黄石消防云平台"]) {
-        AboutViewController *about = [[AboutViewController alloc]init];
-        about.title = valueString;
-        [self.navigationController pushViewController:about animated:YES];
+        hsdcwUtils *utils = [[hsdcwUtils alloc]init];
+        NSString *xf_dt = utils.myencrypt[0];
+        NSString *xf_tk = utils.myencrypt[1];
+        //NSLog(@"%@========%@",xf_dt, xf_tk);
+        
+        NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/about/xf_dt/",URL_IMG];
+        url = [url stringByAppendingString:xf_dt];
+        url = [url stringByAppendingString:@"/xf_tk/"];
+        url = [url stringByAppendingString:xf_tk];
+        NSLog(@"%@",url);
+        
+        WKWebviewController *webVC = [WKWebviewController new];
+        webVC.urlString = url;
+        [self.navigationController pushViewController:webVC animated:YES];
     }
 }
 
