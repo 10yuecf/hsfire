@@ -9,6 +9,7 @@
 #import "JYJMyTripViewController.h"
 #import "WKWebviewController.h"
 #import "hsdcwUtils.h"
+#import "Macro.h"
 
 @interface JYJMyTripViewController ()
 
@@ -25,7 +26,7 @@
     
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
     btn1.tag = 1;
-    btn1.frame = CGRectMake(10, 50, self.view.frame.size.width - 100, 37);
+    btn1.frame = CGRectMake(kWidth / 6, 50, kWidth - 100, 37);
     btn1.titleLabel.font = [UIFont systemFontOfSize:19];
     [btn1 setTitle:@"消防设计备案" forState:UIControlStateNormal];
     [btn1 addTarget:self action:@selector(tourl:) forControlEvents:UIControlEventTouchUpInside];
@@ -35,7 +36,7 @@
     
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
     btn2.tag = 2;
-    btn2.frame = CGRectMake(10, 100, self.view.frame.size.width - 100, 37);
+    btn2.frame = CGRectMake(kWidth / 6, 120, kWidth - 100, 37);
     btn2.titleLabel.font = [UIFont systemFontOfSize:19];
     [btn2 setTitle:@"竣工验收消防备案" forState:UIControlStateNormal];
     [btn2 addTarget:self action:@selector(tourl:) forControlEvents:UIControlEventTouchUpInside];
@@ -45,7 +46,7 @@
     
     UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
     btn3.tag = 3;
-    btn3.frame = CGRectMake(10, 150, self.view.frame.size.width - 100, 37);
+    btn3.frame = CGRectMake(kWidth / 6, 190, kWidth - 100, 37);
     btn3.titleLabel.font = [UIFont systemFontOfSize:19];
     [btn3 setTitle:@"消防设计审核" forState:UIControlStateNormal];
     [btn3 addTarget:self action:@selector(tourl:) forControlEvents:UIControlEventTouchUpInside];
@@ -55,45 +56,49 @@
     
     UIButton *btn4 = [UIButton buttonWithType:UIButtonTypeCustom];
     btn4.tag = 4;
-    btn4.frame = CGRectMake(10, 200, self.view.frame.size.width - 100, 37);
+    btn4.frame = CGRectMake(kWidth / 6, 260, kWidth - 100, 37);
     btn4.titleLabel.font = [UIFont systemFontOfSize:19];
     [btn4 setTitle:@"消防验收" forState:UIControlStateNormal];
     [btn4 addTarget:self action:@selector(tourl:) forControlEvents:UIControlEventTouchUpInside];
     [btn4 setBackgroundColor:[UIColor colorWithRed:204/255.0f green:0/255.0f blue:0/255.0f alpha:1]];
     btn4.layer.cornerRadius = 5.0;
     [self.view addSubview:btn4];
+    
+    UIButton *btn5 = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn5.tag = 5;
+    btn5.frame = CGRectMake(kWidth / 6, 330, kWidth - 100, 37);
+    btn5.titleLabel.font = [UIFont systemFontOfSize:19];
+    [btn5 setTitle:@"公共场所安全检查" forState:UIControlStateNormal];
+    [btn5 addTarget:self action:@selector(tourl:) forControlEvents:UIControlEventTouchUpInside];
+    [btn5 setBackgroundColor:[UIColor colorWithRed:204/255.0f green:0/255.0f blue:0/255.0f alpha:1]];
+    btn5.layer.cornerRadius = 5.0;
+    [self.view addSubview:btn5];
 }
 
 -(void)tourl:(UIButton *)button {
-    hsdcwUtils *utils = [[hsdcwUtils alloc]init];
-    NSString *xf_dt = utils.myencrypt[0];
-    NSString *xf_tk = utils.myencrypt[1];
-    NSLog(@"%@========%@",xf_dt, xf_tk);
+//    hsdcwUtils *utils = [[hsdcwUtils alloc]init];
+//    NSString *xf_dt = utils.myencrypt[0];
+//    NSString *xf_tk = utils.myencrypt[1];
+    //NSLog(@"%@========%@",xf_dt, xf_tk);
     
-    NSString *url = @"http://10yue.hsdcw.com/fireyun/index.php/Home/Index/splist?xf_dt=";
-    url = [url stringByAppendingString:xf_dt];
-    url = [url stringByAppendingString:@"&xf_tk="];
-    url = [url stringByAppendingString:xf_tk];
-    url = [url stringByAppendingString:@"&sptype="];
-    
+    NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/splist/type/",URL_IMG];
     if(button.tag == 1) {
-        //NSLog(@"科普宣传");
-        url = [url stringByAppendingString:@"1"];
+        url = [url stringByAppendingString:@"sjba"];
     }
     else if(button.tag == 2) {
-        //NSLog(@"消防云课堂");
-        url = [url stringByAppendingString:@"2"];
+        url = [url stringByAppendingString:@"jgba"];
     }
     else if(button.tag == 3) {
-        //NSLog(@"消防云课堂");
-        url = [url stringByAppendingString:@"3"];
+        url = [url stringByAppendingString:@"sjsh"];
     }
     else if(button.tag == 4) {
-        //NSLog(@"消防云课堂");
-        url = [url stringByAppendingString:@"4"];
+        url = [url stringByAppendingString:@"xfys"];
+    }
+    else if(button.tag == 5) {
+        url = [url stringByAppendingString:@"aqjc"];
     }
     
-    NSLog(@"%@",url);
+    //NSLog(@"%@",url);
     
     WKWebviewController *webVC = [WKWebviewController new];
     webVC.urlString = url;
@@ -105,7 +110,7 @@
 }
 
 - (void)setupNav {
-    self.title = @"消防知识";
+    self.title = @"消防审批";
     [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20], NSForegroundColorAttributeName:[UIColor colorWithRed:255 / 255.0 green:255 / 255.0 blue:255 / 255.0 alpha:1.0]}];
     
     UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];

@@ -124,32 +124,25 @@
 }
 
 -(void)tourl:(UIButton *)button {
-    hsdcwUtils *utils = [[hsdcwUtils alloc]init];
-    NSString *xf_dt = utils.myencrypt[0];
-    NSString *xf_tk = utils.myencrypt[1];
-    NSLog(@"%@========%@",xf_dt, xf_tk);
-    
-    NSString *url = @"http://10yue.hsdcw.com/fireyun/index.php/Home/Index/splist?xf_dt=";
-    url = [url stringByAppendingString:xf_dt];
-    url = [url stringByAppendingString:@"&xf_tk="];
-    url = [url stringByAppendingString:xf_tk];
-    url = [url stringByAppendingString:@"&sptype="];
+    NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/",URL_IMG];
     
     if(button.tag == 1) {
-        //NSLog(@"科普宣传");
-        url = [url stringByAppendingString:@"1"];
+        url = [url stringByAppendingString:@"xaw_jg"];
     }
     else if(button.tag == 2) {
-        //NSLog(@"消防云课堂");
-        url = [url stringByAppendingString:@"2"];
+        url = [url stringByAppendingString:@"xwlist/flid/2"];
     }
     else if(button.tag == 3) {
-        //NSLog(@"消防云课堂");
-        url = [url stringByAppendingString:@"3"];
+        url = [url stringByAppendingString:@"xwlist/flid/1"];
     }
     else if(button.tag == 4) {
-        //NSLog(@"消防云课堂");
-        url = [url stringByAppendingString:@"4"];
+        url = [url stringByAppendingString:@"xaw_lhzflist"];
+    }
+    else if(button.tag == 5) {
+        url = [url stringByAppendingString:@"xaw_yhsb"];
+    }
+    else if(button.tag == 6) {
+        url = [url stringByAppendingString:@"gulist"];
     }
     
     NSLog(@"%@",url);

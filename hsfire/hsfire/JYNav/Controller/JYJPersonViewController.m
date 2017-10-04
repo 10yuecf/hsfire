@@ -90,14 +90,14 @@
 
     UIImageView *line1 = [[UIImageView alloc]initWithFrame:CGRectMake(0, kHeight - 40, kWidth, 1)];
     line1.backgroundColor = [UIColor colorWithRed:180/255.0 green:180/255.0 blue:180/255.0 alpha:0.3];
-    [tableView addSubview:line1];
+    //[tableView addSubview:line1];
     
     //设置
     UILabel *setlabel = [[UILabel alloc]initWithFrame:CGRectMake(20, kHeight - 35, 100, 30)];
     setlabel.text = @"设置";
     setlabel.textColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0];
     setlabel.font = [UIFont systemFontOfSize:14];
-    [tableView addSubview:setlabel];
+    //[tableView addSubview:setlabel];
     
     //为setlabel添加点击事件
     setlabel.userInteractionEnabled = YES;
@@ -109,7 +109,7 @@
     hplabel.text = @"离线地图";
     hplabel.textColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0];
     hplabel.font = [UIFont systemFontOfSize:14];
-    [tableView addSubview:hplabel];
+    //[tableView addSubview:hplabel];
     
     //为hplabel添加点击事件
     hplabel.userInteractionEnabled = YES;
@@ -147,7 +147,7 @@
     
     JYJCommenItem *my8 = [JYJCommenItem itemWithIcon:@"menu8" title:@"消防审批" subtitle:nil destVcClass:[JYJMyTripViewController class]];
     
-    JYJCommenItem *myxf = [JYJCommenItem itemWithIcon:@"menu9" title:@"我的消防" subtitle:nil destVcClass:[JYJMyStickerViewController class]];
+    JYJCommenItem *myxf = [JYJCommenItem itemWithIcon:@"menu9" title:@"我的消防" subtitle:nil destVcClass:[SettingViewController class]];
     
     //读取权限
     

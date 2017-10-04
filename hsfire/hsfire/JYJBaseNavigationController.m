@@ -7,7 +7,7 @@
 //
 
 #import "JYJBaseNavigationController.h"
-#import "IndexViewController.h"
+//#import "IndexViewController.h"
 #import "UIImage+Extension.h"
 
 @interface JYJBaseNavigationController () <UINavigationControllerDelegate>
@@ -19,8 +19,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    //    // 这句话很重要，可以到单独的控制器里去设置
-    //    self.navigationBar.translucent = YES;
+    
+    // 这句话很重要，可以到单独的控制器里去设置
+    //self.navigationBar.translucent = YES;
     
     [self.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:17], NSForegroundColorAttributeName:[UIColor whiteColor]}];
     self.popDelegate = self.interactivePopGestureRecognizer.delegate;
@@ -60,8 +61,8 @@
 
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
     
-    if (self.viewControllers.count > 0) {// 如果现在push的不是栈底控制器(最先push进来的那个控制器)
-        
+    if (self.viewControllers.count > 0) {
+        // 如果现在push的不是栈底控制器(最先push进来的那个控制器)
         UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
         negativeSpacer.width = -15;
         
