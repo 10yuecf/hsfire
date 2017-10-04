@@ -35,4 +35,6 @@
 @synthesize anlon;
 @synthesize clat;
 @synthesize clon;
+@synthesize syid;
+@synthesize syzt;
 @end

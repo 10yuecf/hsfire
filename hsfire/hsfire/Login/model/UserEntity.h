@@ -35,6 +35,8 @@
     NSString *anlon;
     NSString *clat;
     NSString *clon;
+    NSString *syid;
+    NSString *syzt;
 }
 
 @property(nonatomic,retain) NSString *userToken;
@@ -63,4 +65,6 @@
 @property(nonatomic,retain) NSString *anlon;
 @property(nonatomic,retain) NSString *clat;
 @property(nonatomic,retain) NSString *clon;
+@property(nonatomic,retain) NSString *syid;
+@property(nonatomic,retain) NSString *syzt;
 @end
