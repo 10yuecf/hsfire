@@ -13,7 +13,7 @@
 #import "MapViewController.h"
 
 #import "UMMobClick/MobClick.h"
-#import "UMessage.h"
+//#import "UMessage.h"
 
 #import "hsdcwUtils.h"
 #import "UserEntity.h"
@@ -24,11 +24,16 @@
 #import "TestViewController.h"
 #import "MapTwoViewController.h"
 
+#import "XGPush.h"
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
+#import <UserNotifications/UserNotifications.h>
+#endif
+
 #import "BNCoreServices.h"
 #define NAVI_BUNDLE_ID @"cn.hsdcw.fireyun"  //sdk自测bundle ID
 #define NAVI_APP_KEY   @"sKt44yP9nO2Vp6PbfaRDGcxfrvy2qmzX"  //sdk自测APP KEY
 BMKMapManager* _mapManager;
-@interface AppDelegate ()<UNUserNotificationCenterDelegate>
+@interface AppDelegate ()<XGPushDelegate>
 @property (nonatomic, strong) NSMutableArray *datas;
 @property (nonatomic, strong) UserEntity *userEntity;
 @end
@@ -45,25 +50,48 @@ BMKMapManager* _mapManager;
     [MobClick startWithConfigure:UMConfigInstance];//配置以上参数后调用此方法初始化SDK！
     
     //友盟推送
-    [UMessage startWithAppkey:@"597b3b6b310c9371a7001b15" launchOptions:launchOptions httpsEnable:YES];
+    //[UMessage startWithAppkey:@"597b3b6b310c9371a7001b15" launchOptions:launchOptions httpsEnable:YES];
     //注册通知，如果要使用category的自定义策略，可以参考demo中的代码。
-    [UMessage registerForRemoteNotifications];
+    //[UMessage registerForRemoteNotifications];
     
     //iOS10必须加下面这段代码。
-    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
-    center.delegate=self;
-    UNAuthorizationOptions types10=UNAuthorizationOptionBadge|  UNAuthorizationOptionAlert|UNAuthorizationOptionSound;
-    [center requestAuthorizationWithOptions:types10     completionHandler:^(BOOL granted, NSError * _Nullable error) {
-        if (granted) {
-            //点击允许
-            //这里可以添加一些自己的逻辑
-        } else {
-            //点击不允许
-            //这里可以添加一些自己的逻辑
-        }
-    }];
+//    UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+//    center.delegate=self;
+//    UNAuthorizationOptions types10=UNAuthorizationOptionBadge|  UNAuthorizationOptionAlert|UNAuthorizationOptionSound;
+//    [center requestAuthorizationWithOptions:types10     completionHandler:^(BOOL granted, NSError * _Nullable error) {
+//        if (granted) {
+//            //点击允许
+//            //这里可以添加一些自己的逻辑
+//        } else {
+//            //点击不允许
+//            //这里可以添加一些自己的逻辑
+//        }
+//    }];
     //打开日志，方便调试
-    [UMessage setLogEnabled:YES];
+    //[UMessage setLogEnabled:YES];
+    
+    if(launchOptions) {
+        NSDictionary* remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+        if(remoteNotification) {
+            NSLog(@"推送过来的消息是%@",remoteNotification);
+            //点击推送通知进入指定界面（这个肯定是相当于从后台进入的）
+            //[self goToMssageViewControllerWith:remoteNotification];//进入相应页面的方法
+            MapTwoViewController *map = [[MapTwoViewController alloc]init];
+            window.rootViewController = [[JYJNavigationController alloc]initWithRootViewController:map];
+        }
+    }
+    
+    //信鸽推送start
+    [[XGPush defaultManager] setEnableDebug:YES];
+    XGNotificationAction *action1 = [XGNotificationAction actionWithIdentifier:@"xgaction001" title:@"xgAction1" options:XGNotificationActionOptionNone];
+    XGNotificationAction *action2 = [XGNotificationAction actionWithIdentifier:@"xgaction002" title:@"xgAction2" options:XGNotificationActionOptionDestructive];
+    XGNotificationCategory *category = [XGNotificationCategory categoryWithIdentifier:@"xgCategory" actions:@[action1, action2] intentIdentifiers:@[] options:XGNotificationCategoryOptionNone];
+    XGNotificationConfigure *configure = [XGNotificationConfigure configureNotificationWithCategories:[NSSet setWithObject:category] types:XGUserNotificationTypeAlert|XGUserNotificationTypeBadge|XGUserNotificationTypeSound];
+    [[XGPush defaultManager] setNotificationConfigure:configure];
+    [[XGPush defaultManager] startXGWithAppID:2200268364 appKey:@"ID2Q49G8Q2PR" delegate:self];
+    [[XGPush defaultManager] setXgApplicationBadgeNumber:0];
+    [[XGPush defaultManager] reportXGNotificationInfo:launchOptions];
+    //end
     
     // 要使用百度地图，请先启动BaiduMapManager
     _mapManager = [[BMKMapManager alloc]init];
@@ -135,9 +163,9 @@ BMKMapManager* _mapManager;
 }
 
 //iOS10以下使用这个方法接收通知
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+//- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
     
-    [UMessage didReceiveRemoteNotification:userInfo];
+    //[UMessage didReceiveRemoteNotification:userInfo];
     
     //    self.userInfo = userInfo;
     //    //定制自定的的弹出框
@@ -152,98 +180,107 @@ BMKMapManager* _mapManager;
     //        [alertView show];
     //
     //    }
-}
+//}
 
 //iOS10新增：处理前台收到通知的代理方法
--(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler{
-    NSDictionary * userInfo = notification.request.content.userInfo;
-    if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
-        //应用处于前台时的远程推送接受
-        //关闭U-Push自带的弹出框
-        [UMessage setAutoAlert:NO];
-        //必须加这句代码
-        [UMessage didReceiveRemoteNotification:userInfo];
-        
-    }else{
-        //应用处于前台时的本地推送接受
-    }
-    //当应用处于前台时提示设置，需要哪个可以设置哪一个
-    completionHandler(UNNotificationPresentationOptionSound|UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionAlert);
-}
+//-(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler{
+//    NSDictionary * userInfo = notification.request.content.userInfo;
+//    if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+//        //应用处于前台时的远程推送接受
+//        //关闭U-Push自带的弹出框
+//        [UMessage setAutoAlert:NO];
+//        //必须加这句代码
+//        [UMessage didReceiveRemoteNotification:userInfo];
+//        
+//    }else{
+//        //应用处于前台时的本地推送接受
+//    }
+//    //当应用处于前台时提示设置，需要哪个可以设置哪一个
+//    completionHandler(UNNotificationPresentationOptionSound|UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionAlert);
+//}
 
-//iOS10新增：处理后台点击通知的代理方法
--(void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
-    NSDictionary * userInfo = response.notification.request.content.userInfo;
-    if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
-        //应用处于后台时的远程推送接受
-        //必须加这句代码
-        [UMessage didReceiveRemoteNotification:userInfo];
-    }
-    else {
-        //应用处于后台时的本地推送接受
-    }
-}
+////iOS10新增：处理后台点击通知的代理方法
+//-(void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
+//    NSDictionary * userInfo = response.notification.request.content.userInfo;
+//    if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+//        //应用处于后台时的远程推送接受
+//        //必须加这句代码
+//        [UMessage didReceiveRemoteNotification:userInfo];
+//    }
+//    else {
+//        //应用处于后台时的本地推送接受
+//    }
+//}
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    // 1.2.7版本开始不需要用户再手动注册devicetoken，SDK会自动注册
-    //[UMessage registerDeviceToken:deviceToken];
-    
-    NSString *devcode = [[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]
-                          stringByReplacingOccurrencesOfString: @">" withString: @""]
-                         stringByReplacingOccurrencesOfString: @" " withString: @""];
-    
-    //NSLog(@"ios dev code%@",devcode);
+    NSLog(@"[XGDemo] device token is %@", [[XGPushTokenManager defaultTokenManager] deviceTokenString]);
+    NSString *devcode = [[XGPushTokenManager defaultTokenManager] deviceTokenString];
     
     //记录最新设备码至本地数据库
     //写本地前判断一下是否存在设备码信息
     NSString *chkdev = [NSString stringWithFormat:@"select * from t_base"];
-    _datas = [UserTool baseWithSql:chkdev];
-    //NSLog(@"%lu",(unsigned long)_datas.count);
-    
-    if(_datas.count == 0) {
+    NSMutableArray *dev_datas = [UserTool baseWithSql:chkdev];
+    //NSLog(@"%lu",(unsigned long)dev_datas.count);
+
+    if(dev_datas.count == 0) {
         NSString *insert = [NSString stringWithFormat:@"insert into t_base (strname,keyname,keyvalue) values('设备码','设备码','%@')",devcode];
         [UserTool baseWithSql:insert];
+        //NSLog(@"insert");
     }
     else {
         NSString *update = [NSString stringWithFormat:@"update t_base set keyvalue = '%@'",devcode];
         [UserTool baseWithSql:update];
+        //NSLog(@"update");
     }
-    
-    NSString *chkuser = [NSString stringWithFormat:@"select * from t_user where loginstatus = '1' limit 1"];
-    NSMutableArray *user_arr = [UserTool userWithSql:chkuser];
-    
-    NSString *uid;
-    
-    if (user_arr.count == 0) {
-        uid = @"0";
-    }
-    else {
-        User *u = user_arr[0];
-        uid = u.userID;
-    }
-    
-    //NSLog(@"id========%@",uid);
-    
-    //记录用户设备号
-    NSDictionary *param_dev = @{@"type":@"ios",
-                                @"id":uid,
-                                @"code":devcode
-                                };
-    [CKHttpCommunicate createRequest:SandUmcode WithParam:param_dev withMethod:POST success:^(id response) {
-        if (response) {
-            NSString *result = response[@"code"];
-            if ([result isEqualToString:@"200"]) {
-                NSLog(@"%s","update dev code successful!");
-            }
-            else if ([result isEqualToString:@"400"]) {
-                NSLog(@"%s","update dev code error!");
-            }
-        }
-    } failure:^(NSError *error) {
-        NSLog(@"%@",error);
-    } showHUD:self.inputView];
-    //--
 }
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"[XGDemo] register APNS fail.\n[XGDemo] reason : %@", error);
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"registerDeviceFailed" object:nil];
+}
+
+/**
+ 收到静默推送的回调
+ 
+ @param application  UIApplication 实例
+ @param userInfo 推送时指定的参数
+ @param completionHandler 完成回调
+ */
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    NSLog(@"[XGDemo] receive slient Notification");
+    NSLog(@"[XGDemo] userinfo %@", userInfo);
+    [[XGPush defaultManager] reportXGNotificationInfo:userInfo];
+    
+    completionHandler(UIBackgroundFetchResultNewData);
+}
+
+// iOS 10 新增 API
+// iOS 10 会走新 API, iOS 10 以前会走到老 API
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
+// App 用户点击通知的回调
+// 无论本地推送还是远程推送都会走这个回调
+- (void)xgPushUserNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler {
+    NSLog(@"[XGDemo] click notification");
+    if ([response.actionIdentifier isEqualToString:@"xgaction001"]) {
+        NSLog(@"click from Action1");
+    } else if ([response.actionIdentifier isEqualToString:@"xgaction002"]) {
+        NSLog(@"click from Action2");
+    } else if ([response.actionIdentifier isEqualToString:@"xgaction003"]) {
+        NSLog(@"click from Action3");
+    }
+    
+    [[XGPush defaultManager] reportXGNotificationInfo:response.notification.request.content.userInfo];
+    
+    completionHandler();
+}
+
+// App 在前台弹通知需要调用这个接口
+- (void)xgPushUserNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler {
+    [[XGPush defaultManager] reportXGNotificationInfo:notification.request.content.userInfo];
+ 
+    completionHandler(UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert);
+}
+#endif
 
 - (void)applicationWillResignActive:(UIApplication *)application {
 }
