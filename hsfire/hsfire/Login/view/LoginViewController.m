@@ -26,8 +26,8 @@
 #import "UserEntity.h"
 #import "BaseInfo.h"
 
-#import "TestViewController.h"
-#import "MapOneViewController.h"
+//#import "TestViewController.h"
+//#import "MapOneViewController.h"
 
 #import "ForPassViewController.h"
 
