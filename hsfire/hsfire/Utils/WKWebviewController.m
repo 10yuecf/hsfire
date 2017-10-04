@@ -25,11 +25,8 @@
 @implementation WKWebviewController
 
 #pragma mark --- wk
-- (WKWebView *)wkWebview
-{
-    if (_wkWebview == nil)
-    {
-
+- (WKWebView *)wkWebview {
+    if (_wkWebview == nil) {
         _wkWebview = [[WKWebView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, HEIGHT)];
         _wkWebview.UIDelegate = self;
         _wkWebview.navigationDelegate = self;
@@ -38,18 +35,16 @@
         _wkWebview.multipleTouchEnabled = YES;
         _wkWebview.autoresizesSubviews = YES;
         _wkWebview.scrollView.alwaysBounceVertical = YES;
-        _wkWebview.allowsBackForwardNavigationGestures = YES;/**这一步是，开启侧滑返回上一历史界面**/
+        _wkWebview.allowsBackForwardNavigationGestures = YES; /**这一步是，开启侧滑返回上一历史界面**/
         [self.view addSubview:_wkWebview];
     }
     return _wkWebview;
 }
 
 #pragma mark 加载进度条
-- (UIProgressView *)progress
-{
-    if (_progress == nil)
-    {
-        _progress = [[UIProgressView alloc]initWithFrame:CGRectMake(0, 64, WIDTH, 4)];
+- (UIProgressView *)progress {
+    if (_progress == nil) {
+        _progress = [[UIProgressView alloc]initWithFrame:CGRectMake(0, 0, WIDTH, 4)];
         _progress.tintColor = [UIColor redColor];
         _progress.backgroundColor = [UIColor grayColor];
         [self.view addSubview:_progress];
@@ -57,28 +52,23 @@
     return _progress;
 }
 
-
-- (void)viewWillAppear:(BOOL)animated
-{
+- (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-
+    
     [self LoadRequest];
     [self addObserver];
     [self setBarButtonItem];
-
 }
 
 #pragma mark 加载网页
-- (void)LoadRequest
-{
+- (void)LoadRequest {
     //TODO:加载
     [self.wkWebview loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.urlString]]];
+    //[self.wkWebview loadHTMLString:self.urlString baseURL:[NSURL URLWithString:self.urlString]];
 }
 
-
 #pragma mark 添加KVO观察者
-- (void)addObserver
-{
+- (void)addObserver {
     //TODO:kvo监听，获得页面title和加载进度值，以及是否可以返回
     [self.wkWebview addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:NULL];
     [self.wkWebview addObserver:self forKeyPath:@"canGoBack" options:NSKeyValueObservingOptionNew context:NULL];
@@ -86,28 +76,27 @@
 }
 
 #pragma mark 设置BarButtonItem
-- (void)setBarButtonItem
-{
-
+- (void)setBarButtonItem {
     //设置距离左边屏幕的宽度距离
-    self.leftBarButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"back_item"] style:UIBarButtonItemStylePlain target:self action:@selector(selectedToBack)];
+    self.leftBarButton = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"backarr"] style:UIBarButtonItemStylePlain target:self action:@selector(selectedToBack)];
+    [self.leftBarButton setTintColor:[UIColor whiteColor]];
     self.negativeSpacer = [[UIBarButtonItem alloc]   initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace   target:nil action:nil];
     self.negativeSpacer.width = -5;
-
+    
     //设置关闭按钮，以及关闭按钮和返回按钮之间的距离
     self.leftBarButtonSecond = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"close_item"] style:UIBarButtonItemStylePlain target:self action:@selector(selectedToClose)];
+    [self.leftBarButtonSecond setTintColor:[UIColor whiteColor]];
     self.leftBarButtonSecond.imageInsets = UIEdgeInsetsMake(0, -20, 0, 20);
     self.navigationItem.leftBarButtonItems = @[self.negativeSpacer,self.leftBarButton];
-
-
+    
     //设置刷新按妞
     UIBarButtonItem *reloadItem = [[UIBarButtonItem alloc]initWithImage:[UIImage imageNamed:@"reload_item"] style:UIBarButtonItemStylePlain target:self action:@selector(selectedToReloadData)];
     self.navigationItem.rightBarButtonItem = reloadItem;
-
+    [self.navigationItem.rightBarButtonItem setTintColor:[UIColor whiteColor]];
+    
 }
 #pragma mark 关闭并上一界面
-- (void)selectedToClose
-{
+- (void)selectedToClose {
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -132,31 +121,11 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor lightGrayColor];
     
-    [self setupNav];
-}
-
-- (void)setupNav {
-    self.title = @"消防知识";
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20], NSForegroundColorAttributeName:[UIColor colorWithRed:255 / 255.0 green:255 / 255.0 blue:255 / 255.0 alpha:1.0]}];
+    self.view.backgroundColor = [UIColor colorWithRed:245/255.0f green:245/255.0f blue:245/255.0f alpha:1];
     
-    UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    negativeSpacer.width = -15;
-    
-    UIButton *profileButton = [[UIButton alloc] init];
-    // 设置按钮的背景图片
-    [profileButton setImage:[UIImage imageNamed:@"backarr"] forState:UIControlStateNormal];
-    // 设置按钮的尺寸为背景图片的尺寸
-    profileButton.frame = CGRectMake(0, 0, 44, 44);
-    //监听按钮的点击
-    [profileButton addTarget:self action:@selector(backBtnClick) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *profile = [[UIBarButtonItem alloc] initWithCustomView:profileButton];
-    self.navigationItem.leftBarButtonItems = @[negativeSpacer, profile];
-}
-
--(void)backBtnClick {
-    [self.navigationController popViewControllerAnimated:YES];
+    //设置导航栏标题颜色、字体大小
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16], NSForegroundColorAttributeName:[UIColor colorWithRed:255 / 255.0 green:255 / 255.0 blue:255 / 255.0 alpha:1.0]}];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -165,7 +134,7 @@
 
 #pragma mark KVO的监听代理
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-
+    
     //加载进度值
     if ([keyPath isEqualToString:@"estimatedProgress"])
     {
@@ -235,26 +204,22 @@
  *-999
  *101
  */
-- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error
-{
-    NSLog(@"ErrorCode:%ld",(long)error.code);
-    if (error.code == -1099)
-    {
+- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error {
+    NSLog(@"ErrorCode:%ld",error.code);
+    if (error.code == -1099) {
     }
 }
 
-
 #pragma mark 添加返回键和关闭按钮
-
-- (void)viewDidDisappear:(BOOL)animated
-{
+- (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
 }
+
 #pragma mark 移除观察者
-- (void)dealloc
-{
+- (void)dealloc {
     [self.wkWebview removeObserver:self forKeyPath:@"estimatedProgress"];
     [self.wkWebview removeObserver:self forKeyPath:@"canGoBack"];
     [self.wkWebview removeObserver:self forKeyPath:@"title"];
 }
+
 @end

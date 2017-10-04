@@ -24,6 +24,7 @@ static UIWindow *window_;
     JYJAnimateViewController *vc = [[JYJAnimateViewController alloc] init];
     vc.view.backgroundColor = [UIColor clearColor];
     vc.rootViewController = rootViewController;
+    
     JYJBaseNavigationController *nav = [[JYJBaseNavigationController alloc] initWithRootViewController:vc];
     nav.view.backgroundColor = [UIColor clearColor];
     window_.rootViewController = nav;

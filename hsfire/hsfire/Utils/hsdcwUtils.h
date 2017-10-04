@@ -23,4 +23,5 @@
 
 - (NSString *)iphoneType;
 
+-(NSString *)notRounding:(float)price afterPoint:(int)position;
 @end

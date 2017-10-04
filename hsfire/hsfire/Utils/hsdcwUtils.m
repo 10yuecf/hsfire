@@ -73,7 +73,7 @@
 //传输加密方法
 -(NSMutableArray *) myencrypt {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+    [formatter setDateFormat:@"YYYYMMddHHmmss"];
     NSDate *datenow = [NSDate date];
     //NSString *cTimeStr = [formatter stringFromDate:datenow];
     NSString *xf_dt = [formatter stringFromDate:datenow];//[MyMD5 md5:cTimeStr];
@@ -189,7 +189,23 @@
     if ([platform isEqualToString:@"x86_64"])    return @"iPhone Simulator";
     
     return platform;
+}
+
+//四舍五入 price:需要处理的数字 position：保留小数点第几位
+-(NSString *)notRounding:(float)price afterPoint:(int)position {
     
+    NSDecimalNumberHandler* roundingBehavior = [NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:NSRoundDown scale:position raiseOnExactness:NO raiseOnOverflow:NO raiseOnUnderflow:NO raiseOnDivideByZero:NO];
+    
+    NSDecimalNumber *ouncesDecimal;
+    
+    NSDecimalNumber *roundedOunces;
+    
+    ouncesDecimal = [[NSDecimalNumber alloc] initWithFloat:price];
+    
+    roundedOunces = [ouncesDecimal decimalNumberByRoundingAccordingToBehavior:roundingBehavior];
+    //[ouncesDecimal release];
+    
+    return [NSString stringWithFormat:@"%@",roundedOunces];
 }
 
 @end
