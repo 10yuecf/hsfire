@@ -15,18 +15,14 @@
 #import "UserTool.h"
 #import "EditPassViewController.h"
 #import "SuggestViewController.h"
-#import "BadInfoViewController.h"
-#import "HelpViewController.h"
 #import "ContactUsViewController.h"
-#import "AboutViewController.h"
-#import "NoticeViewController.h"
 #import "LoginViewController.h"
 #import "SZKCleanCache.h"
 #import "MBProgressHUD+Add.h"
 #import "hsdcwUtils.h"
 #import "MapViewController.h"
-#import "WKWebviewController.h"
 #import "Macro.h"
+#import "LLWebViewController.h"
 
 #define IOS8 ([[[UIDevice currentDevice] systemVersion] doubleValue] >=8.0 ? YES : NO)
 
@@ -301,16 +297,16 @@
         NSString *xf_tk = utils.myencrypt[1];
         //NSLog(@"%@========%@",xf_dt, xf_tk);
         
-        //NSString *url = @"http://10yue.hsdcw.com/fireyun/index.php/Home/Index/splist?xf_dt=";
         NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/guide/xf_dt/",URL_IMG];
         url = [url stringByAppendingString:xf_dt];
         url = [url stringByAppendingString:@"/xf_tk/"];
         url = [url stringByAppendingString:xf_tk];
-        NSLog(@"%@",url);
+        //NSLog(@"%@",url);
         
-        WKWebviewController *webVC = [WKWebviewController new];
-        webVC.urlString = url;
-        [self.navigationController pushViewController:webVC animated:YES];
+        LLWebViewController *webV = [LLWebViewController new];
+        webV.urlStr = url;
+        webV.isPullRefresh = YES;
+        [self.navigationController pushViewController:webV animated:YES];
     }
     else if ([valueString isEqualToString:@"意见反馈"]) {
         SuggestViewController *sugg = [[SuggestViewController alloc]init];
@@ -328,15 +324,24 @@
         NSString *xf_tk = utils.myencrypt[1];
         //NSLog(@"%@========%@",xf_dt, xf_tk);
         
-        NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/about/xf_dt/",URL_IMG];
+        NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/syadd/xf_dt/",URL_IMG];
         url = [url stringByAppendingString:xf_dt];
         url = [url stringByAppendingString:@"/xf_tk/"];
         url = [url stringByAppendingString:xf_tk];
         NSLog(@"%@",url);
         
-        WKWebviewController *webVC = [WKWebviewController new];
-        webVC.urlString = url;
-        [self.navigationController pushViewController:webVC animated:YES];
+        LLWebViewController *webV = [LLWebViewController new];
+        webV.urlStr = url;
+        webV.isPullRefresh = YES;
+        [self.navigationController pushViewController:webV animated:YES];
+        
+//        UIWebView *webView = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+//        [webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:url]]];
+//        [self.view addSubview:webView];
+        
+//        WKWebviewController *webVC = [WKWebviewController new];
+//        webVC.urlString = url;
+//        [self.navigationController pushViewController:webVC animated:YES];
     }
 }
 
