@@ -7,7 +7,7 @@
 //
 
 #import "JYJMyWalletViewController.h"
-#import "WKWebviewController.h"
+#import "LLWebViewController.h"
 #import "Macro.h"
 
 @interface JYJMyWalletViewController ()
@@ -111,9 +111,14 @@
         url = @"http://www.hsfire.com/xf/ks.php";
     }
     
-    WKWebviewController *webVC = [WKWebviewController new];
-    webVC.urlString = url;
-    [self.navigationController pushViewController:webVC animated:YES];
+    LLWebViewController *webV = [LLWebViewController new];
+    webV.urlStr = url;
+    webV.isPullRefresh = YES;
+    [self.navigationController pushViewController:webV animated:YES];
+    
+//    WKWebviewController *webVC = [WKWebviewController new];
+//    webVC.urlString = url;
+//    [self.navigationController pushViewController:webVC animated:YES];
 }
 
 -(void)backBtnClick {

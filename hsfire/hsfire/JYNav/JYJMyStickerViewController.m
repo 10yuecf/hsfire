@@ -7,9 +7,9 @@
 //  消安委
 
 #import "JYJMyStickerViewController.h"
-#import "WKWebviewController.h"
 #import "hsdcwUtils.h"
 #import "Macro.h"
+#import "LLWebViewController.h"
 
 @interface JYJMyStickerViewController ()
 
@@ -145,11 +145,16 @@
         url = [url stringByAppendingString:@"gulist"];
     }
     
-    NSLog(@"%@",url);
+    //NSLog(@"%@",url);
     
-    WKWebviewController *webVC = [WKWebviewController new];
-    webVC.urlString = url;
-    [self.navigationController pushViewController:webVC animated:YES];
+    LLWebViewController *webV = [LLWebViewController new];
+    webV.urlStr = url;
+    webV.isPullRefresh = YES;
+    [self.navigationController pushViewController:webV animated:YES];
+    
+//    WKWebviewController *webVC = [WKWebviewController new];
+//    webVC.urlString = url;
+//    [self.navigationController pushViewController:webVC animated:YES];
 }
 
 -(void)backBtnClick {
