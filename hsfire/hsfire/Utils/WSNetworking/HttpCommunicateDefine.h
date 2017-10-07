@@ -89,6 +89,14 @@ typedef NS_ENUM(NSInteger,HTTP_COMMAND_LIST){
     GetXawWt,
     //水源情况上报
     Sysb,
+    //获取应急救援列表
+    GetJyList,
+    //获取战勤保障物资列表
+    GetZbwzList,
+    //获取执勤力量中政府、企业专职队伍
+    GetZqInfoList,
+    //获取重点单位
+    GetZddwInfoList,
     //demo
     HTTP_UPDATE_AVATA,
     /*******************/
@@ -134,6 +142,10 @@ static char cHttpMethod[HTTP_METHOD_COUNT][64] = {
     "DelSy",
     "GetXawWt",
     "Sysb",
+    "GetJyList",
+    "GetZbwzList",
+    "GetZqInfoList",
+    "GetZddwInfoList",
     "toutiao/avatar",
 };
 
