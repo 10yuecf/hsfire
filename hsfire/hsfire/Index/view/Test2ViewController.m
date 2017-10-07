@@ -34,8 +34,12 @@
     
     //NSLog(@"%@",self.userEntity.antitle);
     //NSLog(@"%@",self.userEntity.ansubtitle);
-    //NSLog(@"%@",self.userEntity.anlon);
-    //NSLog(@"%@",self.userEntity.anlat);
+    
+    //NSLog(@"起点 %@",self.userEntity.clon);
+    //NSLog(@"起点 %@",self.userEntity.clat);
+    
+    //NSLog(@"终点 %@",self.userEntity.anlon);
+    //NSLog(@"终点 %@",self.userEntity.anlat);
     
     UILabel* startNodeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 130, self.view.frame.size.width, 30)];
     startNodeLabel.backgroundColor = [UIColor clearColor];

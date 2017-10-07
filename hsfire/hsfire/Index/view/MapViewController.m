@@ -5,7 +5,7 @@
 //  Created by louislee on 2017/8/12.
 //  Copyright © 2017年 hsdcw. All rights reserved.
 //
-
+//战报物资
 #import <BaiduMapAPI_Map/BMKMapView.h>
 #import <BaiduMapAPI_Map/BMKMapComponent.h>
 #import <BaiduMapAPI_Location/BMKLocationComponent.h>
@@ -69,24 +69,6 @@
 @end
 
 @implementation MapViewController
-
-- (void)viewWillAppear:(BOOL)animated {
-    [_mapView viewWillAppear];
-    _mapView.delegate = self;
-    _locService.delegate = self;
-    _geoCodeSearch.delegate = self;
-    _routeSearch.delegate = self;
-    _searchAddress.delegate = self;
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [_mapView viewWillDisappear];
-    _mapView.delegate = nil;
-    _locService.delegate = nil;
-    _geoCodeSearch.delegate = nil;
-    _routeSearch.delegate = nil;
-    _searchAddress = nil;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -381,21 +363,21 @@
 #pragma mark -- Selector
 - (void)buttonTap:(UIButton *)button {
     if (button.tag == 0) {
-        NSLog(@"显示消防栓");
+        //NSLog(@"显示消防栓");
         _sytype = @"1";
         [self.mapView removeAnnotations:self.mapView.annotations];
         [self loadData:_lngcnow Lat:_latcnow Sytype:@"1"];
     }
     
     if (button.tag == 1) {
-        NSLog(@"天然水源");
+        //NSLog(@"显示天然水源");
         _sytype = @"2";
         [self.mapView removeAnnotations:self.mapView.annotations];
         [self loadData:_lngcnow Lat:_latcnow Sytype:@"2"];
     }
     
     if (button.tag == 3) {
-        NSLog(@"刷新获取最新水源信息");
+        //NSLog(@"刷新获取最新水源信息");
         [self.mapView removeAnnotations:self.mapView.annotations];
         [self loadData:_lngcnow Lat:_latcnow Sytype:_sytype];
     }
@@ -738,6 +720,34 @@
         NSLog(@"%@",error);
     } showHUD:self.view];
     //-----------------------------------加载数据-----------------------------------------
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [_mapView viewWillAppear];
+    _mapView.delegate = self;
+    _locService.delegate = self;
+    _geoCodeSearch.delegate = self;
+    _routeSearch.delegate = self;
+    _searchAddress.delegate = self;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [_mapView viewWillDisappear];
+    _mapView.delegate = nil;
+    _locService.delegate = nil;
+    _geoCodeSearch.delegate = nil;
+    _routeSearch.delegate = nil;
+    _searchAddress = nil;
+}
+
+- (void)viewDidUnload {
+    [super viewDidUnload];
+}
+
+- (void)dealloc {
+    if (_mapView) {
+        _mapView = nil;
+    }
 }
 
 - (void)didUpdateUserHeading:(BMKUserLocation *)userLocation {

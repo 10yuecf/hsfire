@@ -4,8 +4,8 @@
 //
 //  Created by louislee on 2017/8/12.
 //  Copyright © 2017年 hsdcw. All rights reserved.
-//  战报物资
-
+//
+//战报物资
 #import <BaiduMapAPI_Map/BMKMapView.h>
 #import <BaiduMapAPI_Map/BMKMapComponent.h>
 #import <BaiduMapAPI_Location/BMKLocationComponent.h>
@@ -18,8 +18,18 @@
 #import "JYJSliderMenuTool.h"
 #import "Macro.h"
 #import "MyAnimatedAnnotationView.h"
-//#import "AddSyViewController.h"
+#import "SyAddViewController.h"
 #import "UserEntity.h"
+#import "CKHttpCommunicate.h"
+#import "SyInfoViewController.h"
+#import "User.h"
+#import "BaseInfo.h"
+#import "UserTool.h"
+#import "hsdcwUtils.h"
+#import "MyWebViewController.h"
+
+#import "Test2ViewController.h"
+#import "SyTestViewController.h"
 
 @interface MapFViewController ()<UIGestureRecognizerDelegate,BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,UITextFieldDelegate,BMKPoiSearchDelegate,BMKRouteSearchDelegate>
 
@@ -42,13 +52,24 @@
 @property (nonatomic,strong) UIView *messageView;
 @property (nonatomic,strong) UILabel *addressLabel;
 @property (nonatomic,strong) NSString *lat;
-@property (nonatomic,strong) NSString *lon;
+@property (nonatomic,strong) NSString *lng;
+@property (nonatomic,strong) NSString *latc;
+@property (nonatomic,strong) NSString *lngc;
+@property (nonatomic,strong) NSString *latcnow;
+@property (nonatomic,strong) NSString *lngcnow;
+
 @property (nonatomic,strong) UIButton *sureButton;
 @property (nonatomic,strong) BMKGeoCodeSearch *searchAddress;
 @property (nonatomic,strong) NSString *name;
 @property (nonatomic,assign) CLLocationCoordinate2D location2D;
 @property (nonatomic,strong) NSString *btnflag;
 
+@property (nonatomic,strong) NSString *sytype;
+@property (nonatomic, strong) BMKPointAnnotation *pointXfs; //车辆
+@property (nonatomic, strong) BMKPointAnnotation *pointSy; //装备
+@property (nonatomic, strong) BMKPointAnnotation *pointWz; //器材
+@property (nonatomic, strong) BMKPointAnnotation *pointMhq; //灭火器
+@property (nonatomic, strong) BMKPointAnnotation *pointCt; //船艇
 @end
 
 @implementation MapFViewController
@@ -74,12 +95,27 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied) {
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"打开[定位服务]来允许[黄石消防云]确定您的位置" message:@"请在系统设置中开启定位服务(设置>隐私>定位服务>开启)" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+        UIAlertAction *setAction = [UIAlertAction actionWithTitle:@"打开定位" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            //打开定位设置
+            NSURL *settinsURL = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+            //[[UIApplication sharedApplication] openURL:settinsURL];
+            [[UIApplication sharedApplication] openURL:settinsURL options:@{} completionHandler:nil];// iOS 10 的跳转方式
+        }];
+        
+        [alert addAction:cancelAction];
+        [alert addAction:setAction];
+        [self presentViewController:alert animated:YES completion:nil];
+    }
+    
+    _sytype = @"1"; //救援队伍
+    
     //适配ios7
     if(([[[UIDevice currentDevice] systemVersion] doubleValue]>=7.0)) {
         self.navigationController.navigationBar.translucent = NO;
     }
-    
-    NSLog(@"================%@",self.userEntity.userId);
     
     _locService = [[BMKLocationService alloc]init];
     _geoCodeSearch = [[BMKGeoCodeSearch alloc] init];
@@ -87,7 +123,7 @@
     _searchAddress = [[BMKGeoCodeSearch alloc] init];
     
     _mapView = [[BMKMapView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
-    _mapView.showsUserLocation = YES; //是否显示定位图层
+    _mapView.showsUserLocation = NO; //是否显示定位图层
     _mapView.zoomLevel = 17; //地图显示比例
     [self startLocation];
     [self.view addSubview:_mapView];
@@ -95,17 +131,17 @@
     [self setupNav];
     
     self.automaticallyAdjustsScrollViewInsets = NO;
-    // 这个方法是为了，不让隐藏状态栏的时候出现view上移
+    //    // 这个方法是为了，不让隐藏状态栏的时候出现view上移
     self.extendedLayoutIncludesOpaqueBars = YES;
     self.view.backgroundColor = [UIColor whiteColor];
     
-    // 屏幕边缘pan手势(优先级高于其他手势)
-//    UIScreenEdgePanGestureRecognizer *leftEdgeGesture = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self
-//                                                                                                          action:@selector(moveViewWithGesture:)];
-//    leftEdgeGesture.edges = UIRectEdgeLeft;// 屏幕左侧边缘响应
-//    [self.view addGestureRecognizer:leftEdgeGesture];
-//    // 这里是地图处理方式，遵守代理协议，实现代理方法
-//    leftEdgeGesture.delegate = self;
+        // 屏幕边缘pan手势(优先级高于其他手势)
+        UIScreenEdgePanGestureRecognizer *leftEdgeGesture = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self
+                                                                                                              action:@selector(moveViewWithGesture:)];
+        leftEdgeGesture.edges = UIRectEdgeLeft;// 屏幕左侧边缘响应
+        [self.view addGestureRecognizer:leftEdgeGesture];
+        // 这里是地图处理方式，遵守代理协议，实现代理方法
+        leftEdgeGesture.delegate = self;
     
     // 如果是scrollView的话，下面这行代码就可以了不用遵守代理协议，实现代理方法
     // [scrollView.panGestureRecognizer requireGestureRecognizerToFail:leftEdgeGesture];
@@ -116,19 +152,19 @@
     [self loadbtns];
 }
 
-//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-//    BOOL result = NO;
-//    if ([gestureRecognizer isKindOfClass:[UIScreenEdgePanGestureRecognizer class]]) {
-//        result = YES;
-//    }
-//    return result;
-//}
-//
-//- (void)moveViewWithGesture:(UIPanGestureRecognizer *)panGes {
-//    if (panGes.state == UIGestureRecognizerStateEnded) {
-//        [self profileCenter];
-//    }
-//}
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    BOOL result = NO;
+    if ([gestureRecognizer isKindOfClass:[UIScreenEdgePanGestureRecognizer class]]) {
+        result = YES;
+    }
+    return result;
+}
+
+- (void)moveViewWithGesture:(UIPanGestureRecognizer *)panGes {
+    if (panGes.state == UIGestureRecognizerStateEnded) {
+        [self profileCenter];
+    }
+}
 
 - (void)msgClick {
     UIViewController *vc = [[UIViewController alloc] init];
@@ -150,11 +186,11 @@
     
     UIButton *profileButton = [[UIButton alloc] init];
     // 设置按钮的背景图片
-    [profileButton setImage:[UIImage imageNamed:@"backarr"] forState:UIControlStateNormal];
+    [profileButton setImage:[UIImage imageNamed:@"tt"] forState:UIControlStateNormal];
     // 设置按钮的尺寸为背景图片的尺寸
     profileButton.frame = CGRectMake(0, 0, 44, 44);
     //监听按钮的点击
-    [profileButton addTarget:self action:@selector(backBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [profileButton addTarget:self action:@selector(profileCenter) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *profile = [[UIBarButtonItem alloc] initWithCustomView:profileButton];
     self.navigationItem.leftBarButtonItems = @[negativeSpacer, profile];
     
@@ -229,7 +265,7 @@
     _locService.delegate = self;
     
     _mapView.zoomLevel = 17;
-    _mapView.showsUserLocation = YES;//是否显示小蓝点，no不显示，我们下面要自定义的
+    _mapView.showsUserLocation = NO;//是否显示小蓝点，no不显示，我们下面要自定义的
     _mapView.userTrackingMode = BMKUserTrackingModeNone;
     
     _btnflag = @"dwbtn";
@@ -286,7 +322,7 @@
     btn3.titleLabel.font = [UIFont systemFontOfSize:14.0];
     [btn3 setTitle:@"器材" forState:UIControlStateNormal];
     [btn3 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [btn3 addTarget:self action:@selector(addsy:) forControlEvents:UIControlEventTouchUpInside];
+    [btn3 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
     [btn3 setImage:[UIImage imageNamed:@"zqbz3"] forState:UIControlStateNormal];
     [self.view addSubview:btn3];
     
@@ -313,16 +349,39 @@
 
 #pragma mark -- Selector
 - (void)buttonTap:(UIButton *)button {
-    if (button.tag == 0) {
-        NSLog(@"显示消防栓");
+    if (button.tag == 1) {
+        NSLog(@"显示车辆");
+        _sytype = @"1";
+        [self.mapView removeAnnotations:self.mapView.annotations];
+        [self loadData:_lngcnow Lat:_latcnow Sytype:@"1"];
     }
     
-    if (button.tag == 1) {
-        NSLog(@"天然水源");
+    if (button.tag == 2) {
+        NSLog(@"装备");
+        _sytype = @"2";
+        [self.mapView removeAnnotations:self.mapView.annotations];
+        [self loadData:_lngcnow Lat:_latcnow Sytype:@"2"];
     }
     
     if (button.tag == 3) {
-        NSLog(@"刷新获取最新水源信息");
+        NSLog(@"器材");
+        _sytype = @"3";
+        [self.mapView removeAnnotations:self.mapView.annotations];
+        [self loadData:_lngcnow Lat:_latcnow Sytype:@"3"];
+    }
+    
+    if (button.tag == 4) {
+        NSLog(@"灭火器");
+        _sytype = @"4";
+        [self.mapView removeAnnotations:self.mapView.annotations];
+        [self loadData:_lngcnow Lat:_latcnow Sytype:@"4"];
+    }
+    
+    if (button.tag == 5) {
+        NSLog(@"船艇");
+        _sytype = @"5";
+        [self.mapView removeAnnotations:self.mapView.annotations];
+        [self loadData:_lngcnow Lat:_latcnow Sytype:@"5"];
     }
 }
 
@@ -381,7 +440,7 @@
         _locService.delegate = self;
         
         _mapView.zoomLevel = 17;
-        _mapView.showsUserLocation = YES;//是否显示小蓝点，no不显示，我们下面要自定义的
+        _mapView.showsUserLocation = NO;//是否显示小蓝点，no不显示，我们下面要自定义的
         _mapView.userTrackingMode = BMKUserTrackingModeNone;
         
         _btnflag = @"addsybtn";
@@ -416,7 +475,7 @@
     BOOL flag = [_searchAddress reverseGeoCode:option];
     
     if (flag) {
-        //_mapView.showsUserLocation = NO;//不显示自己的位置
+        _mapView.showsUserLocation = NO;//不显示自己的位置
     }
 }
 
@@ -447,6 +506,35 @@
         return;
     }
     
+    CLLocationCoordinate2D centercoor = _mapView.centerCoordinate;
+    _latcnow = [NSString stringWithFormat:@"%lf",centercoor.latitude];
+    _lngcnow = [NSString stringWithFormat:@"%lf",centercoor.longitude];
+    //NSLog(@"初始化中心点的经纬度=======%@ %@",_latc,_lngc);
+    //NSLog(@"当前中心点的经纬度=======%@ %@",_latcnow,_lngcnow);
+    
+    float latcd = [_latc floatValue];
+    float lngcd = [_lngc floatValue];
+    
+    float latcnowd = [_latcnow floatValue];
+    float lngcnowd = [_lngcnow floatValue];
+    
+    BMKMapPoint point1 = BMKMapPointForCoordinate(CLLocationCoordinate2DMake(latcd,lngcd));
+    BMKMapPoint point2 = BMKMapPointForCoordinate(CLLocationCoordinate2DMake(latcnowd,lngcnowd));
+    CLLocationDistance distance = BMKMetersBetweenMapPoints(point1,point2);
+    //NSLog(@"两点间的距离======%f",distance);
+    
+    //如果两点距离大于800米
+    if(distance > 800) {
+        //重新设置水源中心点坐标
+        _latc = [NSString stringWithFormat:@"%lf",centercoor.latitude];
+        _lngc = [NSString stringWithFormat:@"%lf",centercoor.longitude];
+        
+        [self.mapView removeAnnotations:self.mapView.annotations];
+        
+        //异步加载标注点
+        [self loadData:_lngc Lat:_latc Sytype:_sytype];
+    }
+    
     self.addressLabel.text = resultAddress;
     self.location2D = coor;
     self.name = houseName;
@@ -456,22 +544,23 @@
     //建立临时变量传值
     UserEntity *ue = [[UserEntity alloc]init];
     ue.title = self.addressLabel.text;
-    ue.lat = self.lat;
-    ue.lon = self.lon;
+    ue.lat = self.latcnow;
+    ue.lon = self.lngcnow;
     
-    //AddSyViewController *addsy = [[AddSyViewController alloc]init];
-    //[self.navigationController pushViewController:addsy animated:YES];
-    //addsy.userEntity = ue;
+    SyAddViewController *addsy = [[SyAddViewController alloc]init];
+    //SyTestViewController *addsy = [[SyTestViewController alloc]init];
+    [self.navigationController pushViewController:addsy animated:YES];
+    addsy.userEntity = ue;
     
     //NSLog(@"this is sure btn click%@",self.addressLabel.text);
 }
 
 - (void)willStartLocatingUser {
-    NSLog(@"start locate");
+    //NSLog(@"start locate");
 }
 
 - (void)didStopLocatingUser {
-    NSLog(@"stop locate");
+    //NSLog(@"stop locate");
 }
 
 - (void)didFailToLocateUserWithError:(NSError *)error {
@@ -479,24 +568,32 @@
 }
 
 -(void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation {
-    //NSLog(@"didUpdateUserLocation lat %f,long %f",userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);
-    
     [_mapView updateLocationData:userLocation]; //更新地图上的位置
     _mapView.centerCoordinate = userLocation.location.coordinate; //更新当前位置到地图中间
+    
+    //获取初始化中心点坐标
+    _latc = [NSString stringWithFormat:@"%lf",userLocation.location.coordinate.latitude];
+    _lngc = [NSString stringWithFormat:@"%lf",userLocation.location.coordinate.longitude];
+    
+    //获取初始化中心点坐标,用于导航
+    _lat = [NSString stringWithFormat:@"%lf",userLocation.location.coordinate.latitude];
+    _lng = [NSString stringWithFormat:@"%lf",userLocation.location.coordinate.longitude];
+    NSLog(@"当前位置坐标：%@ %@",_lat,_lng);
+    
+    //异步加载标注点
+    [self loadData:_lngc Lat:_latc Sytype:_sytype];
     
     //地理反编码
     BMKReverseGeoCodeOption *reverseGeocodeSearchOption = [[BMKReverseGeoCodeOption alloc]init];
     reverseGeocodeSearchOption.reverseGeoPoint = userLocation.location.coordinate;
     BOOL flag = [_geoCodeSearch reverseGeoCode:reverseGeocodeSearchOption];
     if(flag) {
-        NSLog(@"反geo检索发送成功");
+        //NSLog(@"反geo检索发送成功");
         [_locService stopUserLocationService];
     }
     else {
         NSLog(@"反geo检索发送失败");
     }
-    
-    NSLog(@"点击了%@",_btnflag);
     
     if([_btnflag  isEqual: @"dwbtn"]) {
         //nothing to do...
@@ -504,6 +601,227 @@
     else if([_btnflag  isEqual: @"addsybtn"]) {
         [self createLocationSignImage];
     }
+}
+
+- (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation {
+    if (annotation == _pointXfs) {
+        
+        NSString *AnnotationViewID = @"zq1mark";
+        BMKPinAnnotationView *annotationView = (BMKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+        if (annotationView == nil) {
+            annotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+            // 设置颜色
+            annotationView.pinColor = BMKPinAnnotationColorPurple;
+            // 从天上掉下效果
+            annotationView.animatesDrop = YES;
+            // 设置可拖拽
+            annotationView.draggable = YES;
+            // 把大头针换成别的图片
+            annotationView.image = [UIImage imageNamed:@"zqbz1"];
+        }
+        return annotationView;
+    }
+    else if (annotation == _pointSy) {
+        
+        NSString *AnnotationViewID = @"zq2mark";
+        BMKPinAnnotationView *annotationView = (BMKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+        if (annotationView == nil) {
+            annotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+            // 设置颜色
+            annotationView.pinColor = BMKPinAnnotationColorPurple;
+            // 从天上掉下效果
+            annotationView.animatesDrop = YES;
+            // 设置可拖拽
+            annotationView.draggable = YES;
+            // 把大头针换成别的图片
+            annotationView.image = [UIImage imageNamed:@"zqbz2"];
+        }
+        return annotationView;
+    }
+    else if (annotation == _pointWz) {
+        
+        NSString *AnnotationViewID = @"zq3mark";
+        BMKPinAnnotationView *annotationView = (BMKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+        if (annotationView == nil) {
+            annotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+            // 设置颜色
+            annotationView.pinColor = BMKPinAnnotationColorPurple;
+            // 从天上掉下效果
+            annotationView.animatesDrop = YES;
+            // 设置可拖拽
+            annotationView.draggable = YES;
+            // 把大头针换成别的图片
+            annotationView.image = [UIImage imageNamed:@"zqbz3"];
+        }
+        return annotationView;
+    }
+    else if (annotation == _pointMhq) {
+        NSString *AnnotationViewID = @"zq4mark";
+        BMKPinAnnotationView *annotationView = (BMKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+        if (annotationView == nil) {
+            annotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+            // 设置颜色
+            annotationView.pinColor = BMKPinAnnotationColorPurple;
+            // 从天上掉下效果
+            annotationView.animatesDrop = YES;
+            // 设置可拖拽
+            annotationView.draggable = YES;
+            // 把大头针换成别的图片
+            annotationView.image = [UIImage imageNamed:@"zqbz4"];
+        }
+        return annotationView;
+    }
+    else if (annotation == _pointCt) {
+        NSString *AnnotationViewID = @"zq5mark";
+        BMKPinAnnotationView *annotationView = (BMKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
+        if (annotationView == nil) {
+            annotationView = [[BMKPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:AnnotationViewID];
+            // 设置颜色
+            annotationView.pinColor = BMKPinAnnotationColorPurple;
+            // 从天上掉下效果
+            annotationView.animatesDrop = YES;
+            // 设置可拖拽
+            annotationView.draggable = YES;
+            // 把大头针换成别的图片
+            annotationView.image = [UIImage imageNamed:@"zqbz5"];
+        }
+        return annotationView;
+    }
+    
+    return nil;
+}
+
+//点击气泡
+- (void)mapView:(BMKMapView *)mapView annotationViewForBubble:(BMKAnnotationView *)view {
+    //NSLog(@"点击了气泡!");
+    BMKPointAnnotation *tt = (BMKPointAnnotation*)view.annotation;
+    //NSLog(@"%f",tt.coordinate.latitude);
+    //NSLog(@"%f",tt.coordinate.longitude);
+    //NSLog(@"%@",tt.title);
+    //NSLog(@"%@",tt.subtitle);
+    
+    //建立临时变量传值
+    UserEntity *ue = [[UserEntity alloc]init];
+    ue.antitle = tt.title;
+    ue.ansubtitle = tt.subtitle;
+    ue.anlat = [NSString stringWithFormat:@"%lf",tt.coordinate.latitude]; //终点
+    ue.anlon = [NSString stringWithFormat:@"%lf",tt.coordinate.longitude];
+    ue.clat = _lat; //起点
+    ue.clon = _lng;
+    ue.viewName = @"zqbz_view"; //战勤保障视图
+    
+    //Test2ViewController *navi = [[Test2ViewController alloc]init];
+    //[self.navigationController pushViewController:navi animated:YES];
+    //navi.userEntity = ue;
+    
+    hsdcwUtils *utils = [[hsdcwUtils alloc]init];
+    NSString *xf_dt = utils.myencrypt[0];
+    NSString *xf_tk = utils.myencrypt[1];
+    //NSLog(@"%@========%@",xf_dt, xf_tk);
+    
+    NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/zbwzinfo/xf_dt/",URL_IMG];
+    url = [url stringByAppendingString:xf_dt];
+    url = [url stringByAppendingString:@"/xf_tk/"];
+    url = [url stringByAppendingString:xf_tk];
+    //NSLog(@"%@",url);
+    
+    MyWebViewController *webV = [MyWebViewController new];
+    webV.urlStr = url;
+    webV.isPullRefresh = YES;
+    webV.userEntity = ue;
+    [self.navigationController pushViewController:webV animated:YES];
+    
+//    CHWebViewController *web = [[CHWebViewController alloc]initWithURL:url];
+//    web.userEntity = ue;
+//    [self.navigationController pushViewController:web animated:YES];
+    
+    //    MapWebViewController *webVC = [MapWebViewController new];
+    //    webVC.urlString = url;
+    //    webVC.userEntity = ue;
+    //    [self.navigationController pushViewController:webVC animated:YES];
+    
+    //SyInfoViewController *syinfo = [[SyInfoViewController alloc]init];
+    //[self.navigationController pushViewController:syinfo animated:YES];
+    //syinfo.userEntity = ue;
+}
+
+//选中标注点
+- (void)mapView:(BMKMapView *)mapView didSelectAnnotationView:(BMKAnnotationView *)view {
+    //_shopCoor = view.annotation.coordinate;
+    //NSLog(@"选中了标注点!");
+}
+
+//动态请求加载地图标注点
+-(void)loadData:(NSString*)lng Lat:(NSString*)lat Sytype:(NSString*) sytype {
+    //-----------------------------------加载数据-----------------------------------------
+    NSDictionary *parameter = @{@"lng":lng,
+                                @"lat":lat,
+                                @"sytype":sytype};
+    [CKHttpCommunicate createRequest:GetZbwzList WithParam:parameter withMethod:POST success:^(id response) {
+        //NSLog(@"%@",response);
+        
+        if (response) {
+            NSString *code = response[@"code"];
+            
+            //当返回值为200并num为0时
+            if ([code isEqualToString:@"200"]) {
+                NSArray *array = response[@"data"];
+                for (int i = 0; i < array.count; i++) {
+                    CLLocationCoordinate2D coor2;
+                    
+                    double dlng = [array[i][@"map_lng"] doubleValue];
+                    double dlat = [array[i][@"map_lat"] doubleValue];
+                    
+                    coor2.longitude = dlng;
+                    coor2.latitude = dlat;
+                    
+                    if ([_sytype isEqual: @"1"]) {
+                        _pointXfs = [[BMKPointAnnotation alloc]init];
+                        
+                        _pointXfs.coordinate = coor2;  //每次不同的gps坐标
+                        _pointXfs.title = [NSString stringWithFormat:@"%@",array[i][@"wz_name"]];
+                        _pointXfs.subtitle = [NSString stringWithFormat:@"%@",array[i][@"wz_adder"]];
+                        [_mapView addAnnotation:_pointXfs];
+                    }
+                    else if ([_sytype isEqual: @"2"]) {
+                        _pointSy = [[BMKPointAnnotation alloc]init];
+                        
+                        _pointSy.coordinate = coor2;  //每次不同的gps坐标
+                        _pointSy.title = [NSString stringWithFormat:@"%@",array[i][@"wz_name"]];
+                        _pointSy.subtitle = [NSString stringWithFormat:@"%@",array[i][@"wz_adder"]];
+                        [_mapView addAnnotation:_pointSy];
+                    }
+                    else if ([_sytype isEqual: @"3"]) {
+                        _pointWz = [[BMKPointAnnotation alloc]init];
+                        
+                        _pointWz.coordinate = coor2;  //每次不同的gps坐标
+                        _pointWz.title = [NSString stringWithFormat:@"%@",array[i][@"wz_name"]];
+                        _pointWz.subtitle = [NSString stringWithFormat:@"%@",array[i][@"wz_adder"]];
+                        [_mapView addAnnotation:_pointWz];
+                    }
+                    else if ([_sytype isEqual: @"4"]) {
+                        _pointMhq = [[BMKPointAnnotation alloc]init];
+                        
+                        _pointMhq.coordinate = coor2;  //每次不同的gps坐标
+                        _pointMhq.title = [NSString stringWithFormat:@"%@",array[i][@"wz_name"]];
+                        _pointMhq.subtitle = [NSString stringWithFormat:@"%@",array[i][@"wz_adder"]];
+                        [_mapView addAnnotation:_pointMhq];
+                    }
+                    else if ([_sytype isEqual: @"5"]) {
+                        _pointCt = [[BMKPointAnnotation alloc]init];
+                        
+                        _pointCt.coordinate = coor2;  //每次不同的gps坐标
+                        _pointCt.title = [NSString stringWithFormat:@"%@",array[i][@"wz_name"]];
+                        _pointCt.subtitle = [NSString stringWithFormat:@"%@",array[i][@"wz_adder"]];
+                        [_mapView addAnnotation:_pointCt];
+                    }
+                }
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    } showHUD:self.view];
+    //-----------------------------------加载数据-----------------------------------------
 }
 
 - (void)didUpdateUserHeading:(BMKUserLocation *)userLocation {
@@ -515,3 +833,5 @@
 }
 
 @end
+
+
