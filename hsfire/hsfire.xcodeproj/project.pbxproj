@@ -171,6 +171,15 @@
 		88F98E861F7B39EA00E36FD6 /* baiduNaviSDK.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88F98E851F7B39E900E36FD6 /* baiduNaviSDK.xcassets */; };
 		88F98E891F7BBF2B00E36FD6 /* SyInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88F98E881F7BBF2B00E36FD6 /* SyInfoViewController.m */; };
 		88F98E8D1F7CF45C00E36FD6 /* CustomHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 88F98E8C1F7CF45C00E36FD6 /* CustomHUD.m */; };
+		88FF25921F877D19003EAC0E /* MapWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FF25911F877D19003EAC0E /* MapWebViewController.m */; };
+		88FF259C1F87898F003EAC0E /* CHWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FF25961F87898F003EAC0E /* CHWebViewController.m */; };
+		88FF259D1F87898F003EAC0E /* CHWebProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FF25991F87898F003EAC0E /* CHWebProgressView.m */; };
+		88FF259E1F87898F003EAC0E /* CHWebViewProress.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FF259B1F87898F003EAC0E /* CHWebViewProress.m */; };
+		88FF25A41F88BE2E003EAC0E /* UIViewController+Dismis_FileUploadPanel.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FF25A11F88BE2E003EAC0E /* UIViewController+Dismis_FileUploadPanel.m */; };
+		88FF25A51F88BE2E003EAC0E /* UIViewController+Intercept_FileUploadPane.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FF25A31F88BE2E003EAC0E /* UIViewController+Intercept_FileUploadPane.m */; };
+		88FF25AB1F88CA51003EAC0E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 88FF25AA1F88CA51003EAC0E /* WebKit.framework */; };
+		88FF25AF1F88D30C003EAC0E /* LLWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FF25AE1F88D30C003EAC0E /* LLWebViewController.m */; };
+		88FF25B21F88DDCA003EAC0E /* MyWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FF25B11F88DDCA003EAC0E /* MyWebViewController.m */; };
 		88FF7D851F47D73200670C0F /* BMKClusterAlgorithm.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FF7D7E1F47D73200670C0F /* BMKClusterAlgorithm.m */; };
 		88FF7D861F47D73200670C0F /* BMKClusterItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FF7D801F47D73200670C0F /* BMKClusterItem.m */; };
 		88FF7D871F47D73200670C0F /* BMKClusterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 88FF7D821F47D73200670C0F /* BMKClusterManager.m */; };
@@ -487,6 +496,23 @@
 		88F98E881F7BBF2B00E36FD6 /* SyInfoViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SyInfoViewController.m; sourceTree = "<group>"; };
 		88F98E8B1F7CF45C00E36FD6 /* CustomHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHUD.h; sourceTree = "<group>"; };
 		88F98E8C1F7CF45C00E36FD6 /* CustomHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHUD.m; sourceTree = "<group>"; };
+		88FF25901F877D19003EAC0E /* MapWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MapWebViewController.h; sourceTree = "<group>"; };
+		88FF25911F877D19003EAC0E /* MapWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MapWebViewController.m; sourceTree = "<group>"; };
+		88FF25951F87898F003EAC0E /* CHWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHWebViewController.h; sourceTree = "<group>"; };
+		88FF25961F87898F003EAC0E /* CHWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHWebViewController.m; sourceTree = "<group>"; };
+		88FF25981F87898F003EAC0E /* CHWebProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHWebProgressView.h; sourceTree = "<group>"; };
+		88FF25991F87898F003EAC0E /* CHWebProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHWebProgressView.m; sourceTree = "<group>"; };
+		88FF259A1F87898F003EAC0E /* CHWebViewProress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CHWebViewProress.h; sourceTree = "<group>"; };
+		88FF259B1F87898F003EAC0E /* CHWebViewProress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CHWebViewProress.m; sourceTree = "<group>"; };
+		88FF25A01F88BE2E003EAC0E /* UIViewController+Dismis_FileUploadPanel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Dismis_FileUploadPanel.h"; sourceTree = "<group>"; };
+		88FF25A11F88BE2E003EAC0E /* UIViewController+Dismis_FileUploadPanel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Dismis_FileUploadPanel.m"; sourceTree = "<group>"; };
+		88FF25A21F88BE2E003EAC0E /* UIViewController+Intercept_FileUploadPane.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Intercept_FileUploadPane.h"; sourceTree = "<group>"; };
+		88FF25A31F88BE2E003EAC0E /* UIViewController+Intercept_FileUploadPane.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Intercept_FileUploadPane.m"; sourceTree = "<group>"; };
+		88FF25AA1F88CA51003EAC0E /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		88FF25AD1F88D30C003EAC0E /* LLWebViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LLWebViewController.h; sourceTree = "<group>"; };
+		88FF25AE1F88D30C003EAC0E /* LLWebViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LLWebViewController.m; sourceTree = "<group>"; };
+		88FF25B01F88DDCA003EAC0E /* MyWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyWebViewController.h; sourceTree = "<group>"; };
+		88FF25B11F88DDCA003EAC0E /* MyWebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyWebViewController.m; sourceTree = "<group>"; };
 		88FF7D7D1F47D73200670C0F /* BMKClusterAlgorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKClusterAlgorithm.h; sourceTree = "<group>"; };
 		88FF7D7E1F47D73200670C0F /* BMKClusterAlgorithm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BMKClusterAlgorithm.m; sourceTree = "<group>"; };
 		88FF7D7F1F47D73200670C0F /* BMKClusterItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMKClusterItem.h; sourceTree = "<group>"; };
@@ -512,6 +538,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				88FF25AB1F88CA51003EAC0E /* WebKit.framework in Frameworks */,
 				88F98E761F7B33BC00E36FD6 /* libz.1.2.5.tbd in Frameworks */,
 				88F98E741F7B33A700E36FD6 /* libc++.tbd in Frameworks */,
 				88F98E721F7B330A00E36FD6 /* GLKit.framework in Frameworks */,
@@ -954,6 +981,7 @@
 		88D576431F3D93B20082F6F7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				88FF25AA1F88CA51003EAC0E /* WebKit.framework */,
 				88F98E831F7B399700E36FD6 /* libbaiduNaviSDK.a */,
 				88F98E751F7B33BC00E36FD6 /* libz.1.2.5.tbd */,
 				88F98E731F7B33A700E36FD6 /* libc++.tbd */,
@@ -1063,6 +1091,9 @@
 		88D576721F3D96820082F6F7 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				88FF25AC1F88D30C003EAC0E /* LLWeb */,
+				88FF259F1F88BE2E003EAC0E /* WebUpload */,
+				88FF25931F87898F003EAC0E /* CHWebView */,
 				88E06D281F8475E1001EFB66 /* SZKCleanCache */,
 				881CBFBF1F822CB9009E486D /* XgSDK */,
 				881CBFB81F80A39D009E486D /* AlertView */,
@@ -1096,6 +1127,8 @@
 				880059C61F3EE5ED0042441A /* UIImage+Extension.m */,
 				880059CB1F3EE9210042441A /* JYJSliderMenuTool.h */,
 				880059CC1F3EE9210042441A /* JYJSliderMenuTool.m */,
+				88FF25901F877D19003EAC0E /* MapWebViewController.h */,
+				88FF25911F877D19003EAC0E /* MapWebViewController.m */,
 				88D121E31F5EB52B00A745F9 /* WKWebviewController.h */,
 				88D121E41F5EB52B00A745F9 /* WKWebviewController.m */,
 				88D576A41F3DA6E00082F6F7 /* MyNavigationController.h */,
@@ -1189,6 +1222,57 @@
 				88F98E8C1F7CF45C00E36FD6 /* CustomHUD.m */,
 			);
 			path = CustomHUD;
+			sourceTree = "<group>";
+		};
+		88FF25931F87898F003EAC0E /* CHWebView */ = {
+			isa = PBXGroup;
+			children = (
+				88FF25941F87898F003EAC0E /* Core */,
+				88FF25971F87898F003EAC0E /* Progress */,
+			);
+			path = CHWebView;
+			sourceTree = "<group>";
+		};
+		88FF25941F87898F003EAC0E /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				88FF25951F87898F003EAC0E /* CHWebViewController.h */,
+				88FF25961F87898F003EAC0E /* CHWebViewController.m */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		88FF25971F87898F003EAC0E /* Progress */ = {
+			isa = PBXGroup;
+			children = (
+				88FF25981F87898F003EAC0E /* CHWebProgressView.h */,
+				88FF25991F87898F003EAC0E /* CHWebProgressView.m */,
+				88FF259A1F87898F003EAC0E /* CHWebViewProress.h */,
+				88FF259B1F87898F003EAC0E /* CHWebViewProress.m */,
+			);
+			path = Progress;
+			sourceTree = "<group>";
+		};
+		88FF259F1F88BE2E003EAC0E /* WebUpload */ = {
+			isa = PBXGroup;
+			children = (
+				88FF25A01F88BE2E003EAC0E /* UIViewController+Dismis_FileUploadPanel.h */,
+				88FF25A11F88BE2E003EAC0E /* UIViewController+Dismis_FileUploadPanel.m */,
+				88FF25A21F88BE2E003EAC0E /* UIViewController+Intercept_FileUploadPane.h */,
+				88FF25A31F88BE2E003EAC0E /* UIViewController+Intercept_FileUploadPane.m */,
+			);
+			path = WebUpload;
+			sourceTree = "<group>";
+		};
+		88FF25AC1F88D30C003EAC0E /* LLWeb */ = {
+			isa = PBXGroup;
+			children = (
+				88FF25AD1F88D30C003EAC0E /* LLWebViewController.h */,
+				88FF25AE1F88D30C003EAC0E /* LLWebViewController.m */,
+				88FF25B01F88DDCA003EAC0E /* MyWebViewController.h */,
+				88FF25B11F88DDCA003EAC0E /* MyWebViewController.m */,
+			);
+			path = LLWeb;
 			sourceTree = "<group>";
 		};
 		88FF7D7C1F47D73200670C0F /* Cluster */ = {
@@ -1394,16 +1478,20 @@
 				88D576931F3D96820082F6F7 /* AFURLRequestSerialization.m in Sources */,
 				880059C41F3EE5980042441A /* JYJNavigationController.m in Sources */,
 				88F037271F57FB3900E23F5A /* MapTwoViewController.m in Sources */,
+				88FF259D1F87898F003EAC0E /* CHWebProgressView.m in Sources */,
 				88607FD51F556ED30006E002 /* JHCellConfig.m in Sources */,
 				88FF7D9D1F481E4700670C0F /* SVProgressHUD.m in Sources */,
+				88FF259C1F87898F003EAC0E /* CHWebViewController.m in Sources */,
 				880059F01F3EF7540042441A /* JYJPersonViewController.m in Sources */,
 				880059F11F3EF7540042441A /* JYJCommenItem.m in Sources */,
+				88FF25AF1F88D30C003EAC0E /* LLWebViewController.m in Sources */,
 				8808CCB81F49766700CEE75F /* MapOneViewController.m in Sources */,
 				88D5769B1F3D96820082F6F7 /* CKHttpCommunicate.m in Sources */,
 				881CBFBD1F80A39D009E486D /* showBuyView.m in Sources */,
 				88121E091F419F9B002A2129 /* RegViewController.m in Sources */,
 				8818F0971F42F45200F50CB9 /* UIButton+WebCache.m in Sources */,
 				8831E8911F5A530D007F1230 /* Test2ViewController.m in Sources */,
+				88FF25B21F88DDCA003EAC0E /* MyWebViewController.m in Sources */,
 				880059E21F3EF7120042441A /* JYJMyCardViewController.m in Sources */,
 				8818F08F1F42F45200F50CB9 /* NSData+ImageContentType.m in Sources */,
 				8818F0921F42F45200F50CB9 /* SDWebImageDecoder.m in Sources */,
@@ -1450,6 +1538,7 @@
 				88FF7D871F47D73200670C0F /* BMKClusterManager.m in Sources */,
 				88D576991F3D96820082F6F7 /* MyMD5.m in Sources */,
 				880059CA1F3EE65F0042441A /* JYJAnimateViewController.m in Sources */,
+				88FF25A51F88BE2E003EAC0E /* UIViewController+Intercept_FileUploadPane.m in Sources */,
 				8818F0991F42F45200F50CB9 /* UIImage+MultiFormat.m in Sources */,
 				8818F0981F42F45200F50CB9 /* UIImage+GIF.m in Sources */,
 				880059E41F3EF7120042441A /* JYJMyStickerViewController.m in Sources */,
@@ -1462,6 +1551,7 @@
 				8804F8B91F760C66002F01D7 /* STUI.m in Sources */,
 				88D121DF1F5E960F00A745F9 /* MapSevnViewController.m in Sources */,
 				880059CD1F3EE9210042441A /* JYJSliderMenuTool.m in Sources */,
+				88FF25A41F88BE2E003EAC0E /* UIViewController+Dismis_FileUploadPanel.m in Sources */,
 				8804F8B41F760C66002F01D7 /* STToolbar.m in Sources */,
 				8818F05D1F42EC5E00F50CB9 /* HelpViewController.m in Sources */,
 				8818F0671F42EEB600F50CB9 /* XBWebBridge.m in Sources */,
@@ -1478,6 +1568,7 @@
 				88607FEF1F557F9E0006E002 /* NoticeViewController.m in Sources */,
 				88D576921F3D96820082F6F7 /* AFSecurityPolicy.m in Sources */,
 				88D121E21F5E9B2E00A745F9 /* MapEgViewController.m in Sources */,
+				88FF259E1F87898F003EAC0E /* CHWebViewProress.m in Sources */,
 				8818F0931F42F45200F50CB9 /* SDWebImageDownloader.m in Sources */,
 				880059C71F3EE5ED0042441A /* UIImage+Extension.m in Sources */,
 				88F98E8D1F7CF45C00E36FD6 /* CustomHUD.m in Sources */,
@@ -1489,6 +1580,7 @@
 				88D121D31F5E4AC200A745F9 /* MapTViewController.m in Sources */,
 				88D5760F1F3D59E50082F6F7 /* main.m in Sources */,
 				88FF7D861F47D73200670C0F /* BMKClusterItem.m in Sources */,
+				88FF25921F877D19003EAC0E /* MapWebViewController.m in Sources */,
 				880059D01F3EE9A80042441A /* JYJPushBaseViewController.m in Sources */,
 				88D576711F3D966D0082F6F7 /* IndexViewController.m in Sources */,
 				8818F09D1F42F45200F50CB9 /* UIView+WebCacheOperation.m in Sources */,
