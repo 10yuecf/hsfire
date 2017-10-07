@@ -37,4 +37,5 @@
 @synthesize clon;
 @synthesize syid;
 @synthesize syzt;
+@synthesize viewName;
 @end

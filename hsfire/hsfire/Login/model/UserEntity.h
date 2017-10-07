@@ -37,6 +37,7 @@
     NSString *clon;
     NSString *syid;
     NSString *syzt;
+    NSString *viewName; //视图名称
 }
 
 @property(nonatomic,retain) NSString *userToken;
@@ -67,4 +68,5 @@
 @property(nonatomic,retain) NSString *clon;
 @property(nonatomic,retain) NSString *syid;
 @property(nonatomic,retain) NSString *syzt;
+@property(nonatomic,retain) NSString *viewName;
 @end
