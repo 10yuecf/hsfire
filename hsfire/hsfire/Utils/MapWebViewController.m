@@ -162,7 +162,7 @@
     self.view.backgroundColor = [UIColor colorWithRed:245/255.0f green:245/255.0f blue:245/255.0f alpha:1];
     
     //设置导航栏标题颜色、字体大小
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16], NSForegroundColorAttributeName:[UIColor colorWithRed:255 / 255.0 green:255 / 255.0 blue:255 / 255.0 alpha:1.0]}];
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18], NSForegroundColorAttributeName:[UIColor colorWithRed:255 / 255.0 green:255 / 255.0 blue:255 / 255.0 alpha:1.0]}];
     
     CLLocationCoordinate2D wgs84llCoordinate;
     //assign your coordinate here...
@@ -249,7 +249,7 @@
  *101
  */
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error {
-    NSLog(@"ErrorCode:%ld",error.code);
+    NSLog(@"ErrorCode:%ld",(long)error.code);
     if (error.code == -1099) {
     }
 }

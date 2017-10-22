@@ -17,7 +17,7 @@ typedef NS_ENUM (NSInteger , HttpResponseCode)
     HttpResponseCnout
 };
 
-#define URL_BASE          @"http://10yue.hsdcw.com/fireyun/api/socket.php?action="
+#define URL_BASE          @"http://hsxfy.hsdcw.com/fireyun/api/socket.php?action="
 
 //http后缀
 typedef NS_ENUM(NSInteger,HTTP_COMMAND_LIST){

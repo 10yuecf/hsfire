@@ -226,7 +226,7 @@
     else{
         self.textView.editable = NO;
     }
-    return nil;
+    return false;
 }
 
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{

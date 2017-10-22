@@ -757,7 +757,7 @@
     //NSLog(@"new dict is%@",dict);
     
     [self hudTipWillShow:YES];
-    NSString *urlStr = @"http://10yue.hsdcw.com/fireyun/api/socket.php?action=up";
+    NSString *urlStr = [NSString stringWithFormat:@"%@api/socket.php?action=up",URL_IMG];
     [manager POST:urlStr parameters:dict constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [self hudTipWillShow:NO];
         

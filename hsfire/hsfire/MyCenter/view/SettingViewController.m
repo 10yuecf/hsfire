@@ -57,7 +57,7 @@
         JHBCellConfig *cell7 = [JHBCellConfig cellConfigWithClassName:NSStringFromClass([SettingCell class]) title:@"联系我们" showInfoMethod:@selector(showInfo: title:) heightOfCell:40];
         JHBCellConfig *cell8 = [JHBCellConfig cellConfigWithClassName:NSStringFromClass([SettingCell class]) title:@"关于黄石消防云平台" showInfoMethod:@selector(showInfo: title:) heightOfCell:40];
         //JHBCellConfig *cell9 = [JHBCellConfig cellConfigWithClassName:NSStringFromClass([SettingCell class]) title:@"退出帐号" showInfoMethod:@selector(showInfo: title:) heightOfCell:40];
-        [_dataArray addObject:@[cell1, cell2, cell3, cell4, cell5, cell6, cell7, cell8]];
+        [_dataArray addObject:@[cell1, cell2, cell3, cell4, cell5, cell7, cell8]];
     }
     
     return _dataArray;
@@ -137,8 +137,8 @@
 }
 
 - (void)setupNav {
-    self.title = @"设置";
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20], NSForegroundColorAttributeName:[UIColor colorWithRed:255 / 255.0 green:255 / 255.0 blue:255 / 255.0 alpha:1.0]}];
+    self.title = @"我的消防设置";
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18], NSForegroundColorAttributeName:[UIColor colorWithRed:255 / 255.0 green:255 / 255.0 blue:255 / 255.0 alpha:1.0]}];
     
     UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     negativeSpacer.width = -15;
@@ -155,7 +155,7 @@
 }
 
 - (void)addAllViews {
-    self.mainTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 320) style:UITableViewStylePlain];
+    self.mainTableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, kWidth, 280) style:UITableViewStylePlain];
     [self.view addSubview:self.mainTableView];
     
     self.mainTableView.delegate = self;
@@ -297,11 +297,11 @@
         NSString *xf_tk = utils.myencrypt[1];
         //NSLog(@"%@========%@",xf_dt, xf_tk);
         
-        NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/guide/xf_dt/",URL_IMG];
+        NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/about/",URL_IMG];
         url = [url stringByAppendingString:xf_dt];
         url = [url stringByAppendingString:@"/xf_tk/"];
         url = [url stringByAppendingString:xf_tk];
-        //NSLog(@"%@",url);
+        NSLog(@"%@",url);
         
         LLWebViewController *webV = [LLWebViewController new];
         webV.urlStr = url;
@@ -324,7 +324,7 @@
         NSString *xf_tk = utils.myencrypt[1];
         //NSLog(@"%@========%@",xf_dt, xf_tk);
         
-        NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/syadd/xf_dt/",URL_IMG];
+        NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/about/xf_dt/",URL_IMG];
         url = [url stringByAppendingString:xf_dt];
         url = [url stringByAppendingString:@"/xf_tk/"];
         url = [url stringByAppendingString:xf_tk];

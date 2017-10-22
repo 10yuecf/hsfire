@@ -11,10 +11,11 @@
 
 #import <UIKit/UIKit.h>
 #import "UserEntity.h"
+#import "MapEntity.h"
 #import "JYJPushBaseViewController.h"
 
 @interface MapTViewController : JYJPushBaseViewController
 /** userEntity */
 @property (retain,nonatomic) UserEntity *userEntity;
-
+@property (retain,nonatomic) MapEntity *mapEntity;
 @end

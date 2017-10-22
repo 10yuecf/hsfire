@@ -27,6 +27,8 @@
 #import "MapSixViewController.h"
 #import "MapSevnViewController.h"
 #import "MapEgViewController.h"
+#import "UserTool.h"
+#import "User.h"
 
 #import "Test2ViewController.h"
 
@@ -37,6 +39,8 @@
 @property (nonatomic, weak) UIImageView *headerIcon;
 /** data */
 @property (nonatomic, strong) NSArray *data;
+
+@property (nonatomic, strong) NSMutableArray *datas;
 @end
 
 @implementation JYJPersonViewController
@@ -131,27 +135,39 @@
 }
 
 - (void)setupData {
-    JYJCommenItem *my1 = [JYJCommenItem itemWithIcon:@"menu1" title:@"水源管理" subtitle:@"" destVcClass:[MapViewController class]];
+    JYJCommenItem *my3 = [JYJCommenItem itemWithIcon:@"menu3" title:@"消防安全委员会" subtitle:nil destVcClass:[JYJMyStickerViewController class]];
     
-    JYJCommenItem *my2 = [JYJCommenItem itemWithIcon:@"menu2" title:@"重点单位" subtitle:@"" destVcClass:[MapTViewController class]];
+    JYJCommenItem *my1 = [JYJCommenItem itemWithIcon:@"menu1" title:@"消防水源管理" subtitle:nil destVcClass:[MapViewController class]];
     
-    JYJCommenItem *my3 = [JYJCommenItem itemWithIcon:@"menu3" title:@"消安委" subtitle:nil destVcClass:[JYJMyStickerViewController class]];
+    JYJCommenItem *my2 = [JYJCommenItem itemWithIcon:@"menu2" title:@"重点单位管理" subtitle:nil destVcClass:[MapTViewController class]];
     
-    JYJCommenItem *my4 = [JYJCommenItem itemWithIcon:@"menu4" title:@"战保物资" subtitle:nil destVcClass:[MapFViewController class]];
+    JYJCommenItem *my4 = [JYJCommenItem itemWithIcon:@"menu4" title:@"消防战勤保障" subtitle:nil destVcClass:[MapFViewController class]];
     
-    JYJCommenItem *my5 = [JYJCommenItem itemWithIcon:@"menu5" title:@"应急救援" subtitle:nil destVcClass:[MapFivViewController class]];
+    JYJCommenItem *my5 = [JYJCommenItem itemWithIcon:@"menu5" title:@"应急救援联动" subtitle:nil destVcClass:[MapFivViewController class]];
     
-    JYJCommenItem *my6 = [JYJCommenItem itemWithIcon:@"menu6" title:@"执勤力量" subtitle:nil destVcClass:[MapSixViewController class]];
+    JYJCommenItem *my6 = [JYJCommenItem itemWithIcon:@"menu6" title:@"执勤力量管理" subtitle:nil destVcClass:[MapSixViewController class]];
     
-    JYJCommenItem *my7 = [JYJCommenItem itemWithIcon:@"menu7" title:@"消防知识" subtitle:nil destVcClass:[JYJMyWalletViewController class]];
+    JYJCommenItem *my7 = [JYJCommenItem itemWithIcon:@"menu7" title:@"消防学习园地" subtitle:nil destVcClass:[JYJMyWalletViewController class]];
     
-    JYJCommenItem *my8 = [JYJCommenItem itemWithIcon:@"menu8" title:@"消防审批" subtitle:nil destVcClass:[JYJMyTripViewController class]];
+    JYJCommenItem *my8 = [JYJCommenItem itemWithIcon:@"menu8" title:@"审批结果查询" subtitle:nil destVcClass:[JYJMyTripViewController class]];
     
-    JYJCommenItem *myxf = [JYJCommenItem itemWithIcon:@"menu9" title:@"我的消防" subtitle:nil destVcClass:[SettingViewController class]];
+    JYJCommenItem *myxf = [JYJCommenItem itemWithIcon:@"menu9" title:@"我的消防设置" subtitle:nil destVcClass:[SettingViewController class]];
     
     //读取权限
-    
-    self.data = @[my1, my2, my3, my4, my5, my6, my7, my8, myxf];
+    NSString *chkuser = [NSString stringWithFormat:@"select * from t_user where loginstatus = '1' limit 1"];
+    _datas = [UserTool userWithSql:chkuser];
+    if (_datas.count == 1) {
+        User *u = _datas[0];
+        if([u.bz isEqualToString:@"普通用户"]) {
+            self.data = @[my7, my8, myxf];
+        }
+        else {
+            self.data = @[my3 , my1, my2, my4, my5, my6, my7, my8, myxf];
+        }
+    }
+    else {
+        self.data = @[my3 , my1, my2, my4, my5, my6, my7, my8, myxf];
+    }
 }
 
 #pragma mark - TableView DataSource

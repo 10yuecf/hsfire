@@ -38,6 +38,8 @@
 @property (nonatomic, strong) UILabel *sytellabel;//水源联系人电话
 @property (nonatomic, strong) UILabel *syaddrlabel;//水源地址
 @property (nonatomic, strong) NSString *syid;//水源id
+@property (nonatomic, assign) UIView *background;//图片放大
+@property (nonatomic, strong) UITapGestureRecognizer *tapGesture;
 @end
 
 @implementation SyInfoViewController
@@ -50,9 +52,9 @@
     [[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
     self.view.backgroundColor = [UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
     
-    NSLog(@"================%@",self.userEntity.antitle);
-    NSLog(@"================%@",self.userEntity.anlat);
-    NSLog(@"================%@",self.userEntity.anlon);
+    //NSLog(@"================%@",self.userEntity.antitle);
+    //NSLog(@"================%@",self.userEntity.anlat);
+    //NSLog(@"================%@",self.userEntity.anlon);
     
     [self getSyInfo:self.userEntity.antitle Lat:self.userEntity.anlat Lng:self.userEntity.anlon];
     [self setupNav];
@@ -104,27 +106,47 @@
                 NSString *p1str = [NSString stringWithFormat:@"%@/up/photo/%@",URL_IMG,response[@"data"][0][@"sypic1"]];
                 //NSLog(@"%@",p1str);
                 NSURL *p1url = [NSURL URLWithString:p1str];
+                _p1.tag = 1;
                 [_p1 sd_setImageWithURL:p1url placeholderImage:[UIImage imageNamed:@"nophoto"]];
+                _p1.userInteractionEnabled = YES;
+                _tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cleckImageViewAction:)];
+                [_p1 addGestureRecognizer:_tapGesture];
                 
                 NSString *p2str = [NSString stringWithFormat:@"%@/up/photo/%@",URL_IMG,response[@"data"][0][@"sypic2"]];
                 //NSLog(@"%@",p1str);
                 NSURL *p2url = [NSURL URLWithString:p2str];
+                _p2.tag = 2;
                 [_p2 sd_setImageWithURL:p2url placeholderImage:[UIImage imageNamed:@"nophoto"]];
+                _p2.userInteractionEnabled = YES;
+                _tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cleckImageViewAction:)];
+                [_p2 addGestureRecognizer:_tapGesture];
                 
                 NSString *p3str = [NSString stringWithFormat:@"%@/up/photo/%@",URL_IMG,response[@"data"][0][@"sypic3"]];
                 //NSLog(@"%@",p1str);
                 NSURL *p3url = [NSURL URLWithString:p3str];
+                _p3.tag = 3;
                 [_p3 sd_setImageWithURL:p3url placeholderImage:[UIImage imageNamed:@"nophoto"]];
+                _p3.userInteractionEnabled = YES;
+                _tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cleckImageViewAction:)];
+                [_p3 addGestureRecognizer:_tapGesture];
                 
                 NSString *p4str = [NSString stringWithFormat:@"%@/up/photo/%@",URL_IMG,response[@"data"][0][@"sypic4"]];
                 //NSLog(@"%@",p1str);
                 NSURL *p4url = [NSURL URLWithString:p4str];
+                _p4.tag = 4;
                 [_p4 sd_setImageWithURL:p4url placeholderImage:[UIImage imageNamed:@"nophoto"]];
+                _p4.userInteractionEnabled = YES;
+                _tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cleckImageViewAction:)];
+                [_p4 addGestureRecognizer:_tapGesture];
                 
                 NSString *p5str = [NSString stringWithFormat:@"%@/up/photo/%@",URL_IMG,response[@"data"][0][@"sypic5"]];
                 //NSLog(@"%@",p1str);
                 NSURL *p5url = [NSURL URLWithString:p5str];
+                _p5.tag = 5;
                 [_p5 sd_setImageWithURL:p5url placeholderImage:[UIImage imageNamed:@"nophoto"]];
+                _p5.userInteractionEnabled = YES;
+                _tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(cleckImageViewAction:)];
+                [_p5 addGestureRecognizer:_tapGesture];
             }
             else if ([result isEqualToString:@"400"]) {
                 NSString *text = response[@"data"][@"text"];
@@ -144,7 +166,51 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     } showHUD:self.view];
+}
+
+//点击图片后的方法(即图片的放大全屏效果)
+- (void)cleckImageViewAction:(UIGestureRecognizer *)gesture {
+    UIImageView *imageView = (UIImageView *)gesture.view;
+    NSLog(@"image view = %ld", (long)imageView.tag);
     
+    NSLog(@"点击了图片");
+    //创建一个黑色背景
+    //初始化一个用来当做背景的View。
+    UIView *bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
+    _background = bgView;
+    [bgView setBackgroundColor:[UIColor colorWithRed:0/250.0 green:0/250.0 blue:0/250.0 alpha:1.0]];
+    [self.view addSubview:bgView];
+    
+    //创建显示图像的视图
+    //初始化要显示的图片内容的imageView
+    UIImageView *browseImgView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, kWidth, kHeight - 64)];
+    browseImgView.contentMode = UIViewContentModeScaleAspectFit;
+    //self.view.browseImgView = browseImgView;
+    //要显示的图片，即要放大的图片
+    browseImgView.image = imageView.image;
+    [bgView addSubview:browseImgView];
+    
+    browseImgView.userInteractionEnabled = YES;
+    //添加点击手势（即点击图片后退出全屏）
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(closeView)];
+    [browseImgView addGestureRecognizer:tapGesture];
+    
+    [self shakeToShow:bgView];//放大过程中的动画
+}
+
+-(void)closeView {
+    [_background removeFromSuperview];
+}
+
+//放大过程中出现的缓慢动画
+- (void) shakeToShow:(UIView*)aView{
+    CAKeyframeAnimation* animation = [CAKeyframeAnimation animationWithKeyPath:@"transform"];
+    animation.duration = 0.3;
+    NSMutableArray *values = [NSMutableArray array];
+    [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(0.1, 0.1, 1.0)]];
+    [values addObject:[NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1.0)]];
+    animation.values = values;
+    [aView.layer addAnimation:animation forKey:nil];
 }
 
 - (void)setupNav {

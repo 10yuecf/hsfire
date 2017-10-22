@@ -37,6 +37,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16], NSForegroundColorAttributeName:[UIColor colorWithRed:255 / 255.0 green:255 / 255.0 blue:255 / 255.0 alpha:1.0]}];
+    
     [self createWebView];
     [self createNaviItem];
     [self loadRequest];
@@ -200,7 +202,7 @@
         [_wk_WebView goBack];
     } else {
         NSString *viewname = self.userEntity.viewName;
-        NSLog(@"%@",viewname);
+        //NSLog(@"%@",viewname);
         
         CATransition* transition = [CATransition animation];
         transition.type = kCATransitionPush;//可更改为其他方式
@@ -338,7 +340,7 @@
 
 //进程被终止时调用
 -(void)webViewWebContentProcessDidTerminate:(WKWebView *)webView {
-    NSLog(@"==========");
+    //NSLog(@"==========");
 }
 
 //-------------导航-------------------

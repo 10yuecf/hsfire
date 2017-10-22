@@ -10,9 +10,27 @@
 #import "hsdcwUtils.h"
 #import "Macro.h"
 #import "LLWebViewController.h"
+#import "JYJSliderMenuTool.h"
+#import "User.h"
+#import "UserTool.h"
+#import "BaseInfo.h"
+#import "CKHttpCommunicate.h"
+
+//-----极光推送
+// 引入JPush功能所需头文件
+#import "JPUSHService.h"
+// iOS10注册APNs所需头文件
+#ifdef NSFoundationVersionNumber_iOS_9_x_Max
+#import <UserNotifications/UserNotifications.h>
+#endif
+//-----end
 
 @interface JYJMyStickerViewController ()
-
+/** tapGestureRec */
+@property (nonatomic, weak) UITapGestureRecognizer *tapGestureRec;
+/** panGestureRec */
+@property (nonatomic, strong) UIPanGestureRecognizer *panGestureRec;
+@property (nonatomic, strong) NSString *devcode;
 @end
 
 @implementation JYJMyStickerViewController
@@ -24,7 +42,45 @@
     
     [self setupNav];
     
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    // 这个方法是为了，不让隐藏状态栏的时候出现view上移
+    self.extendedLayoutIncludesOpaqueBars = YES;
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    // 屏幕边缘pan手势(优先级高于其他手势)
+    UIScreenEdgePanGestureRecognizer *leftEdgeGesture = [[UIScreenEdgePanGestureRecognizer alloc] initWithTarget:self
+                                                                                                          action:@selector(moveViewWithGesture:)];
+    leftEdgeGesture.edges = UIRectEdgeLeft;// 屏幕左侧边缘响应
+    [self.view addGestureRecognizer:leftEdgeGesture];
+    // 这里是地图处理方式，遵守代理协议，实现代理方法
+    leftEdgeGesture.delegate = self;
+    
+    // 如果是scrollView的话，下面这行代码就可以了不用遵守代理协议，实现代理方法
+    // [scrollView.panGestureRecognizer requireGestureRecognizerToFail:leftEdgeGesture];
+    
     [self loadUI];
+    
+    [self updevcode];
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    BOOL result = NO;
+    if ([gestureRecognizer isKindOfClass:[UIScreenEdgePanGestureRecognizer class]]) {
+        result = YES;
+    }
+    return result;
+}
+
+- (void)moveViewWithGesture:(UIPanGestureRecognizer *)panGes {
+    if (panGes.state == UIGestureRecognizerStateEnded) {
+        [self profileCenter];
+    }
+}
+
+- (void)profileCenter {
+    // 展示个人中心
+    [JYJSliderMenuTool showWithRootViewController:self];
 }
 
 -(void)loadUI {
@@ -124,6 +180,19 @@
 }
 
 -(void)tourl:(UIButton *)button {
+    NSString *chkuser = [NSString stringWithFormat:@"select * from t_user where loginstatus = '1' limit 1"];
+    NSMutableArray *user_arr = [UserTool userWithSql:chkuser];
+    
+    NSString *uid;
+    
+    if (user_arr.count == 0) {
+        uid = @"0";
+    }
+    else {
+        User *u = user_arr[0];
+        uid = u.userID;
+    }
+    
     NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/",URL_IMG];
     
     if(button.tag == 1) {
@@ -139,22 +208,19 @@
         url = [url stringByAppendingString:@"xaw_lhzflist"];
     }
     else if(button.tag == 5) {
-        url = [url stringByAppendingString:@"xaw_yhsb"];
+        url = [url stringByAppendingString:@"yhsblist/uid/"];
+        url = [url stringByAppendingString:uid];
     }
     else if(button.tag == 6) {
         url = [url stringByAppendingString:@"gulist"];
     }
     
-    //NSLog(@"%@",url);
+    NSLog(@"%@",url);
     
     LLWebViewController *webV = [LLWebViewController new];
     webV.urlStr = url;
     webV.isPullRefresh = YES;
     [self.navigationController pushViewController:webV animated:YES];
-    
-//    WKWebviewController *webVC = [WKWebviewController new];
-//    webVC.urlString = url;
-//    [self.navigationController pushViewController:webVC animated:YES];
 }
 
 -(void)backBtnClick {
@@ -162,21 +228,74 @@
 }
 
 - (void)setupNav {
-    self.title = @"消安委";
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20], NSForegroundColorAttributeName:[UIColor colorWithRed:255 / 255.0 green:255 / 255.0 blue:255 / 255.0 alpha:1.0]}];
+    self.title = @"消防安全委员会";
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18], NSForegroundColorAttributeName:[UIColor colorWithRed:255 / 255.0 green:255 / 255.0 blue:255 / 255.0 alpha:1.0]}];
     
     UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     negativeSpacer.width = -15;
     
     UIButton *profileButton = [[UIButton alloc] init];
     // 设置按钮的背景图片
-    [profileButton setImage:[UIImage imageNamed:@"backarr"] forState:UIControlStateNormal];
+    [profileButton setImage:[UIImage imageNamed:@"tt"] forState:UIControlStateNormal];
     // 设置按钮的尺寸为背景图片的尺寸
     profileButton.frame = CGRectMake(0, 0, 44, 44);
     //监听按钮的点击
-    [profileButton addTarget:self action:@selector(backBtnClick) forControlEvents:UIControlEventTouchUpInside];
+    [profileButton addTarget:self action:@selector(profileCenter) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *profile = [[UIBarButtonItem alloc] initWithCustomView:profileButton];
     self.navigationItem.leftBarButtonItems = @[negativeSpacer, profile];
+}
+
+-(void)updevcode {
+    hsdcwUtils *utils = [hsdcwUtils new];
+    NSUserDefaults *userDefaultes = [NSUserDefaults standardUserDefaults];
+    NSString *devcode = [userDefaultes stringForKey:@"devcode"];
+    
+    if([utils isBlankString:devcode]) {
+        devcode = @"noid";
+    }
+    else {
+        devcode = [userDefaultes stringForKey:@"devcode"];
+    }
+    NSLog(@"=========================%@",devcode);
+    
+    NSString *chkuser = [NSString stringWithFormat:@"select * from t_user where loginstatus = '1' limit 1"];
+    NSMutableArray *user_arr = [UserTool userWithSql:chkuser];
+    
+    NSString *uid;
+    
+    if (user_arr.count == 0) {
+        uid = @"0";
+    }
+    else {
+        User *u = user_arr[0];
+        uid = u.userID;
+    }
+    
+    //更新本地设备码
+    NSString *update = [NSString stringWithFormat:@"update t_user set devicetoken = '%@'",devcode];
+    [UserTool userWithSql:update];
+    
+    //NSLog(@"id========%@",uid);
+    
+    //记录用户设备号
+    NSDictionary *param_dev = @{@"type":@"ios",
+                                @"id":uid,
+                                @"code":devcode
+                                };
+    [CKHttpCommunicate createRequest:SandUmcode WithParam:param_dev withMethod:POST success:^(id response) {
+        //NSLog(@"%@",response);
+        if (response) {
+            NSString *result = response[@"code"];
+            if ([result isEqualToString:@"200"]) {
+                NSLog(@"%s","update dev code successful!");
+            }
+            else if ([result isEqualToString:@"400"]) {
+                NSLog(@"%s","update dev code error!");
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    } showHUD:self.inputView];
 }
 
 - (void)didReceiveMemoryWarning {

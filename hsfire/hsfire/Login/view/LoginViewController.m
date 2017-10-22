@@ -8,9 +8,7 @@
 
 #import <QuartzCore/QuartzCore.h>
 #import "LoginViewController.h"
-#import "IndexViewController.h"
 #import "MapViewController.h"
-#import "CustomTabBarController.h"
 #import "JYJNavigationController.h"
 #import "JYJBaseNavigationController.h"
 #import "RegViewController.h"
@@ -25,11 +23,15 @@
 #import "User.h"
 #import "UserEntity.h"
 #import "BaseInfo.h"
+#import "JYJMyWalletViewController.h"
+#import "JYJMyStickerViewController.h"
 
 //#import "TestViewController.h"
-//#import "MapOneViewController.h"
 
 #import "ForPassViewController.h"
+
+//第一步，导入头文件
+#import "NewEditionTestManager.h"
 
 static void *ProgressObserverContext = &ProgressObserverContext;
 @interface LoginViewController ()<UITextFieldDelegate>
@@ -65,6 +67,24 @@ static void *ProgressObserverContext = &ProgressObserverContext;
     }
     
     [self login];
+    
+    [self upver];
+}
+
+/**
+ 1，使用的时候直接把NewEditionCheck文件夹拖入项目即可
+ 2，使用步骤很简单，第一和第二步，
+ */
+- (void)upver {
+    
+    //第二步  appID:应用在Store里面的ID (应用的AppStore地址里面可获取)
+    [NewEditionTestManager checkNewEditionWithAppID:@"1294012388" ctrl:self]; //1种用法，系统Alert
+    
+    
+    //[NewEditionTestManager checkNewEditionWithAppID:@"xxxx" CustomAlert:^(AppStoreInfoModel *appInfo) {
+        
+    //}];//2种用法,自定义Alert
+    
 }
 
 -(void)login {
@@ -152,7 +172,7 @@ static void *ProgressObserverContext = &ProgressObserverContext;
     //[self.view addSubview:forgetButton];
     
     UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(kWidth / 2.5, kHeight / 1.5, 100, 30)];
-    label.text = @"忘记密码?";
+    label.text = @"忘记密码??";
     label.textColor = [UIColor colorWithRed:225/255.0f green:208/255.0f blue:208/255.0f alpha:1];
     label.textAlignment = NSTextAlignmentLeft;
     label.font = [UIFont systemFontOfSize:13];
@@ -180,18 +200,6 @@ static void *ProgressObserverContext = &ProgressObserverContext;
 -(void)registerButtonClick:(UIButton *)button {
     RegViewController *reg = [[RegViewController alloc]init];
     [self.navigationController pushViewController:reg animated:YES];
-    
-    //TestViewController *test = [[TestViewController alloc]init];
-    //[self.navigationController pushViewController:test animated:YES];
-    
-    //ClusterDemoViewController *cluster = [[ClusterDemoViewController alloc]init];
-    ///[self.navigationController pushViewController:cluster animated:YES];
-    
-    //HouseTypeMapVC *hs = [[HouseTypeMapVC alloc]init];
-    //[self.navigationController pushViewController:hs animated:YES];
-    
-    //MapOneViewController *mp = [[MapOneViewController alloc]init];
-    //[self.navigationController pushViewController:mp animated:YES];
 }
 
 -(void)loginButtonClick:(UIButton *)button {
@@ -299,10 +307,21 @@ static void *ProgressObserverContext = &ProgressObserverContext;
                     userEntity.dwname = dwname;
                     userEntity.dwid = dwid;
                     
-                    //登陆成功跳转
-                    MapViewController *mapvc = [[MapViewController alloc]init];
-                    [self.navigationController pushViewController:mapvc animated:YES];
-                    mapvc.userEntity = userEntity;
+                    if([zw isEqualToString:@"普通用户"]) {
+                        JYJMyWalletViewController *uv = [[JYJMyWalletViewController alloc]init];
+                        uv.userEntity = userEntity;
+                        [self.navigationController pushViewController:uv animated:YES];
+                    }
+                    else {
+                        //登陆成功跳转
+                        JYJMyStickerViewController *xaw = [[JYJMyStickerViewController alloc]init];
+                        xaw.userEntity = userEntity;
+                        [self.navigationController pushViewController:xaw animated:YES];
+                        
+//                        MapViewController *mapvc = [[MapViewController alloc]init];
+//                        mapvc.userEntity = userEntity;
+//                        [self.navigationController pushViewController:mapvc animated:YES];
+                    }
                 }
                 else if ([result isEqualToString:@"400"]) {
                     NSString *text = response[@"data"][@"text"];

@@ -79,9 +79,9 @@
     [[UINavigationBar appearance] setBarTintColor:[UIColor whiteColor]];
     self.view.backgroundColor = [UIColor colorWithRed:240/255.0f green:240/255.0f blue:240/255.0f alpha:1];
     
-    NSLog(@"================%@",self.userEntity.title);
-    NSLog(@"================%@",self.userEntity.lat);
-    NSLog(@"================%@",self.userEntity.lon);
+    //NSLog(@"================%@",self.userEntity.title);
+    //NSLog(@"================%@",self.userEntity.lat);
+    //NSLog(@"================%@",self.userEntity.lon);
     
     self.edgesForExtendedLayout = UIRectEdgeNone;
     
@@ -492,7 +492,6 @@
                                       @"devtype":@"ios",
                                       @"xf_dt":xf_dt,
                                       @"xf_tk":xf_tk};
-        
         [CKHttpCommunicate createRequest:Sybhchk WithParam:param_syadd withMethod:POST success:^(id response) {
             //NSLog(@"%@",response);
             
@@ -827,7 +826,7 @@
     if (user_arr.count == 0) {
         [MBProgressHUD showError:@"未获取到用户登录信息，请重新登录！" toView:self.view];
         uid = @"0";
-        devcode = @"no";
+        devcode = @"noid";
     }
     else {
         User *u = user_arr[0];
@@ -864,7 +863,9 @@
     //NSLog(@"new dict is%@",dict);
     
     [self hudTipWillShow:YES];
-    NSString *urlStr = @"http://10yue.hsdcw.com/fireyun/api/socket.php?action=up";
+    NSString *urlStr = [NSString stringWithFormat:@"%@api/socket.php?action=up",URL_IMG];
+    //NSLog(@"========%@",urlStr);
+    //NSLog(@"========%@",url);
     [manager POST:urlStr parameters:dict constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         [self hudTipWillShow:NO];
         

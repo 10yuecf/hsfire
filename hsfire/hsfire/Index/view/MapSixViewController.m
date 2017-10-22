@@ -31,6 +31,8 @@
 
 #import "Test2ViewController.h"
 #import "SyTestViewController.h"
+#import "FirstPointAnnotation.h"
+#import "SearchViewController.h"
 
 @interface MapSixViewController ()<UIGestureRecognizerDelegate,BMKMapViewDelegate,BMKLocationServiceDelegate,BMKGeoCodeSearchDelegate,UITextFieldDelegate,BMKPoiSearchDelegate,BMKRouteSearchDelegate>
 
@@ -66,11 +68,7 @@
 @property (nonatomic,strong) NSString *btnflag;
 
 @property (nonatomic,strong) NSString *sytype;
-@property (nonatomic, strong) BMKPointAnnotation *pointXfs; //车辆
-@property (nonatomic, strong) BMKPointAnnotation *pointSy; //装备
-@property (nonatomic, strong) BMKPointAnnotation *pointWz; //器材
-@property (nonatomic, strong) BMKPointAnnotation *pointMhq; //灭火器
-@property (nonatomic, strong) BMKPointAnnotation *pointCt; //船艇
+@property (nonatomic, strong) FirstPointAnnotation *pointA; //车辆
 @end
 
 @implementation MapSixViewController
@@ -124,9 +122,36 @@
     _searchAddress = [[BMKGeoCodeSearch alloc] init];
     
     _mapView = [[BMKMapView alloc]initWithFrame:CGRectMake(0, 0, kWidth, kHeight)];
-    _mapView.showsUserLocation = NO; //是否显示定位图层
+    _mapView.showsUserLocation = YES; //是否显示定位图层
     _mapView.zoomLevel = 17; //地图显示比例
-    [self startLocation];
+    
+    if(self.mapEntity.points) {
+        //NSLog(@"有数据");
+        //设置中心点
+        CLLocationCoordinate2D searchDoor;
+        [self.mapEntity.points getValue:&searchDoor];
+        _mapView.centerCoordinate = searchDoor;
+        NSString *search_lat = [NSString stringWithFormat:@"%f",searchDoor.latitude];
+        NSString *search_lng = [NSString stringWithFormat:@"%f",searchDoor.longitude];
+        //NSLog(@"搜索地图返回的点%f=====%f",searchDoor.latitude,searchDoor.longitude);
+        [self loadData:search_lng Lat:search_lat Sytype:_sytype];
+        
+        //获取初始化中心点坐标
+        _latcnow = [NSString stringWithFormat:@"%lf",searchDoor.latitude];
+        _lngcnow = [NSString stringWithFormat:@"%lf",searchDoor.longitude];
+        
+        //获取初始化中心点坐标,用于导航
+        _lat = [NSString stringWithFormat:@"%lf",searchDoor.latitude];
+        _lng = [NSString stringWithFormat:@"%lf",searchDoor.longitude];
+    }
+    else {
+        _latcnow = @"30.203701";
+        _lngcnow = @"115.019247";
+        
+        //NSLog(@"无数据");
+        [self startLocation];
+    }
+    
     [self.view addSubview:_mapView];
     
     [self setupNav];
@@ -173,14 +198,25 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+//搜索界面
+-(void)searchClick {
+    //建立临时变量传值
+    UserEntity *ue = [[UserEntity alloc]init];
+    ue.viewName = @"map_zqll";
+    
+    SearchViewController *searchvc = [[SearchViewController alloc] init];
+    searchvc.userEntity = ue;
+    [self.navigationController pushViewController:searchvc animated:YES];
+}
+
 - (void)profileCenter {
     // 展示个人中心
     [JYJSliderMenuTool showWithRootViewController:self];
 }
 
 - (void)setupNav {
-    self.title = @"执勤力量";
-    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:20], NSForegroundColorAttributeName:[UIColor colorWithRed:255 / 255.0 green:255 / 255.0 blue:255 / 255.0 alpha:1.0]}];
+    self.title = @"执勤力量动态管理";
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:18], NSForegroundColorAttributeName:[UIColor colorWithRed:255 / 255.0 green:255 / 255.0 blue:255 / 255.0 alpha:1.0]}];
     
     UIBarButtonItem *negativeSpacer = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     negativeSpacer.width = -15;
@@ -200,16 +236,16 @@
     [searchButton setImage:[UIImage imageNamed:@"search"] forState:UIControlStateNormal];
     [searchButton setImage:[UIImage imageNamed:@"search_down"] forState:UIControlStateHighlighted];
     searchButton.frame = CGRectMake(0, 0, 44, 44);
-    [searchButton addTarget:self action:@selector(msgClick) forControlEvents:UIControlEventTouchUpInside];
+    [searchButton addTarget:self action:@selector(searchClick) forControlEvents:UIControlEventTouchUpInside];
     
     UIButton *msgButton = [[UIButton alloc] init];
     [msgButton setImage:[UIImage imageNamed:@"mymsg"] forState:UIControlStateNormal];
     msgButton.frame = CGRectMake(40, 0, 44, 44);
-    [msgButton addTarget:self action:@selector(msgClick) forControlEvents:UIControlEventTouchUpInside];
+    //[msgButton addTarget:self action:@selector(msgClick) forControlEvents:UIControlEventTouchUpInside];
     
     UIView *rightView = [[UIView alloc] init];
     rightView.frame = CGRectMake(0, 0, 88, 44);
-    [rightView addSubview:msgButton];
+    //[rightView addSubview:msgButton];
     [rightView addSubview:searchButton];
     
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightView];
@@ -266,7 +302,7 @@
     _locService.delegate = self;
     
     _mapView.zoomLevel = 17;
-    _mapView.showsUserLocation = NO;//是否显示小蓝点，no不显示，我们下面要自定义的
+    _mapView.showsUserLocation = YES;//是否显示小蓝点，no不显示，我们下面要自定义的
     _mapView.userTrackingMode = BMKUserTrackingModeNone;
     
     _btnflag = @"dwbtn";
@@ -288,7 +324,7 @@
 //底部按钮组
 -(void)loadbtns {
     //按钮组
-    CGFloat btn_w = 150;
+    CGFloat btn_w = 100;
     CGFloat btn_h = 30;
     int maph = 35;
     
@@ -297,25 +333,48 @@
     view.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:view];
     
+    //专职队
     UIButton *btn1 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn1.frame = CGRectMake(0, kHeight - maph, btn_w, btn_h);
+    btn1.frame = CGRectMake(5, kHeight - 105, 30, 30);
+    btn1.layer.cornerRadius = 3.0;
     btn1.tag = 1;
-    btn1.titleLabel.font = [UIFont systemFontOfSize:14.0];
-    [btn1 setTitle:@"政企专(兼)职队" forState:UIControlStateNormal];
-    [btn1 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btn1 setBackgroundColor:[UIColor whiteColor]];
     [btn1 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
     [btn1 setImage:[UIImage imageNamed:@"jy1"] forState:UIControlStateNormal];
     [self.view addSubview:btn1];
     
+    //熟悉演练
     UIButton *btn2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn2.frame = CGRectMake(btn_w, kHeight - maph, btn_w + 10, btn_h);
+    btn2.frame = CGRectMake(0, kHeight - maph, btn_w, btn_h);
     btn2.tag = 2;
     btn2.titleLabel.font = [UIFont systemFontOfSize:14.0];
-    [btn2 setTitle:@"训练计划上报" forState:UIControlStateNormal];
+    [btn2 setTitle:@"熟悉演练" forState:UIControlStateNormal];
     [btn2 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [btn2 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
-    [btn2 setImage:[UIImage imageNamed:@"zqbz2"] forState:UIControlStateNormal];
+    [btn2 setImage:[UIImage imageNamed:@"zq1"] forState:UIControlStateNormal];
     [self.view addSubview:btn2];
+    
+    //隐患上报
+    UIButton *btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn3.frame = CGRectMake(btn_w, kHeight - maph, btn_w + 10, btn_h);
+    btn3.tag = 3;
+    btn3.titleLabel.font = [UIFont systemFontOfSize:14.0];
+    [btn3 setTitle:@"隐患上报" forState:UIControlStateNormal];
+    [btn3 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btn3 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
+    [btn3 setImage:[UIImage imageNamed:@"zq2"] forState:UIControlStateNormal];
+    [self.view addSubview:btn3];
+    
+    //联勤联训
+    UIButton *btn4 = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn4.frame = CGRectMake(btn_w * 2 + 10, kHeight - maph, btn_w + 10, btn_h);
+    btn4.tag = 4;
+    btn4.titleLabel.font = [UIFont systemFontOfSize:14.0];
+    [btn4 setTitle:@"联勤联训" forState:UIControlStateNormal];
+    [btn4 setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [btn4 addTarget:self action:@selector(buttonTap:) forControlEvents:UIControlEventTouchUpInside];
+    [btn4 setImage:[UIImage imageNamed:@"zq3"] forState:UIControlStateNormal];
+    [self.view addSubview:btn4];
 }
 
 #pragma mark -- Selector
@@ -328,18 +387,85 @@
     }
     
     if (button.tag == 2) {
-        NSLog(@"训练计划上报");
+        NSLog(@"熟悉演练");
         
         hsdcwUtils *utils = [[hsdcwUtils alloc]init];
         NSString *xf_dt = utils.myencrypt[0];
         NSString *xf_tk = utils.myencrypt[1];
         //NSLog(@"%@========%@",xf_dt, xf_tk);
         
-        NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/xljhsb/xf_dt/",URL_IMG];
+        NSString *chkuser = [NSString stringWithFormat:@"select * from t_user where loginstatus = '1' limit 1"];
+        NSMutableArray *user_arr = [UserTool userWithSql:chkuser];
+        User *u = user_arr[0];
+        
+        NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/sxyllist/xf_dt/",URL_IMG];
         url = [url stringByAppendingString:xf_dt];
         url = [url stringByAppendingString:@"/xf_tk/"];
         url = [url stringByAppendingString:xf_tk];
+        url = [url stringByAppendingString:@"/uid/"];
+        url = [url stringByAppendingString:u.userID];
+        //url = [url stringByAppendingString:@"/uname/"];
+        //url = [url stringByAppendingString:u.name];
+        
         //NSLog(@"%@",url);
+        
+        LLWebViewController *webV = [LLWebViewController new];
+        webV.urlStr = url;
+        webV.isPullRefresh = YES;
+        [self.navigationController pushViewController:webV animated:YES];
+    }
+    
+    if (button.tag == 3) {
+        NSLog(@"隐患上报");
+        
+//        hsdcwUtils *utils = [[hsdcwUtils alloc]init];
+//        NSString *xf_dt = utils.myencrypt[0];
+//        NSString *xf_tk = utils.myencrypt[1];
+//        //NSLog(@"%@========%@",xf_dt, xf_tk);
+//
+//        NSString *chkuser = [NSString stringWithFormat:@"select * from t_user where loginstatus = '1' limit 1"];
+//        NSMutableArray *user_arr = [UserTool userWithSql:chkuser];
+//        User *u = user_arr[0];
+//
+//        NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/xljhsb/xf_dt/",URL_IMG];
+//        url = [url stringByAppendingString:xf_dt];
+//        url = [url stringByAppendingString:@"/xf_tk/"];
+//        url = [url stringByAppendingString:xf_tk];
+//        url = [url stringByAppendingString:@"/uid/"];
+//        url = [url stringByAppendingString:u.userID];
+//        //url = [url stringByAppendingString:@"/uname/"];
+//        //url = [url stringByAppendingString:u.name];
+//
+//        //NSLog(@"%@",url);
+//
+//        LLWebViewController *webV = [LLWebViewController new];
+//        webV.urlStr = url;
+//        webV.isPullRefresh = YES;
+//        [self.navigationController pushViewController:webV animated:YES];
+    }
+    
+    if (button.tag == 4) {
+        NSLog(@"联勤联训");
+        
+        hsdcwUtils *utils = [[hsdcwUtils alloc]init];
+        NSString *xf_dt = utils.myencrypt[0];
+        NSString *xf_tk = utils.myencrypt[1];
+        //NSLog(@"%@========%@",xf_dt, xf_tk);
+        
+        NSString *chkuser = [NSString stringWithFormat:@"select * from t_user where loginstatus = '1' limit 1"];
+        NSMutableArray *user_arr = [UserTool userWithSql:chkuser];
+        User *u = user_arr[0];
+        
+        NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/jzd_list/xf_dt/",URL_IMG];
+        url = [url stringByAppendingString:xf_dt];
+        url = [url stringByAppendingString:@"/xf_tk/"];
+        url = [url stringByAppendingString:xf_tk];
+        url = [url stringByAppendingString:@"/uid/"];
+        url = [url stringByAppendingString:u.userID];
+        //url = [url stringByAppendingString:@"/uname/"];
+        //url = [url stringByAppendingString:u.name];
+        
+        NSLog(@"%@",url);
         
         LLWebViewController *webV = [LLWebViewController new];
         webV.urlStr = url;
@@ -403,7 +529,7 @@
         _locService.delegate = self;
         
         _mapView.zoomLevel = 17;
-        _mapView.showsUserLocation = NO;//是否显示小蓝点，no不显示，我们下面要自定义的
+        _mapView.showsUserLocation = YES;//是否显示小蓝点，no不显示，我们下面要自定义的
         _mapView.userTrackingMode = BMKUserTrackingModeNone;
         
         _btnflag = @"addsybtn";
@@ -438,7 +564,7 @@
     BOOL flag = [_searchAddress reverseGeoCode:option];
     
     if (flag) {
-        _mapView.showsUserLocation = NO;//不显示自己的位置
+        _mapView.showsUserLocation = YES;//不显示自己的位置
     }
 }
 
@@ -567,8 +693,7 @@
 }
 
 - (BMKAnnotationView *)mapView:(BMKMapView *)mapView viewForAnnotation:(id <BMKAnnotation>)annotation {
-    if (annotation == _pointXfs) {
-        
+    if (annotation == (BMKPointAnnotation *)_pointA) {
         NSString *AnnotationViewID = @"zfdw1mark";
         BMKPinAnnotationView *annotationView = (BMKPinAnnotationView *)[mapView dequeueReusableAnnotationViewWithIdentifier:AnnotationViewID];
         if (annotationView == nil) {
@@ -591,55 +716,48 @@
 //点击气泡
 - (void)mapView:(BMKMapView *)mapView annotationViewForBubble:(BMKAnnotationView *)view {
     //NSLog(@"点击了气泡!");
-    BMKPointAnnotation *tt = (BMKPointAnnotation*)view.annotation;
+    FirstPointAnnotation *tt = (FirstPointAnnotation*)view.annotation;
     //NSLog(@"%f",tt.coordinate.latitude);
     //NSLog(@"%f",tt.coordinate.longitude);
     //NSLog(@"%@",tt.title);
     //NSLog(@"%@",tt.subtitle);
     
-    //建立临时变量传值
-    UserEntity *ue = [[UserEntity alloc]init];
-    ue.antitle = tt.title;
-    ue.ansubtitle = tt.subtitle;
-    ue.anlat = [NSString stringWithFormat:@"%lf",tt.coordinate.latitude]; //终点
-    ue.anlon = [NSString stringWithFormat:@"%lf",tt.coordinate.longitude];
-    ue.clat = _lat; //起点
-    ue.clon = _lng;
-    ue.viewName = @"zqll_view"; //救援视图
-    
-    //Test2ViewController *navi = [[Test2ViewController alloc]init];
-    //[self.navigationController pushViewController:navi animated:YES];
-    //navi.userEntity = ue;
-    
-    hsdcwUtils *utils = [[hsdcwUtils alloc]init];
-    NSString *xf_dt = utils.myencrypt[0];
-    NSString *xf_tk = utils.myencrypt[1];
-    //NSLog(@"%@========%@",xf_dt, xf_tk);
-    
-    NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/zqinfo/xf_dt/",URL_IMG];
-    url = [url stringByAppendingString:xf_dt];
-    url = [url stringByAppendingString:@"/xf_tk/"];
-    url = [url stringByAppendingString:xf_tk];
-    //NSLog(@"%@",url);
-    
-    MyWebViewController *webV = [MyWebViewController new];
-    webV.urlStr = url;
-    webV.isPullRefresh = YES;
-    webV.userEntity = ue;
-    [self.navigationController pushViewController:webV animated:YES];
-    
-//    CHWebViewController *web = [[CHWebViewController alloc]initWithURL:url];
-//    web.userEntity = ue;
-//    [self.navigationController pushViewController:web animated:YES];
-    
-    //    MapWebViewController *webVC = [MapWebViewController new];
-    //    webVC.urlString = url;
-    //    webVC.userEntity = ue;
-    //    [self.navigationController pushViewController:webVC animated:YES];
-    
-    //SyInfoViewController *syinfo = [[SyInfoViewController alloc]init];
-    //[self.navigationController pushViewController:syinfo animated:YES];
-    //syinfo.userEntity = ue;
+    if([tt.title isEqualToString:@"我的位置"]) {
+        //nothing to do....
+    }
+    else {
+        //建立临时变量传值
+        UserEntity *ue = [[UserEntity alloc]init];
+        ue.antitle = tt.title;
+        ue.ansubtitle = tt.subtitle;
+        ue.anlat = [NSString stringWithFormat:@"%lf",tt.coordinate.latitude]; //终点
+        ue.anlon = [NSString stringWithFormat:@"%lf",tt.coordinate.longitude];
+        ue.clat = _lat; //起点
+        ue.clon = _lng;
+        ue.viewName = @"zqll_view"; //救援视图
+        ue.hdId = tt.dataid;
+        
+        hsdcwUtils *utils = [[hsdcwUtils alloc]init];
+        NSString *xf_dt = utils.myencrypt[0];
+        NSString *xf_tk = utils.myencrypt[1];
+        //NSLog(@"%@========%@",xf_dt, xf_tk);
+        
+        NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/zqinfo/xf_dt/",URL_IMG];
+        url = [url stringByAppendingString:xf_dt];
+        url = [url stringByAppendingString:@"/xf_tk/"];
+        url = [url stringByAppendingString:xf_tk];
+        url = [url stringByAppendingString:@"/dwtype/"];
+        url = [url stringByAppendingString:_sytype];
+        url = [url stringByAppendingString:@"/id/"];
+        url = [url stringByAppendingString:tt.dataid];
+        //NSLog(@"%@",url);
+        
+        MyWebViewController *webV = [MyWebViewController new];
+        webV.urlStr = url;
+        webV.isPullRefresh = YES;
+        webV.userEntity = ue;
+        [self.navigationController pushViewController:webV animated:YES];
+    }
 }
 
 //选中标注点
@@ -673,12 +791,17 @@
                     coor2.latitude = dlat;
                     
                     if ([_sytype isEqual: @"1"]) {
-                        _pointXfs = [[BMKPointAnnotation alloc]init];
+//                        _pointXfs = [[BMKPointAnnotation alloc]init];
+//                        _pointXfs.coordinate = coor2;  //每次不同的gps坐标
+//                        _pointXfs.title = [NSString stringWithFormat:@"%@",array[i][@"dwname"]];
+//                        _pointXfs.subtitle = [NSString stringWithFormat:@"%@",array[i][@"adder"]];
+//                        [_mapView addAnnotation:_pointXfs];
                         
-                        _pointXfs.coordinate = coor2;  //每次不同的gps坐标
-                        _pointXfs.title = [NSString stringWithFormat:@"%@",array[i][@"dwname"]];
-                        _pointXfs.subtitle = [NSString stringWithFormat:@"%@",array[i][@"adder"]];
-                        [_mapView addAnnotation:_pointXfs];
+                        _pointA = [[FirstPointAnnotation alloc] initWithLatitude:dlat andLongtude:dlng];
+                        _pointA.title = [NSString stringWithFormat:@"%@",array[i][@"dwname"]];
+                        _pointA.subtitle = [NSString stringWithFormat:@"%@",array[i][@"adder"]];
+                        _pointA.dataid = [NSString stringWithFormat:@"%@",array[i][@"id"]];
+                        [_mapView addAnnotation:(BMKPointAnnotation *)_pointA];
                     }
                 }
             }

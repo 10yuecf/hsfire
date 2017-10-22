@@ -7,7 +7,9 @@
 //
 
 #import "JYJPushBaseViewController.h"
+#import "UserEntity.h"
 
 @interface JYJMyWalletViewController : JYJPushBaseViewController
-
+/** userEntity */
+@property (retain,nonatomic) UserEntity *userEntity;
 @end

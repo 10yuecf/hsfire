@@ -8,6 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
+static NSString *appKey = @"ae7bf927762acb776f0d6e31";
+static NSString *channel = @"App Store";
+static BOOL isProduction = FALSE;
+
 #import <BaiduMapAPI_Base/BMKBaseComponent.h>//引入base相关所有的头文件
 
 #import <BaiduMapAPI_Map/BMKMapComponent.h>//引入地图功能所有的头文件

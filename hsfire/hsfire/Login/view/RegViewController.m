@@ -15,12 +15,12 @@
 #import "hsdcwUtils.h"
 #import "UserEntity.h"
 #import "MyMD5.h"
-#import "HelpViewController.h"
 #import "CKHttpCommunicate.h"
 #import "HQSelectView.h"
 #import "Macro.h"
 #import "MBProgressHUD+Add.h"
 #import "MapViewController.h"
+#import "LLWebViewController.h"
 
 @interface RegViewController ()<UITextFieldDelegate>
 @property (nonatomic ,strong) UIView *baceView;
@@ -228,15 +228,14 @@
 }
 
 -(void)footlabelTouchUpInside:(UITapGestureRecognizer *)recognizer {
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationItem.backBarButtonItem = item;
+    NSString *url = [NSString stringWithFormat:@"%@index.php/Home/Index/service/",URL_IMG];
     
-    UserEntity *userEntity = [[UserEntity alloc] init];
-    userEntity.pageUrl = @"/service.html";
-    HelpViewController *helpVc = [[HelpViewController alloc]init];
-    helpVc.title = @"服务协议";
-    [self.navigationController pushViewController:helpVc animated:YES];
-    helpVc.userEntity = userEntity;
+    //NSLog(@"%@",url);
+    
+    LLWebViewController *webV = [LLWebViewController new];
+    webV.urlStr = url;
+    webV.isPullRefresh = YES;
+    [self.navigationController pushViewController:webV animated:YES];
 }
 
 //获取验证码

@@ -96,11 +96,11 @@
     UIButton *msgButton = [[UIButton alloc] init];
     [msgButton setImage:[UIImage imageNamed:@"mymsg"] forState:UIControlStateNormal];
     msgButton.frame = CGRectMake(40, 0, 44, 44);
-    [msgButton addTarget:self action:@selector(msgClick) forControlEvents:UIControlEventTouchUpInside];
+    //[msgButton addTarget:self action:@selector(msgClick) forControlEvents:UIControlEventTouchUpInside];
     
     UIView *rightView = [[UIView alloc] init];
     rightView.frame = CGRectMake(0, 0, 88, 44);
-    [rightView addSubview:msgButton];
+    //[rightView addSubview:msgButton];
     [rightView addSubview:searchButton];
     
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightView];

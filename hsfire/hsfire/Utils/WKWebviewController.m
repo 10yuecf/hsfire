@@ -205,7 +205,7 @@
  *101
  */
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(null_unspecified WKNavigation *)navigation withError:(NSError *)error {
-    NSLog(@"ErrorCode:%ld",error.code);
+    NSLog(@"ErrorCode:%ld",(long)error.code);
     if (error.code == -1099) {
     }
 }

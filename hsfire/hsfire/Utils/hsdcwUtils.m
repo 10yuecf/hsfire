@@ -72,11 +72,7 @@
 
 //传输加密方法
 -(NSMutableArray *) myencrypt {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"YYYYMMddHHmmss"];
-    NSDate *datenow = [NSDate date];
-    //NSString *cTimeStr = [formatter stringFromDate:datenow];
-    NSString *xf_dt = [formatter stringFromDate:datenow];//[MyMD5 md5:cTimeStr];
+    NSString *xf_dt = [self getCurrentTime];
     NSString *md5key = @"qr4kit1";
     NSString *tmpstr = [NSString stringWithFormat:@"%@%@",xf_dt,md5key];
     NSString *xf_tk = [MyMD5 md5:tmpstr];
@@ -86,6 +82,18 @@
     [datas addObject:xf_tk]; //1
     
     return datas;
+}
+
+//获取当前时间戳
+- (NSString*)getCurrentTime {
+    NSDate *datenow = [NSDate date];
+    NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[datenow timeIntervalSince1970]];
+    //NSTimeZone *zone = [NSTimeZone timeZoneWithName:@"Asia/Beijing"];
+    //NSInteger interval = [zone secondsFromGMTForDate:datenow];
+    //NSDate *localeDate = [datenow dateByAddingTimeInterval:interval];
+    //NSString *timeSpp = [NSString stringWithFormat:@"%f", [localeDate timeIntervalSince1970]];
+    
+    return timeSp;
 }
 
 - (NSString *)iphoneType {

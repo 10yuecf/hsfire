@@ -7,7 +7,8 @@
 //
 
 #import "JYJPushBaseViewController.h"
+#import "UserEntity.h"
 
 @interface JYJMyStickerViewController : JYJPushBaseViewController
-
+@property (retain,nonatomic) UserEntity *userEntity;
 @end
