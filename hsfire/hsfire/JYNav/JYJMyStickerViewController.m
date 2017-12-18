@@ -16,15 +16,6 @@
 #import "BaseInfo.h"
 #import "CKHttpCommunicate.h"
 
-//-----极光推送
-// 引入JPush功能所需头文件
-#import "JPUSHService.h"
-// iOS10注册APNs所需头文件
-#ifdef NSFoundationVersionNumber_iOS_9_x_Max
-#import <UserNotifications/UserNotifications.h>
-#endif
-//-----end
-
 @interface JYJMyStickerViewController ()
 /** tapGestureRec */
 @property (nonatomic, weak) UITapGestureRecognizer *tapGestureRec;
@@ -199,7 +190,8 @@
         url = [url stringByAppendingString:@"xaw_jg"];
     }
     else if(button.tag == 2) {
-        url = [url stringByAppendingString:@"xwlist/flid/2"];
+        //url = [url stringByAppendingString:@"xwlist/flid/2"];
+        url = [url stringByAppendingString:@"friends"];
     }
     else if(button.tag == 3) {
         url = [url stringByAppendingString:@"xwlist/flid/1"];
@@ -210,12 +202,13 @@
     else if(button.tag == 5) {
         url = [url stringByAppendingString:@"yhsblist/uid/"];
         url = [url stringByAppendingString:uid];
+        url = [url stringByAppendingString:@"/sh/10"];
     }
     else if(button.tag == 6) {
         url = [url stringByAppendingString:@"gulist"];
     }
     
-    NSLog(@"%@",url);
+    //NSLog(@"%@",url);
     
     LLWebViewController *webV = [LLWebViewController new];
     webV.urlStr = url;

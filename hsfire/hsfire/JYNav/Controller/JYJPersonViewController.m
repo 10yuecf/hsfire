@@ -27,10 +27,9 @@
 #import "MapSixViewController.h"
 #import "MapSevnViewController.h"
 #import "MapEgViewController.h"
+#import "MapZddViewController.h"
 #import "UserTool.h"
 #import "User.h"
-
-#import "Test2ViewController.h"
 
 @interface JYJPersonViewController () <UITableViewDelegate, UITableViewDataSource>
 /** tableView */
@@ -129,12 +128,14 @@
 
 //离线地图
 -(void)hplab:(UITapGestureRecognizer *)recognizer {
-    Test2ViewController *my1 = [[Test2ViewController alloc]init];
+    //Test2ViewController *my1 = [[Test2ViewController alloc]init];
     //JYJMyWalletViewController *my1 = [[JYJMyWalletViewController alloc]init];
-    [self.navigationController pushViewController:my1 animated:YES];
+    //[self.navigationController pushViewController:my1 animated:YES];
 }
 
 - (void)setupData {
+    JYJCommenItem *zdd = [JYJCommenItem itemWithIcon:@"menu0" title:@"云平台总调度" subtitle:nil destVcClass:[MapZddViewController class]];
+    
     JYJCommenItem *my3 = [JYJCommenItem itemWithIcon:@"menu3" title:@"消防安全委员会" subtitle:nil destVcClass:[JYJMyStickerViewController class]];
     
     JYJCommenItem *my1 = [JYJCommenItem itemWithIcon:@"menu1" title:@"消防水源管理" subtitle:nil destVcClass:[MapViewController class]];
@@ -162,11 +163,11 @@
             self.data = @[my7, my8, myxf];
         }
         else {
-            self.data = @[my3 , my1, my2, my4, my5, my6, my7, my8, myxf];
+            self.data = @[zdd, my3 , my1, my2, my4, my5, my6, my7, my8, myxf];
         }
     }
     else {
-        self.data = @[my3 , my1, my2, my4, my5, my6, my7, my8, myxf];
+        self.data = @[zdd, my3, my1, my2, my4, my5, my6, my7, my8, myxf];
     }
 }
 

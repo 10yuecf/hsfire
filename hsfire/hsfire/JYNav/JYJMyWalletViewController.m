@@ -4,7 +4,7 @@
 //
 //  Created by JYJ on 2017/6/16.
 //  Copyright © 2017年 baobeikeji. All rights reserved.
-//
+//  消防学习园地
 
 #import "JYJMyWalletViewController.h"
 #import "LLWebViewController.h"
@@ -48,7 +48,7 @@
     
     [self loadUI];
     
-    [self updevcode];
+    //[self updevcode];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
@@ -181,60 +181,6 @@
     [profileButton addTarget:self action:@selector(profileCenter) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *profile = [[UIBarButtonItem alloc] initWithCustomView:profileButton];
     self.navigationItem.leftBarButtonItems = @[negativeSpacer, profile];
-}
-
--(void)updevcode {
-    NSString *chkdev = [NSString stringWithFormat:@"select * from t_base"];
-    NSMutableArray *dev_datas = [UserTool baseWithSql:chkdev];
-    BaseInfo *bi = [BaseInfo new];//dev_datas[0];
-    NSString *devcode = @"";
-    if (dev_datas.count > 0) {
-        devcode = bi.keyValue;
-    }
-    else {
-        devcode = @"noid";
-    }
-    //NSString *devcode = bi.keyValue;
-    //NSLog(@"=========================%@",devcode);
-    
-    NSString *chkuser = [NSString stringWithFormat:@"select * from t_user where loginstatus = '1' limit 1"];
-    NSMutableArray *user_arr = [UserTool userWithSql:chkuser];
-    
-    NSString *uid;
-    
-    if (user_arr.count == 0) {
-        uid = @"0";
-    }
-    else {
-        User *u = user_arr[0];
-        uid = u.userID;
-    }
-    
-    //更新本地设备码
-    NSString *update = [NSString stringWithFormat:@"update t_user set devicetoken = '%@'",devcode];
-    [UserTool userWithSql:update];
-    
-    //NSLog(@"id========%@",uid);
-    
-    //记录用户设备号
-    NSDictionary *param_dev = @{@"type":@"ios",
-                                @"id":uid,
-                                @"code":devcode
-                                };
-    [CKHttpCommunicate createRequest:SandUmcode WithParam:param_dev withMethod:POST success:^(id response) {
-        //NSLog(@"%@",response);
-        if (response) {
-            NSString *result = response[@"code"];
-            if ([result isEqualToString:@"200"]) {
-                NSLog(@"%s","update dev code successful!");
-            }
-            else if ([result isEqualToString:@"400"]) {
-                NSLog(@"%s","update dev code error!");
-            }
-        }
-    } failure:^(NSError *error) {
-        NSLog(@"%@",error);
-    } showHUD:self.inputView];
 }
 
 - (void)didReceiveMemoryWarning {
